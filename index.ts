@@ -83,18 +83,17 @@ function listCoins(showAliases: boolean){
     console.log("Supported coins:");
   }
 
-  for (var coin of coins){
+  for (var coin of AllCoins){
     console.log(` ${chalk.gray("*")} ${chalk.underline(coin.name)} ${enabledText(coin)}`);
     if (showAliases && typeof coin.names !== "undefined"){
       for (var name of coin.names){
-        console.log(`  ${chalk.gray("*")} ${name}`)
+        console.log(`  ${chalk.gray("*")} ${name}`);
       }
     }
   }
 }
 
-const options = DefaultOptions;
-
+var options: Options;
 var coins: Coin[] = AllCoins;
 
 if (process.argv.length > 2){
@@ -113,8 +112,10 @@ if (process.argv.length > 2){
   }
 
   // options
-  var parser = new OptionsParser();
-  coins = parser.parse(options, process.argv.splice(2));
+  var parser = new OptionsParser(process.argv.splice(2));
+  parser.parse();
+  options = parser.options;
+  coins = parser.coins;
 }
 
 run(coins);

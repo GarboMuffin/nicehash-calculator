@@ -29,29 +29,33 @@ function getCoin(c: string): Coin|null{
  * @class OptionsParser
  */
 export class OptionsParser{
-  private coins: Coin[] = AllCoins;
-  private customized: boolean = false;
+  constructor(args: string[]){
+    this.args = args;
+  }
 
-  parse(options: Options, args: string[]): Coin[]{
-    for (var i = 0; i < args.length; i++){
-      var arg = args[i];
+  private args: string[];
+  private customized: boolean = false;
+  coins: Coin[] = AllCoins;
+  options: Options = DefaultOptions;
+
+  parse(){
+    for (var i = 0; i < this.args.length; i++){
+      var arg = this.args[i];
 
       if (arg.startsWith("--percent")){
         if (arg.includes(":")){
-          options.percent = Number(arg.split(":")[1]);
+          this.options.percent = Number(arg.split(":")[1]);
         }else{
-          options.percent = true;
+          this.options.percent = true;
         }
       }else if (arg === "--prompt"){
-        options.prompt = true;
+        this.options.prompt = true;
       }else if (arg === "--fixed"){
-        options.fixed = true;
+        this.options.fixed = true;
       }else{
         this.coinParser(arg);
       }
     }
-
-    return this.coins;
   }
 
   private invalidOption(option: string){
@@ -61,8 +65,7 @@ export class OptionsParser{
   private coinParser(_arg: string){
     var arg = _arg;
 
-    enum Action {Show, Hide};
-
+    enum Action {Hide = 0, Show = 1};
     var action;
     if (arg[0] === "-"){
       arg = arg.substring(1);
@@ -84,10 +87,8 @@ export class OptionsParser{
         for (var i of this.coins){
           i.enabled = false;
         }
-      }
-      coin.enabled = true;
-    }else{
-      coin.enabled = false;
+      } 
     }
+    coin.enabled = !!action;
   }
 }
