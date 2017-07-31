@@ -93,7 +93,7 @@ function listCoins(showAliases: boolean){
   }
 }
 
-var options: Options;
+var options: Options = DefaultOptions;
 var coins: Coin[] = AllCoins;
 
 if (process.argv.length > 2){
