@@ -74,7 +74,7 @@ export class OptionsParser{
       action = Action.Show;
     }
 
-    var coin = getCoin(_arg);
+    var coin = getCoin(arg);
 
     if (coin === null){
       this.invalidOption(_arg);
