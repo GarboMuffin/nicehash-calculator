@@ -14,7 +14,16 @@ export const DefaultOptions: Options = {
   fixed: false,
 }
 
-function getCoin(c: string): Coin|null{
+function getCoins(c: string): Coin[]{
+  if (c.startsWith("-")){
+    c = c.substring(1);
+  }
+
+  if (c === "all"){
+    return AllCoins;
+  }
+
+  var ret = [];
   for (var coin of AllCoins){
     if (coin.name.toLowerCase() === c || (coin.names && coin.names.indexOf(c) > -1)){
       return coin;

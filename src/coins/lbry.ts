@@ -5,7 +5,7 @@ import {run as index} from "../index";
 export var coin = {
   name: "LBC",
   names: [
-    "lbry",
+    "lbry", "dual",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,
