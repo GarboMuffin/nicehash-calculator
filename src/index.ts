@@ -20,7 +20,11 @@ export async function run(i: Coin, options?: Options){
   }
 
   function output(text: string){
-    console.log(text);
+    // chalk.white fixes invisible text in some terminals
+    // eg. cmder and maybe some unix ones
+    // ironically windows command prompt works perfectly without this
+    // this may use options at some point in the future
+    console.log(chalk.white(text));
   }
 
   output(`Report on ${chalk.underline(i.name)}:`);

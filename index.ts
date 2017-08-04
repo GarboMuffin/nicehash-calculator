@@ -10,8 +10,8 @@ console.log("The market is constantly changing and what is profitable now might 
 console.log("Do your own math and don't spend what you can't afford to lose.");
 
 console.log("");
-console.log(`BTC: ${chalk.underline("1P93PjYxTVPz2zqtfkgxxsqp9ZstdMpYJQ")}`);
-console.log(`ETH: ${chalk.underline("0x41a06D4b23E882D2093D2C2958Ed35265ff3d56E")}`);
+console.log(chalk.reset(`BTC: ${chalk.underline("1P93PjYxTVPz2zqtfkgxxsqp9ZstdMpYJQ")}`));
+console.log(chalk.reset(`ETH: ${chalk.underline("0x41a06D4b23E882D2093D2C2958Ed35265ff3d56E")}`));
 console.log("");
 
 async function run(coins: Coin[]){
