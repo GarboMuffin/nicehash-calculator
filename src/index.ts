@@ -4,6 +4,7 @@ import {WhatToMine} from "./whattomine";
 import {coins, Coin} from "./coins";
 import {Hash} from "./hash";
 import {Options, DefaultOptions} from "./options";
+import {Algorithms} from "./algorithms";
 
 import * as chalk from "chalk";
 
@@ -27,8 +28,12 @@ export async function run(i: Coin, options?: Options){
     console.log(chalk.white(text));
   }
 
-  output(`Report on ${chalk.underline(i.name)}:`);
+  var coinName = chalk.underline(i.name);
+  var algoName = chalk.gray(`(${Algorithms[i.NiceHash.id]})`);
 
+  output(`Report on ${coinName}: ${algoName}`);
+
+  // calculate the revenue once, it won't change between locations so it doesn't belong to either
   var revenue = await WhatToMine.profit(i.WhatToMine.id, i.WhatToMine.hashrate);
   var hash = `BTC/${i.NiceHash.hashrate.name}`;
 
@@ -45,7 +50,11 @@ export async function run(i: Coin, options?: Options){
     var color = profit > 0 ? chalk.green : chalk.red;
     color = color.underline;
 
-    if (typeof options.percent === "number" && percent < options.percent){
+    if (options.onlyProfit === true && profit <= 0){
+      continue;
+    }
+
+    if (typeof options.onlyProfit === "number" && percent < options.onlyProfit){
       continue;
     }
 
@@ -53,7 +62,7 @@ export async function run(i: Coin, options?: Options){
     output(pad(`Cost: ${color(cost.toFixed(PRECISION))} ${hash}`, 2));
     output(pad(`Profit: ${color(profit.toFixed(PRECISION))} ${hash}`, 2));
 
-    if (options.percent !== false){
+    if (options.percent){
       output(pad(`%: ${color(percent.toFixed(PRECISION))}%`, 2));
     }
   }

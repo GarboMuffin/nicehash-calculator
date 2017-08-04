@@ -4,14 +4,16 @@ import * as chalk from "chalk";
 
 export interface Options {
   prompt: boolean,
-  percent: boolean|number,
+  percent: boolean,
   fixed: boolean,
+  onlyProfit: boolean|number,
 }
 
 export const DefaultOptions: Options = {
   prompt: false,
   percent: false,
   fixed: false,
+  onlyProfit: false,
 }
 
 function getCoins(c: string): Coin[]{
@@ -26,10 +28,10 @@ function getCoins(c: string): Coin[]{
   var ret = [];
   for (var coin of AllCoins){
     if (coin.name.toLowerCase() === c || (coin.names && coin.names.indexOf(c) > -1)){
-      return coin;
+      ret.push(coin);
     }
   }
-  return null;
+  return ret;
 }
 
 /**
@@ -51,18 +53,16 @@ export class OptionsParser{
     for (var i = 0; i < this.args.length; i++){
       var arg = this.args[i];
 
-      if (arg.startsWith("--percent")){
-        if (arg.includes(":")){
-          this.options.percent = Number(arg.split(":")[1]);
-        }else{
-          this.options.percent = true;
-        }
-      }else if (arg === "--prompt"){
-        this.options.prompt = true;
-      }else if (arg === "--fixed"){
-        this.options.fixed = true;
+      var result: boolean;
+
+      if (arg.startsWith("--")){
+        result = this.argParser(arg);
       }else{
-        this.coinParser(arg);
+        result = this.coinParser(arg);
+      }
+
+      if (!result){
+        this.invalidOption(arg);
       }
     }
   }
@@ -71,7 +71,34 @@ export class OptionsParser{
     console.warn(chalk.red(`Invalid option: ${chalk.underline(option)}`));
   }
 
-  private coinParser(_arg: string){
+  private argParser(_arg: string): boolean{
+    var split = _arg.split(":");
+    var arg = split[0];
+
+    switch (arg){
+      case "--percent":
+        this.options.percent = true;
+        break;
+      case "--profit":
+        if (split.length === 1){
+          this.options.onlyProfit = true;
+        }else{
+          this.options.onlyProfit = Number(split[1]);
+        }
+        break;
+      case "--prompt":
+        this.options.prompt = true;
+        break;
+      case "--fixed":
+        this.options.fixed = true;
+        break;
+      default:
+        return false;
+    }
+    return true;
+  }
+
+  private coinParser(_arg: string): boolean{
     var arg = _arg;
 
     enum Action {Hide = 0, Show = 1};
@@ -83,11 +110,10 @@ export class OptionsParser{
       action = Action.Show;
     }
 
-    var coin = getCoin(arg);
+    var coins = getCoins(arg);
 
-    if (coin === null){
-      this.invalidOption(_arg);
-      return;
+    if (coins.length === 0){
+      return false;
     }
 
     if (action === Action.Show){
@@ -98,6 +124,11 @@ export class OptionsParser{
         }
       } 
     }
-    coin.enabled = !!action;
+
+    for (var coin of coins){
+      coin.enabled = !!action;
+    }
+
+    return true;
   }
 }

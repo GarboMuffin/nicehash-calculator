@@ -1,6 +1,7 @@
 import {coins as AllCoins, Coin} from "./src/coins";
 import {run as index} from "./src/index";
 import {Options, DefaultOptions, OptionsParser} from "./src/options";
+import {Algorithms} from "./src/algorithms";
 
 import * as chalk from "chalk";
 import * as readline from "readline";
@@ -69,14 +70,6 @@ function waitForInput(){
 }
 
 function listCoins(showAliases: boolean){
-  function enabledText(coin: Coin){
-    if (!coin.enabled){
-      return chalk.gray("(disabled by default)");
-    }else{
-      return "";
-    }
-  }
-
   if (showAliases){
     console.log("Supported coins and their aliases:");
   }else{
@@ -84,7 +77,18 @@ function listCoins(showAliases: boolean){
   }
 
   for (var coin of AllCoins){
-    console.log(` ${chalk.gray("*")} ${chalk.underline(coin.name)} ${enabledText(coin)}`);
+    var coinName = chalk.underline(coin.name);
+
+    var enabledText = "";
+    if (!coin.enabled){
+      enabledText = chalk.gray("(disabled by default)");
+    }
+
+    // not used rn, but could be
+    var algoName = chalk.gray(`(${Algorithms[coin.NiceHash.id]})`);
+
+    console.log(` ${chalk.gray("*")} ${coinName} ${enabledText}`);
+
     if (showAliases && typeof coin.names !== "undefined"){
       for (var name of coin.names){
         console.log(`  ${chalk.gray("*")} ${name}`);
