@@ -9,7 +9,7 @@ export var coin = {
   ],
   NiceHash: {
     hashrate: Hash.GIGA,
-    id: Algorithms.Keccak,
+    id: Algorithms.Lbry,
   },
   WhatToMine: {
     hashrate: 1000,
