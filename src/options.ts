@@ -16,6 +16,12 @@ export const DefaultOptions: Options = {
   onlyProfit: false,
 }
 
+/**
+ * Get coins with a given name
+ * 
+ * @param {string} c The name of the the coins.
+ * @returns {Coin[]} The coins with that name, if any.
+ */
 function getCoins(c: string): Coin[]{
   if (c.startsWith("-")){
     c = c.substring(1);

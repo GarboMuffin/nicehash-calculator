@@ -28,7 +28,7 @@ async function run(coins: Coin[]){
       if (options.prompt){
         await waitForInput();
       }else{
-        // FIXME: sleep time too low?
+        // FIXME: sleep time too low/too high?
         await sleep(1000);
       }
     }
