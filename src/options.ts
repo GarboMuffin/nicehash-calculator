@@ -21,6 +21,8 @@ function getCoins(c: string): Coin[]{
     c = c.substring(1);
   }
 
+  c = c.toLowerCase();
+
   if (c === "all"){
     return AllCoins;
   }
