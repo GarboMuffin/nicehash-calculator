@@ -8,10 +8,11 @@ import * as readline from "readline";
 
 console.log("The results of this program do not necessarily reflect real world results.");
 console.log("The market is constantly changing and what is profitable now might not be in a couple minutes.");
-console.log("Do your own math and don't spend what you can't afford to lose.");
+console.log("Do your own research and don't spend what you can't afford to lose.");
+console.log("I am not responsible for any losses.");
 
 console.log("");
-console.log(chalk.reset(`BTC: ${chalk.underline("1P93PjYxTVPz2zqtfkgxxsqp9ZstdMpYJQ")}`));
+console.log(chalk.reset(`BTC: ${chalk.underline("1EecFw5Nq8ACAUKVptUPkakgXb2sbPQa7Z")}`));
 console.log(chalk.reset(`ETH: ${chalk.underline("0x41a06D4b23E882D2093D2C2958Ed35265ff3d56E")}`));
 console.log("");
 
