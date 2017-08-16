@@ -8,7 +8,7 @@ import {Algorithms} from "./algorithms";
 
 import * as chalk from "chalk";
 
-const PRECISION = 6;
+const PRECISION = 6; // decimal places
 
 function pad(text: string, i: number){
   // not exactly the fastest, but it works
@@ -22,9 +22,8 @@ export async function run(i: Coin, options?: Options){
 
   function output(text: string){
     // chalk.white fixes invisible text in some terminals
-    // eg. cmder and maybe some unix ones
+    // eg. cmder and other terminal emulators
     // ironically windows command prompt works perfectly without this
-    // this may use options at some point in the future
     console.log(chalk.white(text));
   }
 

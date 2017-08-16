@@ -1,3 +1,4 @@
+// note: most of these are not supported
 export enum Algorithms {
   Scrypt = 0,
   SHA256 = 1,
