@@ -1,19 +1,9 @@
 import {Hash} from "./hash";
 import {NiceHashLocation} from "./location";
 import {Algorithms as Algorithm} from "./algorithms";
+import {Order, OrderType} from "./order";
 
 import * as request from "request-promise";
-
-interface Order {
-  limit_speed: number,
-  alive: boolean,
-  price: number,
-  id: number,
-  type: number,
-  workers: number,
-  algo: number,
-  accepted_speed: number,
-}
 
 interface NiceHashApiResponse {
   result: {
@@ -22,9 +12,9 @@ interface NiceHashApiResponse {
 }
 
 export class NiceHashCost {
-  constructor(endpoint: string, fixed: boolean){
+  constructor(endpoint: string, type: OrderType){
     this.endpoint = endpoint;
-    this.fixed = fixed;
+    this.type = type;
   }
 
   get price(){
@@ -45,7 +35,7 @@ export class NiceHashCost {
 
   private orders: Order[];
   private endpoint: string;
-  private fixed: boolean;
+  private type: OrderType;
 
   async init(){
     var response: any = await request(this.endpoint);

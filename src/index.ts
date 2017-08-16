@@ -38,8 +38,13 @@ export async function run(i: Coin, options?: Options){
 
   output(pad(`Revenue: ${chalk.underline(revenue.toFixed(PRECISION))} ${hash}`, 1));
 
-  for (var l of Locations){
-    var coin = new NiceHashCost(createEndpoint(i.NiceHash.id, l), options.fixed);
+  // --only-revenue only outputs revenues
+  if (options.onlyRevenue){
+    return;
+  }
+
+  for (var l of options.locations){
+    var coin = new NiceHashCost(createEndpoint(i.NiceHash.id, l), options.orderType);
     await coin.init();
 
     var cost = coin.price;

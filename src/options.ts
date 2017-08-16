@@ -1,19 +1,25 @@
 import {coins as AllCoins, Coin} from "./coins";
+import {NiceHashLocation, Locations} from "./location";
+import {OrderType} from "./order";
 
 import * as chalk from "chalk";
 
 export interface Options {
   prompt: boolean,
   percent: boolean,
-  fixed: boolean,
+  orderType: OrderType,
   onlyProfit: boolean|number,
+  onlyRevenue: boolean,
+  locations: NiceHashLocation[],
 }
 
 export const DefaultOptions: Options = {
   prompt: false,
   percent: false,
-  fixed: false,
+  orderType: OrderType.Standard,
   onlyProfit: false,
+  onlyRevenue: false,
+  locations: Locations
 }
 
 /**
@@ -83,23 +89,47 @@ export class OptionsParser{
     var split = _arg.split(":");
     var arg = split[0];
 
-    switch (arg){
+    // TODO: consider moving cases to their own functions?
+    switch (arg.toLowerCase()){
       case "--percent":
         this.options.percent = true;
         break;
-      case "--profit":
+      case "--only-profit":
         if (split.length === 1){
           this.options.onlyProfit = true;
         }else{
           this.options.onlyProfit = Number(split[1]);
         }
         break;
+      case "--only-revenue":
+        this.options.onlyRevenue = true;
+        break;
       case "--prompt":
         this.options.prompt = true;
         break;
       case "--fixed":
-        this.options.fixed = true;
+        this.options.orderType = OrderType.Fixed;
         break;
+      case "--location":
+        // oh god
+        // switches inside switches
+        if (split.length === 2){
+          switch (split[1].toLowerCase()){
+            case "us":
+            case "usa":
+            case "westhash":
+              this.options.locations = [NiceHashLocation.US];
+              break;
+            case "eu":
+            case "europe":
+              this.options.locations = [NiceHashLocation.EU];
+              break;
+            default:
+              return false;
+          }
+          return true;
+        }
+        return false;
       default:
         return false;
     }
