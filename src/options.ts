@@ -22,6 +22,10 @@ export const DefaultOptions: Options = {
   locations: Locations
 }
 
+interface Occurences {
+  [i: string]: number,
+}
+
 /**
  * Get coins with a given name
  * 
@@ -59,6 +63,7 @@ export class OptionsParser{
   }
 
   private args: string[];
+  private occurences: Occurences = {};
   private customized: boolean = false;
   coins: Coin[] = AllCoins;
   options: Options = DefaultOptions;
@@ -68,7 +73,6 @@ export class OptionsParser{
       var arg = this.args[i];
 
       var result: boolean;
-
       if (arg.startsWith("--")){
         result = this.argParser(arg);
       }else{
@@ -79,6 +83,8 @@ export class OptionsParser{
         this.invalidOption(arg);
       }
     }
+
+    this.checkCompatibility();
   }
 
   private invalidOption(option: string){
@@ -88,6 +94,13 @@ export class OptionsParser{
   private argParser(_arg: string): boolean{
     var split = _arg.split(":");
     var arg = split[0];
+
+    var rawArg = arg;
+    arg = arg.toLowerCase();
+
+    // for compatibilty checking, record the number of times an argument appears
+    // this is good enough for what the checking does
+    this.occurences[arg] = (this.occurences[arg] || 0) + 1;
 
     // TODO: consider moving cases to their own functions?
     switch (arg.toLowerCase()){
@@ -133,6 +146,7 @@ export class OptionsParser{
       default:
         return false;
     }
+
     return true;
   }
 
@@ -168,5 +182,44 @@ export class OptionsParser{
     }
 
     return true;
+  }
+
+  private checkCompatibility(){
+    function warn(msg: string){
+      console.warn(chalk.red(msg) + " Behavior may be unexpected!");
+    }
+
+    function underline(msg: string){
+      return chalk.underline(msg);
+    }
+
+    // any arguments that are not --only-revenue
+    // its not compatible with pretty much anything so record that for logging
+    var notOnlyRevenue = [];
+
+    // catch duplicates
+    for (var arg in this.occurences){
+      var occurences = this.occurences[arg];
+
+      if (occurences > 1){
+        warn(`Too many ${underline(arg)} arguments specified!`);
+      }
+
+      if (arg !== "--only-revenue"){
+        notOnlyRevenue.push(arg);
+      }
+    }
+
+    // other edge cases
+
+    // --only-revenue is not compatible with pretty much anything
+    if (this.occurences["--only-revenue"] > 0){
+      if (notOnlyRevenue.length > 0){
+        var ul = underline("--only-revenue");
+        for (var arg of notOnlyRevenue){
+          warn(`${ul} is not compatible with ${underline(arg)}`);
+        }
+      }
+    }
   }
 }
