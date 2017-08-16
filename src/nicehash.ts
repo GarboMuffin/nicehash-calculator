@@ -46,13 +46,17 @@ export class NiceHashCost {
   }
 
   private filter(){
+    var self = this;
+
+    // remove dead orders and incorrect types
+    this.orders = this.orders.filter(function(order){
+      return order.workers > 0 && order.type === self.type;
+    });
+
+    // convert strings to numbers
     this.orders = this.orders.map(function(order){
       order.price = Number(order.price);
       return order;
-    });
-    var self = this;
-    this.orders = this.orders.filter(function(order){
-      return order.workers > 0 && !!order.type === self.fixed;
     });
   }
 };

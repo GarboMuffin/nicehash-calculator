@@ -42,7 +42,7 @@ async function run(coins: Coin[]){
  * Returns a promise that will resolve after ms milliseconds.
  * @param {number} ms
  */
-async function sleep(ms: number){
+function sleep(ms: number){
   return new Promise(resolve => setTimeout(resolve, ms));
 }
 
