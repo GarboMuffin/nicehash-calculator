@@ -8,22 +8,70 @@ export interface Options {
   prompt: boolean,
   percent: boolean,
   orderType: OrderType,
-  minProfit: number,
+  minProfit: ProfitUnit,
+  priceOffset: ProfitUnit,
   onlyRevenue: boolean,
   locations: NiceHashLocation[],
+}
+
+export enum Unit {
+  Percent, BTC
+}
+
+export interface ProfitUnit {
+  amount: number,
+  unit: Unit
 }
 
 export const DefaultOptions: Options = {
   prompt: false,
   percent: false,
   orderType: OrderType.Standard,
-  minProfit: -Infinity,
+  minProfit: {
+    amount: -Infinity,
+    unit: Unit.BTC
+  },
+  priceOffset: {
+    amount: 0,
+    unit: Unit.BTC
+  },
   onlyRevenue: false,
   locations: Locations
 }
 
 interface Occurences {
   [i: string]: number,
+}
+
+const ONLY_REVENUE_COMPATIBLE = [
+  "--only-revenue",
+  "--no-underline",
+  "--no-color",
+  "--no-colour",
+];
+const USA_ALIASES = [
+  "us", "usa", "westhash",
+];
+const EUROPE_ALIASES = [
+  "eu", "europe",
+];
+
+/**
+ * Parse a string for a number
+ * Returns null if not a number
+ * @param {string} str The string to be read
+ * @returns The number or null
+ */
+function parseNumber(str: string): number|null {
+  var match = str.match(/[1234567890\.-]*/g);
+  if (match === null){
+    return null;
+  }
+  var num = Number(match[0]);
+  if (isNaN(num)){
+    return null;
+  }
+  return num;
 }
 
 /**
@@ -51,13 +99,6 @@ function getCoins(c: string): Coin[]{
   }
   return ret;
 }
-
-const ONLY_REVENUE_COMPATIBLE = [
-  "--only-revenue",
-  "--no-underline",
-  "--no-color",
-  "--no-colour",
-]
 
 /**
  * Parses command line arguments for coins, options, etc.
@@ -109,14 +150,12 @@ export class OptionsParser{
     // this is good enough for what the checking does
     this.occurences[arg] = (this.occurences[arg] || 0) + 1;
 
-    // TODO: consider moving cases to their own functions?
     switch (arg.toLowerCase()){
       case "--percent":
         this.options.percent = true;
         break;
       case "--min-profit":
-        this.options.minProfit = Number(split[1]);
-        break;
+        return this.minProfitParser(split);
       case "--only-revenue":
         this.options.onlyRevenue = true;
         break;
@@ -127,25 +166,9 @@ export class OptionsParser{
         this.options.orderType = OrderType.Fixed;
         break;
       case "--location":
-        // oh god
-        // switches inside switches
-        if (split.length === 2){
-          switch (split[1].toLowerCase()){
-            case "us":
-            case "usa":
-            case "westhash":
-              this.options.locations = [NiceHashLocation.US];
-              break;
-            case "eu":
-            case "europe":
-              this.options.locations = [NiceHashLocation.EU];
-              break;
-            default:
-              return false;
-          }
-          return true;
-        }
-        return false;
+        return this.locationParser(split);
+      case "--offset":
+        return this.offsetParser(split);
       case "--no-color":
         // chalk supports --no-color
         // adding it here prevents invalid option warnings
@@ -155,6 +178,63 @@ export class OptionsParser{
     }
 
     return true;
+  }
+
+  private minProfitParser(args: string[]){
+    var value = parseNumber(args[1]);
+    if (value === null){
+      return false;
+    }
+
+    // TODO: move this into own function
+    var unit;
+    if (args[1].endsWith("%")){
+      unit = Unit.Percent;
+    }else{
+      unit = Unit.BTC;
+    }
+
+    this.options.minProfit = {
+      unit: unit,
+      amount: value,
+    };
+
+    return true;
+  }
+  
+  private offsetParser(args: string[]){
+    var value = parseNumber(args[1]);
+    if (value === null){
+      return false;
+    }
+
+    var unit;
+    if (args[1].endsWith("%")){
+      unit = Unit.Percent;
+    }else{
+      unit = Unit.BTC;
+    }
+
+    this.options.priceOffset = {
+      unit: unit,
+      amount: value,
+    };
+
+    return true;
+  }
+
+  private locationParser(args: string[]){
+    if (args.length === 2){
+      var country = args[1];
+      if (USA_ALIASES.indexOf(country) > -1){
+        this.options.locations = [NiceHashLocation.US];
+        return true;
+      }else if (EUROPE_ALIASES.indexOf(country) > -1){
+        this.options.locations = [NiceHashLocation.EU];
+        return true;
+      }
+    }
+    return false;
   }
 
   private coinParser(_arg: string): boolean{

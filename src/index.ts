@@ -3,8 +3,9 @@ import {NiceHashCost, createEndpoint} from "./nicehash";
 import {WhatToMine} from "./whattomine";
 import {coins, Coin} from "./coins";
 import {Hash} from "./hash";
-import {Options, DefaultOptions} from "./options";
+import {Options, DefaultOptions, ProfitUnit, Unit} from "./options";
 import {Algorithms} from "./algorithms";
+import {OrderType} from "./order";
 
 import * as chalk from "chalk";
 
@@ -15,11 +16,27 @@ function pad(text: string, i: number){
   return " ".repeat(i) + text;
 }
 
-export async function run(i: Coin, options?: Options){
-  if (options === undefined){
-    options = DefaultOptions;
+function minProfitCheck(options: ProfitUnit, btc: number, percent: number){
+  if (options.unit === Unit.BTC){
+    return options.amount <= btc;
   }
+  if (options.unit === Unit.Percent){
+    return options.amount <= percent;
+  }
+  return false;
+}
 
+function applyProfitOffset(options: ProfitUnit, profit: number){
+  if (options.unit === Unit.BTC){
+    profit += options.amount;
+  }
+  if (options.unit === Unit.Percent){
+    profit *= (options.amount / 100) + 1;
+  }
+  return profit;
+}
+
+export async function run(i: Coin, options = DefaultOptions){
   function output(text: string){
     // chalk.white fixes invisible text in some terminals
     // eg. cmder and other terminal emulators
@@ -49,16 +66,23 @@ export async function run(i: Coin, options?: Options){
 
     var cost = coin.price;
     var profit = revenue - cost;
+    profit = applyProfitOffset(options.priceOffset, profit);
     var percent = profit / cost * 100;
 
     var color = profit > 0 ? chalk.green : chalk.red;
     color = color.underline;
 
-    if (profit < options.minProfit){
+    if (!minProfitCheck(options.minProfit, profit, percent)){
       continue;
     }
 
     output(pad(`${NiceHashLocation[l]}:`, 1));
+
+    if (options.orderType === OrderType.Fixed && cost === 0){
+      output(pad(chalk.red(`NO FIXED ORDERS`), 2));
+      continue;
+    }
+
     output(pad(`Cost: ${color(cost.toFixed(PRECISION))} ${hash}`, 2));
     output(pad(`Profit: ${color(profit.toFixed(PRECISION))} ${hash}`, 2));
 
