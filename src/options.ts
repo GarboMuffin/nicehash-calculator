@@ -52,6 +52,13 @@ function getCoins(c: string): Coin[]{
   return ret;
 }
 
+const ONLY_REVENUE_COMPATIBLE = [
+  "--only-revenue",
+  "--no-underline",
+  "--no-color",
+  "--no-colour",
+]
+
 /**
  * Parses command line arguments for coins, options, etc.
  * @export
@@ -139,6 +146,10 @@ export class OptionsParser{
           return true;
         }
         return false;
+      case "--no-color":
+        // chalk supports --no-color
+        // adding it here prevents invalid option warnings
+        break;
       default:
         return false;
     }
@@ -190,8 +201,8 @@ export class OptionsParser{
     }
 
     // any arguments that are not --only-revenue
-    // its not compatible with pretty much anything so record that for logging
-    var notOnlyRevenue = [];
+    // its not compatible with pretty much anything
+    var onlyRevenueIncompatible = [];
 
     // catch duplicates
     for (var arg in this.occurences){
@@ -201,8 +212,8 @@ export class OptionsParser{
         warn(`Too many ${underline(arg)} arguments specified!`);
       }
 
-      if (arg !== "--only-revenue"){
-        notOnlyRevenue.push(arg);
+      if (ONLY_REVENUE_COMPATIBLE.indexOf(arg) === -1){
+        onlyRevenueIncompatible.push(arg);
       }
     }
 
@@ -210,10 +221,10 @@ export class OptionsParser{
 
     // --only-revenue is not compatible with pretty much anything
     if (this.occurences["--only-revenue"] > 0){
-      if (notOnlyRevenue.length > 0){
+      if (onlyRevenueIncompatible.length > 0){
         var ul = underline("--only-revenue");
-        for (var arg of notOnlyRevenue){
-          warn(`${ul} is not compatible with ${underline(arg)}`);
+        for (var arg of onlyRevenueIncompatible){
+          warn(`${ul} is not compatible with ${underline(arg)}!`);
         }
       }
     }
