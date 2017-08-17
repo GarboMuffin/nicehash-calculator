@@ -54,11 +54,7 @@ export async function run(i: Coin, options?: Options){
     var color = profit > 0 ? chalk.green : chalk.red;
     color = color.underline;
 
-    if (options.onlyProfit === true && profit <= 0){
-      continue;
-    }
-
-    if (typeof options.onlyProfit === "number" && percent < options.onlyProfit){
+    if (profit < options.minProfit){
       continue;
     }
 

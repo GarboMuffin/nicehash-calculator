@@ -8,7 +8,7 @@ export interface Options {
   prompt: boolean,
   percent: boolean,
   orderType: OrderType,
-  onlyProfit: boolean|number,
+  minProfit: number,
   onlyRevenue: boolean,
   locations: NiceHashLocation[],
 }
@@ -17,7 +17,7 @@ export const DefaultOptions: Options = {
   prompt: false,
   percent: false,
   orderType: OrderType.Standard,
-  onlyProfit: false,
+  minProfit: -Infinity,
   onlyRevenue: false,
   locations: Locations
 }
@@ -92,7 +92,7 @@ export class OptionsParser{
   }
 
   private argParser(_arg: string): boolean{
-    var split = _arg.split(":");
+    var split = _arg.split("=");
     var arg = split[0];
 
     var rawArg = arg;
@@ -107,12 +107,8 @@ export class OptionsParser{
       case "--percent":
         this.options.percent = true;
         break;
-      case "--only-profit":
-        if (split.length === 1){
-          this.options.onlyProfit = true;
-        }else{
-          this.options.onlyProfit = Number(split[1]);
-        }
+      case "--min-profit":
+        this.options.minProfit = Number(split[1]);
         break;
       case "--only-revenue":
         this.options.onlyRevenue = true;
