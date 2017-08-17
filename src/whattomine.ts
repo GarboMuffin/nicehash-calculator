@@ -2,7 +2,7 @@ import {HashRate} from "./hash";
 
 import * as request from "request-promise";
 
-interface WhatToMineResponse {
+export interface WhatToMineResponse {
   algorithm: string,
   block_reward: number,
   block_reward24: number,
@@ -39,7 +39,7 @@ export class WhatToMine {
   static async profit(endpoint: number, hashrate: number){
     var profit = await request(
       `http://whattomine.com/coins/${endpoint}.json?utf8=%E2%9C%93&hr=${hashrate}&p=0&fee=0.0&cost=0.1&hcost=0.0&commit=Calculate`
-    )
+    );
 
     var response: WhatToMineResponse = JSON.parse(profit as any);
     return Number(response.btc_revenue);
