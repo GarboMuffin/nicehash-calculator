@@ -18,12 +18,6 @@ export var coin = {
   enabled: true,
 }
 
-const runningAsScript = require.main === module;
-
-function run(){
+if (require.main === module){
   index(coin);
-}
-
-if (runningAsScript){
-  run();
 }
