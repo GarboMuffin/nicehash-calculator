@@ -145,7 +145,6 @@ export class OptionsParser{
     var split = _arg.split("=");
     var arg = split[0];
 
-    var rawArg = arg;
     arg = arg.toLowerCase();
 
     // for compatibilty checking, record the number of times an argument appears
@@ -295,7 +294,7 @@ export class OptionsParser{
       var occurences = this.occurences[arg];
 
       if (occurences > 1){
-        warn(`Too many ${underline(arg)} arguments specified!`);
+        warn(`Duplicate ${underline(arg)} arguments found!`);
       }
 
       if (ONLY_REVENUE_COMPATIBLE.indexOf(arg) === -1){
@@ -307,11 +306,9 @@ export class OptionsParser{
 
     // --only-revenue is not compatible with pretty much anything
     if (this.occurences["--only-revenue"] > 0){
-      if (onlyRevenueIncompatible.length > 0){
-        var ul = underline("--only-revenue");
-        for (var arg of onlyRevenueIncompatible){
-          warn(`${ul} is not compatible with ${underline(arg)}!`);
-        }
+      var ul = underline("--only-revenue");
+      for (var arg of onlyRevenueIncompatible){
+        warn(`${ul} is not compatible with ${underline(arg)}!`);
       }
     }
   }

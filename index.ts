@@ -37,6 +37,7 @@ async function run(coins: Coin[], options: Options){
         await waitForInput();
       }else{
         // FIXME: sleep time too low/too high?
+        // TODO: argument support
         await sleep(1000);
       }
     }
@@ -87,15 +88,11 @@ function listCoins(showAliases: boolean){
   for (var coin of AllCoins){
     var coinName = chalk.underline(coin.name);
 
-    var enabledText = "";
-    if (!coin.enabled){
-      enabledText = chalk.gray("(disabled by default)");
-    }
+    var enabledText = coin.enabled ? "" : chalk.gray("(disabled by default)");
 
-    // not used rn, but could be
     var algoName = chalk.gray(`(${Algorithms[coin.NiceHash.id]})`);
 
-    console.log(` ${chalk.gray("*")} ${coinName} ${enabledText}`);
+    console.log(` ${chalk.gray("*")} ${coinName} ${algoName} ${enabledText}`);
 
     if (showAliases && typeof coin.names !== "undefined"){
       for (var name of coin.names){

@@ -65,9 +65,9 @@ export async function run(i: Coin, options = DefaultOptions){
     await coin.init();
 
     var totalOrders = coin.totalOrders;
-    var cost = coin.price;
-    var profit = applyProfitOffset(options.priceOffset, revenue - cost);
-    var percent = profit / cost * 100;
+    var price = applyProfitOffset(options.priceOffset, coin.price);
+    var profit = revenue - price;
+    var percent = profit / price * 100;
 
     var color = profit > 0 ? chalk.green : chalk.red;
     color = color.underline;
@@ -83,7 +83,7 @@ export async function run(i: Coin, options = DefaultOptions){
       continue;
     }
 
-    output(pad(`Cost: ${color(cost.toFixed(PRECISION))} ${hash}`, 2));
+    output(pad(`Price: ${color(price.toFixed(PRECISION))} ${hash}`, 2));
     output(pad(`Profit: ${color(profit.toFixed(PRECISION))} ${hash}`, 2));
 
     if (options.percent){
