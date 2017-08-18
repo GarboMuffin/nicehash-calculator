@@ -12,6 +12,7 @@ export interface Options {
   priceOffset: ProfitUnit,
   onlyRevenue: boolean,
   locations: NiceHashLocation[],
+  debug: boolean,
 }
 
 export enum Unit {
@@ -36,7 +37,8 @@ export const DefaultOptions: Options = {
     unit: Unit.BTC
   },
   onlyRevenue: false,
-  locations: Locations
+  locations: Locations,
+  debug: false,
 }
 
 interface Occurences {
@@ -45,9 +47,9 @@ interface Occurences {
 
 const ONLY_REVENUE_COMPATIBLE = [
   "--only-revenue",
-  "--no-underline",
+  "--prompt",
+  "--debug",
   "--no-color",
-  "--no-colour",
 ];
 const USA_ALIASES = [
   "us", "usa", "westhash",
@@ -148,6 +150,7 @@ export class OptionsParser{
 
     // for compatibilty checking, record the number of times an argument appears
     // this is good enough for what the checking does
+    // TODO: only count occurence if valid arg
     this.occurences[arg] = (this.occurences[arg] || 0) + 1;
 
     switch (arg.toLowerCase()){
@@ -164,6 +167,9 @@ export class OptionsParser{
         break;
       case "--fixed":
         this.options.orderType = OrderType.Fixed;
+        break;
+      case "--debug":
+        this.options.debug = true;
         break;
       case "--location":
         return this.locationParser(split);

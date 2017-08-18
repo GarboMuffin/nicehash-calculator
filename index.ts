@@ -2,6 +2,7 @@ import {coins as AllCoins, Coin} from "./src/coins";
 import {run as index} from "./src/index";
 import {Options, DefaultOptions, OptionsParser} from "./src/options";
 import {Algorithms} from "./src/algorithms";
+import {Debug} from "./src/debug";
 
 import * as chalk from "chalk";
 import * as readline from "readline";
@@ -16,7 +17,13 @@ console.log(chalk.reset(`BTC: ${chalk.underline("1EecFw5Nq8ACAUKVptUPkakgXb2sbPQ
 console.log(chalk.reset(`ETH: ${chalk.underline("0x41a06D4b23E882D2093D2C2958Ed35265ff3d56E")}`));
 console.log("");
 
-async function run(coins: Coin[]){
+async function run(coins: Coin[], options: Options){
+  var debug = Debug.create(options);
+  debug("DEBUG ENABLED");
+  debug("Arguments", process.argv);
+  debug("Options", options);
+  debug("Coins", coins);
+
   // remove disabled coins
   coins = coins.filter(coin => coin.enabled);
 
@@ -123,4 +130,4 @@ if (process.argv.length > 2){
   coins = parser.coins;
 }
 
-run(coins);
+run(coins, options);
