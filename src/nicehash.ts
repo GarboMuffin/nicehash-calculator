@@ -33,6 +33,10 @@ export class NiceHashCost {
     return min;
   }
 
+  get totalOrders(){
+    return this.orders.length;
+  }
+
   private orders: Order[];
   private endpoint: string;
   private type: OrderType;
@@ -41,8 +45,6 @@ export class NiceHashCost {
     var response: any = await request(this.endpoint);
     this.orders = JSON.parse(response).result.orders;
     this.filter();
-
-    return this;
   }
 
   private filter(){

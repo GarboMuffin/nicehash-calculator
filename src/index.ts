@@ -64,9 +64,9 @@ export async function run(i: Coin, options = DefaultOptions){
     var coin = new NiceHashCost(createEndpoint(i.NiceHash.id, l), options.orderType);
     await coin.init();
 
+    var totalOrders = coin.totalOrders;
     var cost = coin.price;
-    var profit = revenue - cost;
-    profit = applyProfitOffset(options.priceOffset, profit);
+    var profit = applyProfitOffset(options.priceOffset, revenue - cost);
     var percent = profit / cost * 100;
 
     var color = profit > 0 ? chalk.green : chalk.red;
@@ -78,8 +78,8 @@ export async function run(i: Coin, options = DefaultOptions){
 
     output(pad(`${NiceHashLocation[l]}:`, 1));
 
-    if (options.orderType === OrderType.Fixed && cost === 0){
-      output(pad(chalk.red(`NO FIXED ORDERS`), 2));
+    if (totalOrders === 0){
+      output(pad(chalk.red(`NO ORDERS`), 2));
       continue;
     }
 
