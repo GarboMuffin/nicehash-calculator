@@ -3,6 +3,7 @@ import {run as index} from "./src/index";
 import {Options, DefaultOptions, OptionsParser} from "./src/options";
 import {Algorithms} from "./src/algorithms";
 import {Debug} from "./src/debug";
+import {OrderType} from "./src/order";
 
 import * as chalk from "chalk";
 import * as readline from "readline";
@@ -23,6 +24,11 @@ async function run(coins: Coin[], options: Options){
   debug("Arguments", process.argv);
   debug("Options", options);
   debug("Coins", coins);
+
+  if (options.orderType === OrderType.Fixed){
+    var ul = chalk.underline("--fixed");
+    console.warn(chalk.red(`${ul} is experimental and its results are VERY inaccurate!`) + " Its use is discouraged!");
+  }
 
   // remove disabled coins
   coins = coins.filter(coin => coin.enabled);
