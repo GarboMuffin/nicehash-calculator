@@ -1,0 +1,25 @@
+# Specify arguments you want to be enabled by default here
+# Lines starting with # are ingored
+# One argument per line
+# You can also specify coins here, although it might break some stuff.
+
+# Adds a % detail to the output
+--show-percent
+
+# Changes the method of finding price
+# Switches from using average global prices to finding the minimum order in EU and US that has SOME amount of miners.
+# Changes the output to list EU and US seperately
+# Average prices are much faster because they involve MUCH, MUCH fewer api requests. (1 inital, 1 for each coin to calculate profit)
+# --find-min
+
+# Changes the order type to FIXED
+# Currently experimental, any results of this are incorrect.
+# Might break if there aren't any fixed orders.
+# --fixed
+
+# Disables color
+# --no-color
+
+# Disables showing additional details if the profit is below X BTC or %
+# --min-profit=0.001
+# --min-profit=10%

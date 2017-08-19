@@ -7,6 +7,7 @@ import {OrderType} from "./src/order";
 
 import * as chalk from "chalk";
 import * as readline from "readline";
+import * as fs from "fs";
 
 console.log("The results of this program do not necessarily reflect real world results and fees.");
 console.log("The market is constantly changing and what is profitable now might not be in a couple minutes.");
@@ -111,10 +112,33 @@ function listCoins(showAliases: boolean){
 var options: Options = DefaultOptions;
 var coins: Coin[] = AllCoins;
 
-if (process.argv.length > 2){
+// clone the list
+var args = process.argv;
+
+try{
+  var argumentsFile = fs.readFileSync("arguments.txt");
+  for (var line of argumentsFile.toString().split("\n")){
+    if (line.startsWith("#")){
+      continue;
+    }
+
+    line = line.trim();
+    if (line === ""){
+      continue;
+    }
+
+    args.push(line);
+  }
+}catch(e){
+  // if it doesn't exist then just create an empty file
+  fs.writeFileSync("arguments.txt", "");
+}
+
+
+if (args.length > 2){
 
   // coin listing
-  switch (process.argv[2]){
+  switch (args[2]){
     case "list":
     case "coins":
       listCoins(false);
@@ -127,7 +151,7 @@ if (process.argv.length > 2){
   }
 
   // options
-  var parser = new OptionsParser(process.argv.splice(2));
+  var parser = new OptionsParser(args.splice(2));
   parser.parse();
   options = parser.options;
   coins = parser.coins;
