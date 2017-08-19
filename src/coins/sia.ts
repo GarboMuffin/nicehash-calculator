@@ -1,6 +1,5 @@
 import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
-import {run as index} from "../index";
 
 export var coin = {
   name: "SC",
@@ -16,8 +15,4 @@ export var coin = {
     id: 161,
   },
   enabled: true,
-}
-
-if (require.main === module){
-  index(coin);
 }
