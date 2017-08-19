@@ -1,16 +1,16 @@
 import {coins as AllCoins, Coin} from "./coins";
 import {NiceHashLocation, Locations} from "./location";
-import {OrderType} from "./order";
+import {NHOrderType} from "./order";
+import {NHOptions} from "./nicehash";
 
 import * as chalk from "chalk";
 
-export interface Options {
-  prompt: boolean,
-  percent: boolean,
-  orderType: OrderType,
+export interface Options extends NHOptions {
+  showPrompt: boolean,
+  showPercent: boolean,
   minProfit: ProfitUnit,
   priceOffset: ProfitUnit,
-  onlyRevenue: boolean,
+  onlyShowRevenue: boolean,
   locations: NiceHashLocation[],
   debug: boolean,
 }
@@ -25,9 +25,9 @@ export interface ProfitUnit {
 }
 
 export const DefaultOptions: Options = {
-  prompt: false,
-  percent: false,
-  orderType: OrderType.Standard,
+  showPrompt: false,
+  showPercent: false,
+  orderType: NHOrderType.Standard,
   minProfit: {
     amount: -Infinity,
     unit: Unit.BTC
@@ -36,9 +36,12 @@ export const DefaultOptions: Options = {
     amount: 0,
     unit: Unit.BTC
   },
-  onlyRevenue: false,
+  onlyShowRevenue: false,
   locations: Locations,
   debug: false,
+
+  // inherited from NHOptions
+  findMin: false,
 }
 
 interface Occurences {
@@ -153,22 +156,25 @@ export class OptionsParser{
     this.occurences[arg] = (this.occurences[arg] || 0) + 1;
 
     switch (arg.toLowerCase()){
-      case "--percent":
-        this.options.percent = true;
+      case "--show-percent":
+        this.options.showPercent = true;
         break;
       case "--min-profit":
         return this.minProfitParser(split);
       case "--only-revenue":
-        this.options.onlyRevenue = true;
+        this.options.onlyShowRevenue = true;
         break;
       case "--prompt":
-        this.options.prompt = true;
+        this.options.showPercent = true;
         break;
       case "--fixed":
-        this.options.orderType = OrderType.Fixed;
+        this.options.orderType = NHOrderType.Fixed;
         break;
       case "--debug":
         this.options.debug = true;
+        break;
+      case "--find-min":
+        this.options.findMin = true;
         break;
       case "--location":
         return this.locationParser(split);

@@ -3,7 +3,9 @@ import {run as index} from "./src/index";
 import {Options, DefaultOptions, OptionsParser} from "./src/options";
 import {Algorithms} from "./src/algorithms";
 import {Debug} from "./src/debug";
-import {OrderType} from "./src/order";
+import {NHOrderType} from "./src/order";
+import {NiceHashAPI} from "./src/nicehash";
+import {NiceHashLocation} from "./src/location";
 
 import * as chalk from "chalk";
 import * as readline from "readline";
@@ -26,25 +28,32 @@ async function run(coins: Coin[], options: Options){
   debug("Options", options);
   debug("Coins", coins);
 
-  if (options.orderType === OrderType.Fixed){
+  // --fixed only uses existing fixed orders to determine price
+  // this is not how nicehash chooses prices so any results are complete lies
+  if (options.orderType === NHOrderType.Fixed){
     var ul = chalk.underline("--fixed");
     console.warn(chalk.red(`${ul} is experimental and its results are VERY inaccurate!`) + " Its use is discouraged!");
   }
 
+  // get our api wrapper and load it
+  var nicehash = new NiceHashAPI();
+  await nicehash.getCoinCosts();
+
   // remove disabled coins
   coins = coins.filter(coin => coin.enabled);
+
+  console.log(`Using ${options.findMin ? "MINIMUM" : "AVERAGE"} prices.`);
+  console.log("");
 
   for (var i = 0; i < coins.length; i++){
     var coin = coins[i];
 
-    await index(coin, options);
+    await index(coin, options, nicehash);
 
     if (i + 1 < coins.length){
-      if (options.prompt){
+      if (options.showPrompt){
         await waitForInput();
       }else{
-        // FIXME: sleep time too low/too high?
-        // TODO: argument support
         await sleep(1000);
       }
     }

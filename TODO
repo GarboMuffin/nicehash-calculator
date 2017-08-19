@@ -1,0 +1,6 @@
+ * Fixed orders: https://new.nicehash.com/help/fixed-order
+   * Use the formula on the help page to calculate price
+   * I believe all data is availible already in the things implemented?
+ * Rewrite NiceHash APIs
+ * Rewrite WhatToMine APIs
+ * Renaming things

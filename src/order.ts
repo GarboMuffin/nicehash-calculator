@@ -1,4 +1,4 @@
-export interface Order {
+export interface NHOrder {
   limit_speed: number,
   alive: boolean,
   price: number,
@@ -9,7 +9,7 @@ export interface Order {
   accepted_speed: number,
 }
 
-export enum OrderType {
+export enum NHOrderType {
   Standard = 0,
   Fixed = 1,
 }
