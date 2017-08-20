@@ -2,9 +2,9 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "XMR",
+  name: "Monero",
   names: [
-    "cryptonight", "monero",
+    "xmr", "cryptonight", "monero",
   ],
   NiceHash: {
     hashrate: Hash.MEGA,

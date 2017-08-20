@@ -2,9 +2,9 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "MAX",
+  name: "Maxcoin",
   names: [
-    "maxcoin", "keccak",
+    "max", "keccak",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,

@@ -2,9 +2,9 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "BTC",
+  name: "Bitcoin",
   names: [
-    "bitcoin",
+    "btc",
   ],
   NiceHash: {
     hashrate: Hash.PETA,

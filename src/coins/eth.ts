@@ -2,9 +2,9 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "ETH",
+  name: "Ethereum",
   names: [
-    "ethereum", "daggerhashimoto", "ethash",
+    "eth", "daggerhashimoto", "ethash",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,

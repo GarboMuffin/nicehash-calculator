@@ -2,7 +2,7 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "DASH",
+  name: "Dash",
   names: [
 
   ],

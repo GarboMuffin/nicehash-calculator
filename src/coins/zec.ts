@@ -2,9 +2,9 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "ZEC",
+  name: "Zcash",
   names: [
-    "equihash", "zcash",
+    "zec", "equihash",
   ],
   NiceHash: {
     hashrate: Hash.MSOL,

@@ -2,9 +2,9 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "SC",
+  name: "Sia",
   names: [
-    "sia", "siacoin", "dual",
+    "sc", "siacoin", "dual",
   ],
   NiceHash: {
     hashrate: Hash.TERA,
