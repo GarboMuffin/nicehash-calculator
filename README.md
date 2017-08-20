@@ -4,6 +4,7 @@ It uses [WhatToMine](https://whattomine.com/) to calculate earnings.
 
 ## supported coins
  * bitcoin
+ * bitcoin cash
  * ethereum
  * ethereum classic
  * zcash

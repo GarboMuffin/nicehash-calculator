@@ -13,6 +13,7 @@ import {coin as Litecoin} from "./coins/ltc";
 import {coin as Monero} from "./coins/monero";
 import {coin as Keccak} from "./coins/keccak";
 import {coin as Lbry} from "./coins/lbry";
+import {coin as BitcoinCash} from "./coins/bcc";
 
 export interface Coin {
   name: string
@@ -33,6 +34,7 @@ export interface Coin {
 
 export var coins: Coin[] = [
   Bitcoin,
+  BitcoinCash,
   Ethereum,
   EthereumClassic,
   ZCash,
