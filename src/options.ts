@@ -5,6 +5,15 @@ import {NHOptions} from "./nicehash";
 
 import * as chalk from "chalk";
 
+export enum Unit {
+  Percent, BTC
+}
+
+export interface ProfitUnit {
+  amount: number,
+  unit: Unit
+}
+
 export interface Options extends NHOptions {
   showPrompt: boolean,
   showPercent: boolean,
@@ -13,15 +22,7 @@ export interface Options extends NHOptions {
   onlyShowRevenue: boolean,
   locations: NiceHashLocation[],
   debug: boolean,
-}
-
-export enum Unit {
-  Percent, BTC
-}
-
-export interface ProfitUnit {
-  amount: number,
-  unit: Unit
+  showHeader: boolean,
 }
 
 export const DefaultOptions: Options = {
@@ -39,6 +40,7 @@ export const DefaultOptions: Options = {
   onlyShowRevenue: false,
   locations: Locations,
   debug: false,
+  showHeader: true,
 
   // inherited from NHOptions
   findMin: false,
@@ -181,10 +183,16 @@ export class OptionsParser{
       case "--offset":
         return this.offsetParser(split);
       case "--no-color":
-        // chalk supports --no-color
-        // adding it here prevents invalid option warnings
+        // --no-color is usually supplied by chalk
+        // this manually disables color because arguments.txt
+        (chalk as any).level = 0;
+        break;
+      case "--no-header":
+        // header contains disclaimers and donation addresses
+        this.options.showHeader = false;
         break;
       default:
+        // unknown option
         return false;
     }
 

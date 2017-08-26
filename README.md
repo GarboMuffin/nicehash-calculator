@@ -21,6 +21,7 @@ put arguments in arguments.txt for them to be used by default
 | `--find-min` | find the minimum prices instead of average prices   note: much slower. this changes the output to have EU/US categories as they are different |  |
 | `--location=X` | only find the prices in a certain marketplace. used with `--find-min` | `--location=eu` or `--location=us` |
 | `--no-color` | disables color |  |
+| `--no-header` | hides the header containing disclaimers and donation addresses |  |
 
 ## supported coins
  * bitcoin
