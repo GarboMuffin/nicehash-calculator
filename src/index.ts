@@ -36,7 +36,7 @@ function applyProfitOffset(options: ProfitUnit, profit: number){
   return profit;
 }
 
-function shouldUseUnifiedOutput(options: Options){
+export function shouldUseUnifiedOutput(options: Options){
   return !options.findMin && options.orderType === NHOrderType.Standard;
 }
 

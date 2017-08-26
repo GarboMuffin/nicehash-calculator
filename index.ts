@@ -1,5 +1,5 @@
 import {coins as AllCoins, Coin} from "./src/coins";
-import {run as index} from "./src/index";
+import {run as index, shouldUseUnifiedOutput} from "./src/index";
 import {Options, DefaultOptions, OptionsParser} from "./src/options";
 import {Algorithms} from "./src/algorithms";
 import {Debug} from "./src/debug";
@@ -37,7 +37,16 @@ async function run(coins: Coin[], options: Options){
 
   // get our api wrapper and load it
   var nicehash = new NiceHashAPI();
-  await nicehash.getCoinCosts();
+  if (shouldUseUnifiedOutput(options)){
+    try{
+      await nicehash.getCoinCosts();
+    }catch(e){
+      console.error(chalk.red(`Failed to load price data from NiceHash. Aborting.`));
+      console.error(chalk.red("Error received:"));
+      console.error(e);
+      exit(1);
+    }
+  }
 
   // remove disabled coins
   coins = coins.filter(coin => coin.enabled);
@@ -116,6 +125,10 @@ function listCoins(showAliases: boolean){
       }
     }
   }
+}
+
+function exit(code: number = 0){
+  process.exit(code);
 }
 
 var options: Options = DefaultOptions;
