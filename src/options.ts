@@ -173,9 +173,11 @@ export class OptionsParser{
         this.options.orderType = NHOrderType.Fixed;
         break;
       case "--debug":
+        // output more things for debugging
         this.options.debug = true;
         break;
       case "--find-min":
+        // use minimum prices at EU and US instead of global averages
         this.options.findMin = true;
         break;
       case "--location":

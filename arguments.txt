@@ -22,5 +22,6 @@
 # --no-color
 
 # Disables showing additional details if the profit is below X BTC or %
+# Note that the revenue will still be outputted.
 # --min-profit=0.001
 # --min-profit=10%

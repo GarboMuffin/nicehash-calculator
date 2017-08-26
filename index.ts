@@ -12,7 +12,7 @@ import * as readline from "readline";
 import * as fs from "fs";
 
 async function run(coins: Coin[], options: Options){
-  var debug = Debug.create(options);
+  const debug = Debug.create(options);
   debug("DEBUG ENABLED");
   debug("Arguments", process.argv);
   debug("Options", options);
@@ -59,8 +59,11 @@ async function run(coins: Coin[], options: Options){
   for (var i = 0; i < coins.length; i++){
     var coin = coins[i];
 
+    // run the main logic
+    // could maybe move into here because coin definitions no longer run on their own?
     await index(coin, options, nicehash);
 
+    // do not wait after the last coin
     if (i + 1 < coins.length){
       if (options.showPrompt){
         await waitForInput();
