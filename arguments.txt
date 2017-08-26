@@ -1,7 +1,8 @@
 # Specify arguments you want to be enabled by default here
 # Lines starting with # are ingored
 # One argument per line
-# You can also specify coins here, although it might break some stuff.
+
+# You can specify coins here but I would highly recommend against it.
 
 # Adds a % detail to the output
 --show-percent
