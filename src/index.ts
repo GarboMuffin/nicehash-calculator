@@ -1,3 +1,8 @@
+/*
+ * This is where the major part of the script lives.
+ * This is where profits are actually calculated and outputted to the console.
+ */
+
 import {NiceHashLocation, Locations} from "./location";
 import {NiceHashAPI, NHCoinStat} from "./nicehash";
 import {WhatToMine} from "./whattomine";
@@ -16,6 +21,13 @@ function pad(text: string, i: number){
   return " ".repeat(i) + text;
 }
 
+/**
+ * Returns if the profit reaches the minimum required for outputting.
+ * @param {ProfitUnit} options
+ * @param {number} btc The profit in BTC
+ * @param {number} percent The profit in %
+ * @returns
+ */
 function minProfitCheck(options: ProfitUnit, btc: number, percent: number){
   if (options.unit === Unit.BTC){
     return options.amount <= btc;
@@ -26,7 +38,13 @@ function minProfitCheck(options: ProfitUnit, btc: number, percent: number){
   return false;
 }
 
-function applyProfitOffset(options: ProfitUnit, profit: number){
+/**
+ * Apply offsets to the price.
+ * @param {ProfitUnit} options
+ * @param {number} profit
+ * @returns
+ */
+function applyOffset(options: ProfitUnit, profit: number){
   if (options.unit === Unit.BTC){
     profit += options.amount;
   }
@@ -70,47 +88,28 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
 
   var useUnifiedOutput = shouldUseUnifiedOutput(options);
 
-  enum OutputMethod {Unified, Divided};
-  interface OutputMethodMeta {
-    padding: number,
-    showLocation: boolean,
-  }
-  interface OutputOptions {
-    location: NiceHashLocation
-  }
-  var methods = new Map<OutputMethod, OutputMethodMeta>();
-  methods.set(OutputMethod.Unified, {
-    padding: 1,
-    showLocation: false,
-  });
-  methods.set(OutputMethod.Divided, {
-    padding: 2,
-    showLocation: true,
-  });
-
   if (useUnifiedOutput){
-    // if not --find-min or --fixed eu and us have the same details
-    // and whatnot
-    
+    // if not --find-min or --fixed then both eu and us have the same details
+
     // NOTE: the location argument is IGNORED
     // this function always returns a NHCoinStat in this case
-    var coin = await nicehash.get(i.NiceHash.id, NiceHashLocation.EU, options) as NHCoinStat;
-    outputData(coin.price, OutputMethod.Unified);
+    var coin = await nicehash.get(i.NiceHash.id, null, options) as NHCoinStat;
+    outputData(coin.price, OutputMethods.Unified);
   }else{
     for (var l of options.locations){
       var price = await nicehash.get(i.NiceHash.id, l, options) as number;
-      outputData(price, OutputMethod.Divided, {
+      outputData(price, OutputMethods.Divided, {
         location: l,
       });
     }
   }
 
-  function outputData(price: number, method: OutputMethod, doptions?: OutputOptions){
-    var methodMeta = methods.get(method) as OutputMethodMeta;
+  function outputData(price: number, method: OutputMethodMeta, doptions?: OutputOptions){
+    var methodMeta = method;
     var padding = methodMeta.padding;
     var showLocation = methodMeta.showLocation;
 
-    price = applyProfitOffset(options.priceOffset, price);
+    price = applyOffset(options.priceOffset, price);
 
     var profit = revenue - price;
     var percent = profit / price * 100
@@ -132,5 +131,26 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
     if (options.showPercent){
       output(pad(`%: ${color(percent.toFixed(PRECISION))}%`, padding));
     }
+  }
+}
+
+// Defines the different methods of outputting and their options
+interface OutputMethodMeta {
+  padding: number,
+  showLocation: boolean,
+}
+interface OutputOptions {
+  location: NiceHashLocation
+}
+
+class OutputMethods {
+  static Unified: OutputMethodMeta = {
+    padding: 1,
+    showLocation: false,
+  }
+
+  static Divided: OutputMethodMeta = {
+    padding: 2,
+    showLocation: true,
   }
 }

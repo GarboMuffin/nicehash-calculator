@@ -1,3 +1,9 @@
+/**
+ * A reusable class for debugging.
+ * Removes some useless boilerplate and expands objects passed to it.
+ * (console.log has a depth limit, many objects in this reach that limit quickly)
+ */
+
 import {Options} from "./options";
 
 import * as chalk from "chalk";

@@ -1,3 +1,8 @@
+/*
+ * A simple wrapper for the NiceHash API
+ * Currently only gets prices, could be expanded.
+ */
+
 import {Hash} from "./hash";
 import {NiceHashLocation} from "./location";
 import {Algorithms as Algorithm} from "./algorithms";
@@ -48,12 +53,12 @@ export class NiceHashAPI {
     return this.coinCosts as TCoinStats;
   }
 
-  async get(algo: Algorithm, location: NiceHashLocation, options: NHOptions){
+  async get(algo: Algorithm, location: NiceHashLocation|null, options: NHOptions){
     // note: in most cases (not --find-min or --fixed) the location argument is IGNORED
 
     if (options.orderType === NHOrderType.Fixed || options.findMin){
       // make an api request to find the MINIMUM price
-      var req = await request(createEndpoint(algo, location));
+      var req = await request(createEndpoint(algo, location as NiceHashLocation));
       var json = JSON.parse(req as any);
       var orders: NHOrder[] = json.result.orders;
 

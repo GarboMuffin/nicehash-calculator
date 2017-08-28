@@ -1,33 +1,38 @@
+/*
+ * A simple wrapper for the WhatToMine API, very simple.
+ */
+
 import {HashRate} from "./hash";
 
 import * as request from "request-promise";
 
+// All of these things are supported but we don't care about anything other than the btc_revenue
 export interface WhatToMineResponse {
-  algorithm: string,
-  block_reward: number,
-  block_reward24: number,
-  block_time: string,
+  // algorithm: string,
+  // block_reward: number,
+  // block_reward24: number,
+  // block_time: string,
   btc_revenue: string,
-  cost: string,
-  difficulty: number,
-  difficulty24: number,
-  estimated_rewards: string,
-  exchange_rate: number,
-  exchange_rate24: number,
-  exchange_rate_curr: string,
-  exchange_rate_vol: number,
-  id: number,
-  lagging: boolean,
-  last_block: number,
-  market_cap: string,
-  name: string,
-  nethash: string,
-  pool_fee: string,
-  profit: string,
-  revenue: string,
-  status: string,
-  tag: string,
-  timestamp: number,
+  // cost: string,
+  // difficulty: number,
+  // difficulty24: number,
+  // estimated_rewards: string,
+  // exchange_rate: number,
+  // exchange_rate24: number,
+  // exchange_rate_curr: string,
+  // exchange_rate_vol: number,
+  // id: number,
+  // lagging: boolean,
+  // last_block: number,
+  // market_cap: string,
+  // name: string,
+  // nethash: string,
+  // pool_fee: string,
+  // profit: string,
+  // revenue: string,
+  // status: string,
+  // tag: string,
+  // timestamp: number,
 }
 
 /**

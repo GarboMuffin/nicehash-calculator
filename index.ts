@@ -23,7 +23,7 @@ async function run(coins: Coin[], options: Options){
     console.log("The market is constantly changing and what is profitable now might not be in a couple minutes.");
     console.log("Do your own research and don't spend what you can't afford to lose.");
     console.log("I am not responsible for any losses.");
-  
+
     console.log("");
     console.log(chalk.reset(`BTC: ${chalk.underline("1EecFw5Nq8ACAUKVptUPkakgXb2sbPQa7Z")}`));
     console.log(chalk.reset(`ETH: ${chalk.underline("0x41a06D4b23E882D2093D2C2958Ed35265ff3d56E")}`));
@@ -117,9 +117,7 @@ function listCoins(showAliases: boolean){
 
   for (var coin of AllCoins){
     var coinName = chalk.underline(coin.name);
-
     var enabledText = coin.enabled ? "" : chalk.gray("(disabled by default)");
-
     var algoName = chalk.gray(`(${Algorithms[coin.NiceHash.id]})`);
 
     console.log(` ${chalk.gray("*")} ${coinName} ${algoName} ${enabledText}`);
@@ -142,13 +140,25 @@ var coins: Coin[] = AllCoins;
 // clone the list
 var args = process.argv;
 
+const ARGUMENTS_TXT_DEFAULT = `
+# Specify arguments you want to be enabled by default here
+# Lines starting with # are ingored
+# One argument per line
+
+# You can specify coins here but I would highly recommend against it.`;
+
 try{
+  // read arguments.txt
+  // done synchronously for simplicity, async isn't needed for this.
   var argumentsFile = fs.readFileSync("arguments.txt");
   for (var line of argumentsFile.toString().split("\n")){
+    // ignore lines starting with #
     if (line.startsWith("#")){
       continue;
     }
 
+    // some line ending things break the comparisons later
+    // also removes trailing and leading whitespace
     line = line.trim();
     if (line === ""){
       continue;
@@ -158,12 +168,10 @@ try{
   }
 }catch(e){
   // if it doesn't exist then just create an empty file
-  fs.writeFileSync("arguments.txt", "");
+  fs.writeFileSync("arguments.txt", ARGUMENTS_TXT_DEFAULT);
 }
 
-
 if (args.length > 2){
-
   // coin listing
   switch (args[2]){
     case "list":

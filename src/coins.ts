@@ -1,3 +1,7 @@
+/*
+ * All coins supported by this script.
+ */
+
 import {Hash, HashRate} from "./hash";
 import {Algorithms as Algorithm} from "./algorithms";
 
@@ -48,6 +52,7 @@ export var coins: Coin[] = [
   Lbry,
 ];
 
+// sorts the coins alphabetically
 coins.sort(function(a, b) {
   var atext = a.name.toUpperCase();
   var btext = b.name.toUpperCase();

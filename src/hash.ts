@@ -1,3 +1,7 @@
+/*
+ * Defines reusable units of hashrates
+ */
+
 export class HashRate {
   constructor(hashrate: number, name: string){
     this.hashrate = hashrate;
