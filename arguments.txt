@@ -13,11 +13,6 @@
 # Average prices are much faster because they involve MUCH, MUCH fewer api requests. (1 inital, 1 for each coin to calculate profit)
 # --find-min
 
-# Changes the order type to FIXED
-# Currently experimental, any results of this are incorrect.
-# Might break if there aren't any fixed orders.
-# --fixed
-
 # Disables color
 # --no-color
 
