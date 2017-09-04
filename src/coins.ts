@@ -18,6 +18,7 @@ import {coin as Monero} from "./coins/monero";
 import {coin as Keccak} from "./coins/keccak";
 import {coin as Lbry} from "./coins/lbry";
 import {coin as BitcoinCash} from "./coins/bcc";
+import {coin as Vertcoin} from "./coins/vtc";
 
 export interface Coin {
   name: string
@@ -50,6 +51,7 @@ export var coins: Coin[] = [
   Monero,
   Keccak,
   Lbry,
+  Vertcoin,
 ];
 
 // sorts the coins alphabetically
