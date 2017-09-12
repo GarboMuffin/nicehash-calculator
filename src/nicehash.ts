@@ -72,8 +72,6 @@ export class NiceHashAPI {
     var coinStats = (await this.getCoinCosts()).get(algo) as NHCoinStat;
 
     if (options.orderType === NHOrderType.Fixed){
-      console.log("a");
-
       // make an api request to find the MINIMUM price
       var req = await request(createEndpoint(algo, location as NiceHashLocation));
       var json = JSON.parse(req as any);
