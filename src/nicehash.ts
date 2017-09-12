@@ -92,7 +92,7 @@ export class NiceHashAPI {
 
         return price;
       }
-    }else{
+    }else if (options.findMin){
       var req = await request(createEndpoint(algo, location as NiceHashLocation));
       var json = JSON.parse(req as any);
       var orders: NHOrder[] = json.result.orders;
