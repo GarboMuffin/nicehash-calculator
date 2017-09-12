@@ -32,9 +32,24 @@ export interface NHCoinStat {
 
 type TCoinStats = Map<Algorithm, NHCoinStat>;
 
+// see: https://www.nicehash.com/help/fixed-order
+export function calculateFixedPrice(fixedHashrate: number, totalHashrate: number, price: number){
+  function f(){
+    return 2 - Math.cos(
+      Math.asin(
+        2 * (fixedHashrate / totalHashrate)
+      )
+    ) + 0.01;
+  }
+
+  console.log(f());
+
+  return f() * price;
+}
+
 export class NiceHashAPI {
   private coinCosts: TCoinStats = new Map();
-  async getCoinCosts() {
+  async getCoinCosts(){
     if (this.coinCosts.size === 0){
       // load the statistics
       var req = await request(`https://api.nicehash.com/api?method=stats.global.current`);
@@ -56,23 +71,48 @@ export class NiceHashAPI {
   async get(algo: Algorithm, location: NiceHashLocation|null, options: NHOptions){
     // note: in most cases (not --find-min or --fixed) the location argument is IGNORED
 
-    if (options.orderType === NHOrderType.Fixed || options.findMin){
+    var coinStats = (await this.getCoinCosts()).get(algo) as NHCoinStat;
+
+    if (options.orderType === NHOrderType.Fixed){
+      console.log("a");
+
       // make an api request to find the MINIMUM price
       var req = await request(createEndpoint(algo, location as NiceHashLocation));
       var json = JSON.parse(req as any);
       var orders: NHOrder[] = json.result.orders;
 
-      var min = Infinity;
+      if (options.orderType === NHOrderType.Fixed){
+        var totalHashrate = coinStats.speed;
+        var fixedHashrate = 0;
+        var requestHashrate = 0; // TODO: nicehash uses this in their calculations, currently this doesn't account for it
+
+        for (var o of orders){
+          if (o.type === NHOrderType.Fixed){
+            fixedHashrate += Number(o.limit_speed);
+          }
+        }
+
+        var price = calculateFixedPrice(fixedHashrate, totalHashrate, coinStats.price);
+
+        return price;
+      }
+    }else{
+      var req = await request(createEndpoint(algo, location as NiceHashLocation));
+      var json = JSON.parse(req as any);
+      var orders: NHOrder[] = json.result.orders;
+
+      var price = Infinity;
+
       for (var o of orders){
-        if (o.price < min && o.workers > 0 && o.type === options.orderType){
-          min = o.price;
+        if (o.price < price && o.workers > 0 && o.type === options.orderType){
+          price = o.price;
         }
       }
 
-      return Number(min);
+      return price;
     }
 
-    return (await this.getCoinCosts()).get(algo) || 0;
+    return coinStats;
   }
 }
 

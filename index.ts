@@ -26,28 +26,24 @@ async function run(coins: Coin[], options: Options){
 
     console.log("");
     console.log(chalk.reset(`BTC: ${chalk.underline("1EecFw5Nq8ACAUKVptUPkakgXb2sbPQa7Z")}`));
-    console.log(chalk.reset(`ETH: ${chalk.underline("0x41a06D4b23E882D2093D2C2958Ed35265ff3d56E")}`));
     console.log("");
   }
 
-  // --fixed only uses existing fixed orders to determine price
-  // this is not how nicehash chooses prices so any results are complete lies
+  // --fixed is buggy
   if (options.orderType === NHOrderType.Fixed){
     var ul = chalk.underline("--fixed");
-    console.warn(chalk.red(`${ul} is experimental and its results are VERY inaccurate!`) + " Its use is discouraged!");
+    console.warn(chalk.red(`${ul} is experimental and its results may not be accurate!`) + " Its use is discouraged!");
   }
 
   // get our api wrapper and load it
   var nicehash = new NiceHashAPI();
-  if (shouldUseUnifiedOutput(options)){
-    try{
-      await nicehash.getCoinCosts();
-    }catch(e){
-      console.error(chalk.red(`Failed to load price data from NiceHash. Aborting.`));
-      console.error(chalk.red("Error received:"));
-      console.error(e);
-      exit(1);
-    }
+  try{
+    await nicehash.getCoinCosts();
+  }catch(e){
+    console.error(chalk.red(`Failed to load price data from NiceHash. Aborting.`));
+    console.error(chalk.red("Error received:"));
+    console.error(e);
+    exit(1);
   }
 
   // remove disabled coins

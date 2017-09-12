@@ -82,8 +82,6 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
     return;
   }
 
-  // var coin = new NiceHashCost(createEndpoint(i.NiceHash.id, l), options.orderType);
-
   // load the price details now
 
   var useUnifiedOutput = shouldUseUnifiedOutput(options);
