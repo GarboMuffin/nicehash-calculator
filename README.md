@@ -37,3 +37,4 @@ there's lots of them. you can put things in arguments.txt for them to be read au
  * monero
  * keccak
  * lbry
+ * vertcoin
