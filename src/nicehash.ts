@@ -42,8 +42,6 @@ export function calculateFixedPrice(fixedHashrate: number, totalHashrate: number
     ) + 0.01;
   }
 
-  console.log(f());
-
   return f() * price;
 }
 
