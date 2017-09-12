@@ -22,6 +22,7 @@ there's lots of them. you can put things in arguments.txt for them to be read au
 | `--location=X` | only find the prices in a certain marketplace. used with `--find-min` | `--location=eu` or `--location=us` |
 | `--no-color` | disables color |  |
 | `--no-header` | hides the header containing disclaimers and donation addresses |  |
+| `--fixed-speed=X` | (for fixed orders) the requested speed to be used in price calculations | `--fixed-speed=1`
 
 ## supported coins
  * bitcoin

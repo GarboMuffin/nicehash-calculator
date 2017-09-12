@@ -90,13 +90,12 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
     // if not --find-min or --fixed then both eu and us have the same details
 
     // NOTE: the location argument is IGNORED
-    // this function always returns a NHCoinStat in this case
-    var coin = await nicehash.get(i.NiceHash.id, null, options) as NHCoinStat;
-    outputData(coin.price, OutputMethods.Unified);
+    var price = await nicehash.get(i.NiceHash.id, null, options);
+    outputData(Number(price), OutputMethods.Unified);
   }else{
     for (var l of options.locations){
-      var price = await nicehash.get(i.NiceHash.id, l, options) as number;
-      outputData(price, OutputMethods.Divided, {
+      var price = await nicehash.get(i.NiceHash.id, l, options);
+      outputData(Number(price), OutputMethods.Divided, {
         location: l,
       });
     }

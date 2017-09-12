@@ -33,6 +33,7 @@ async function run(coins: Coin[], options: Options){
   if (options.orderType === NHOrderType.Fixed){
     var ul = chalk.underline("--fixed");
     console.warn(chalk.red(`${ul} is experimental and its results may not be accurate!`) + " Its use is discouraged!");
+    console.warn(`Using an order speed of ${options.fixedSpeed}(any)H/s. The real price does increase and decrease with order size.`);
   }
 
   // get our api wrapper and load it

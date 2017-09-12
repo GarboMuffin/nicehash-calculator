@@ -23,6 +23,7 @@ interface NHGlobalCosts {
 export interface NHOptions {
   findMin: boolean,
   orderType: NHOrderType,
+  fixedSpeed: number,
 }
 
 export interface NHCoinStat {
@@ -33,8 +34,8 @@ export interface NHCoinStat {
 type TCoinStats = Map<Algorithm, NHCoinStat>;
 
 // see: https://www.nicehash.com/help/fixed-order
-export function calculateFixedPrice(fixedHashrate: number, totalHashrate: number, price: number){
-  function f(){
+export function calculateFixedPrice(fixedHashrate: number, totalHashrate: number, requestHashrate: number, price: number){
+  function f1(){
     return 2 - Math.cos(
       Math.asin(
         2 * (fixedHashrate / totalHashrate)
@@ -42,7 +43,15 @@ export function calculateFixedPrice(fixedHashrate: number, totalHashrate: number
     ) + 0.01;
   }
 
-  return f() * price;
+  function f2(){
+    return 2 - Math.cos(
+      Math.asin(
+        2 * ((fixedHashrate + requestHashrate) / totalHashrate)
+      )
+    ) + 0.01;
+  }
+
+  return ((f1() + f2()) / 2) * price;
 }
 
 export class NiceHashAPI {
@@ -66,7 +75,7 @@ export class NiceHashAPI {
     return this.coinCosts as TCoinStats;
   }
 
-  async get(algo: Algorithm, location: NiceHashLocation|null, options: NHOptions){
+  async get(algo: Algorithm, location: NiceHashLocation|null, options: NHOptions): Promise<number>{
     // note: in most cases (not --find-min or --fixed) the location argument is IGNORED
 
     var coinStats = (await this.getCoinCosts()).get(algo) as NHCoinStat;
@@ -88,7 +97,7 @@ export class NiceHashAPI {
           }
         }
 
-        var price = calculateFixedPrice(fixedHashrate, totalHashrate, coinStats.price);
+        var price = calculateFixedPrice(fixedHashrate, totalHashrate, options.fixedSpeed, coinStats.price);
 
         return price;
       }
@@ -108,7 +117,7 @@ export class NiceHashAPI {
       return price;
     }
 
-    return coinStats;
+    return coinStats.price;
   }
 }
 

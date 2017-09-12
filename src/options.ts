@@ -23,6 +23,7 @@ export interface Options extends NHOptions {
   locations: NiceHashLocation[],
   debug: boolean,
   showHeader: boolean,
+  fixedSpeed: number,
 }
 
 export const DefaultOptions: Options = {
@@ -44,6 +45,7 @@ export const DefaultOptions: Options = {
 
   // inherited from NHOptions
   findMin: false,
+  fixedSpeed: 1,
 }
 
 interface Occurences {
@@ -184,6 +186,8 @@ export class OptionsParser{
         return this.locationParser(split);
       case "--offset":
         return this.offsetParser(split);
+      case "--fixed-speed":
+        return this.fixedSpeedParser(split);
       case "--no-color":
         // --no-color is usually supplied by chalk
         // this manually disables color because arguments.txt
@@ -197,6 +201,17 @@ export class OptionsParser{
         // unknown option
         return false;
     }
+
+    return true;
+  }
+
+  private fixedSpeedParser(args: string[]){
+    var value = parseNumber(args[1]);
+    if (value === null){
+      return false;
+    }
+
+    this.options.fixedSpeed = value;
 
     return true;
   }
