@@ -1,5 +1,5 @@
 # nicehash profit calculator
-a highly customizable script to calculate the profitability of buying hashing power on nicehash.
+a customizable script to calculate the profitability of buying hashing power on nicehash
 
 ## usage
 ```bash
@@ -9,7 +9,7 @@ $ ts-node index <...args>
 ```
 
 ## arguments
-put arguments in arguments.txt for them to be used by default
+there's lots of them. you can put things in arguments.txt for them to be read automatically.
 
 | argument | description | usage |
 |:----------------:|:---------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------:|

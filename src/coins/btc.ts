@@ -4,7 +4,7 @@ import {Algorithms} from "../algorithms";
 export var coin = {
   name: "Bitcoin",
   names: [
-    "btc",
+    "btc", "sha", "sha256",
   ],
   NiceHash: {
     hashrate: Hash.PETA,
