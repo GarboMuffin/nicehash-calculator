@@ -4,7 +4,7 @@ import {Algorithms} from "../../algorithms";
 export var coin = {
   name: "Musicoin",
   names: [
-    "music", "daggerhashimoto", "ethash", "dagger",
+    "music",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,

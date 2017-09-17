@@ -14,5 +14,5 @@ export var coin = {
     hashrate: 1000 * 1000,
     id: 161,
   },
-  enabled: true,
+  enabled: false,
 }

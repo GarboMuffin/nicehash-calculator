@@ -2,17 +2,17 @@ import {Hash} from "../../hash";
 import {Algorithms} from "../../algorithms";
 
 export var coin = {
-  name: "Pascal",
+  name: "Halcyon",
   names: [
-    "pasc", "dual",
+    "hal",
   ],
   NiceHash: {
-    hashrate: Hash.TERA,
-    id: Algorithms.Pascal,
+    hashrate: Hash.GIGA,
+    id: Algorithms.NeoScrypt,
   },
   WhatToMine: {
     hashrate: 1000 * 1000,
-    id: 172,
+    id: 122,
   },
   enabled: false,
 }
