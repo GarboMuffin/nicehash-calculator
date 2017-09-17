@@ -2,17 +2,17 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "Monero",
+  name: "Sibcoin",
   names: [
-    "xmr", "cryptonight", "monero",
+    "sib", "x11gost", "gost",
   ],
   NiceHash: {
-    hashrate: Hash.MEGA,
-    id: Algorithms.CryptoNight,
+    hashrate: Hash.GIGA,
+    id: Algorithms.X11Gost,
   },
   WhatToMine: {
-    hashrate: 1000 * 1000,
-    id: 101,
+    hashrate: 1000,
+    id: 169,
   },
   enabled: false,
 }

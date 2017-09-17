@@ -1,10 +1,10 @@
-import {Hash} from "../hash";
-import {Algorithms} from "../algorithms";
+import {Hash} from "../../hash";
+import {Algorithms} from "../../algorithms";
 
 export var coin = {
-  name: "Zcash",
+  name: "ZClassic",
   names: [
-    "zec", "equihash",
+    "zcl", "equihash",
   ],
   NiceHash: {
     hashrate: Hash.MSOL,
@@ -12,7 +12,7 @@ export var coin = {
   },
   WhatToMine: {
     hashrate: 1000 * 1000,
-    id: 166,
+    id: 167,
   },
-  enabled: true,
+  enabled: false,
 }

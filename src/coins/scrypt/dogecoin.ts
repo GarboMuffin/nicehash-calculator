@@ -1,10 +1,10 @@
-import {Hash} from "../hash";
-import {Algorithms} from "../algorithms";
+import {Hash} from "../../hash";
+import {Algorithms} from "../../algorithms";
 
 export var coin = {
-  name: "Litecoin",
+  name: "Dogecoin",
   names: [
-    "ltc", "scrypt",
+    "doge", "scrypt",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,
@@ -12,7 +12,7 @@ export var coin = {
   },
   WhatToMine: {
     hashrate: 1000,
-    id: 4,
+    id: 6,
   },
   enabled: false,
 }

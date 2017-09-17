@@ -29,4 +29,5 @@ export enum Algorithms {
   X11Gost = 26,
   Sia = 27,
   Blake2s = 28,
+  Skunk = 29,
 };

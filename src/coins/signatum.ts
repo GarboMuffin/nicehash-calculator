@@ -2,17 +2,17 @@ import {Hash} from "../hash";
 import {Algorithms} from "../algorithms";
 
 export var coin = {
-  name: "Vertcoin",
+  name: "Signatum",
   names: [
-    "vtc", "vert", "lyra2rev2", "lyra2", "lyra"
+    "sigt", "skunk", "skunkhash",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,
-    id: Algorithms.Lyra2REv2,
+    id: Algorithms.Skunk,
   },
   WhatToMine: {
-    hashrate: 1000 * 1000,
-    id: 5,
+    hashrate: 1000,
+    id: 191,
   },
   enabled: false,
 }

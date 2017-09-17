@@ -1,10 +1,10 @@
-import {Hash} from "../hash";
-import {Algorithms} from "../algorithms";
+import {Hash} from "../../hash";
+import {Algorithms} from "../../algorithms";
 
 export var coin = {
-  name: "Ethereum Classic",
+  name: "Ethereum",
   names: [
-    "etc", "daggerhashimoto", "ethash",
+    "eth", "daggerhashimoto", "ethash", "dagger",
   ],
   NiceHash: {
     hashrate: Hash.GIGA,
@@ -12,7 +12,7 @@ export var coin = {
   },
   WhatToMine: {
     hashrate: 1000,
-    id: 162,
+    id: 151,
   },
   enabled: true,
 }

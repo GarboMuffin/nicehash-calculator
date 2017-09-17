@@ -24,18 +24,26 @@ there's lots of them. you can put things in arguments.txt for them to be read au
 | `--no-header` | hides the header containing disclaimers and donation addresses |  |
 | `--fixed-speed=X` | (for fixed orders) the requested speed to be used in price calculations | `--fixed-speed=1`
 
-## supported coins
- * bitcoin
- * bitcoin cash
- * ethereum
- * ethereum classic
- * zcash
- * sia
- * decred
- * pascal
- * dash
- * litecoin
- * monero
- * keccak
- * lbry
- * vertcoin
+## Supported coins:
+ * Bitcoin (SHA256)
+ * Bitcoin Cash (SHA256)
+ * Dash (X11)
+ * Decred (Decred)
+ * Dogecoin (Scrypt)
+ * Ethereum (DaggerHashimoto)
+ * Ethereum Classic (DaggerHashimoto)
+ * Expanse (DaggerHashimoto)
+ * Feathercoin (NeoScrypt)
+ * Gamecredits (Scrypt)
+ * Lbry (Lbry)
+ * Litecoin (Scrypt)
+ * Maxcoin (Keccak)
+ * Monero (CryptoNight)
+ * Musicoin (DaggerHashimoto)
+ * Pascal (Pascal)
+ * Sia (Sia)
+ * Sibcoin (X11Gost)
+ * Signatum (Skunk)
+ * Ubiq (DaggerHashimoto)
+ * Vertcoin (Lyra2REv2)
+ * ZCash (Equihash)
