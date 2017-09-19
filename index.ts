@@ -29,6 +29,13 @@ async function run(coins: Coin[], options: Options){
     console.log("");
   }
 
+  if (process.argv.length === 2){
+    console.log("Did you know that this script supports more coins than listed here?");
+    console.log("Run this again like: `ts-node index list` to see all supported coins. (there's lots!)");
+    console.log("You can enable coins like so: `ts-node index monero bitcoin litecoin`");
+    console.log("");
+  }
+
   // --fixed is buggy
   if (options.orderType === NHOrderType.Fixed){
     var ul = chalk.underline("--fixed");
@@ -131,14 +138,22 @@ function exit(code: number = 0){
   process.exit(code);
 }
 
+function clone(list: any[]){
+  var ret = [];
+  for (var i of list){
+    ret.push(i);
+  }
+  return ret;
+}
+
 var options: Options = DefaultOptions;
 var coins: Coin[] = AllCoins;
 
 // clone the list
-var args = process.argv;
+var args = clone(process.argv);
 
-const ARGUMENTS_TXT_DEFAULT = `
-# Specify arguments you want to be enabled by default here
+const ARGUMENTS_TXT_DEFAULT =
+`# Specify arguments you want to be enabled by default here
 # Lines starting with # are ingored
 # One argument per line
 
