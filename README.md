@@ -5,7 +5,7 @@ a customizable script to calculate the profitability of buying hashing power on 
 ```bash
 $ npm install
 $ npm install -g ts-node typescript
-$ ts-node index <...args>
+$ ts-node index [...args]
 ```
 
 ## arguments
@@ -22,9 +22,9 @@ there's lots of them. you can put things in arguments.txt for them to be read au
 | `--location=X` | only find the prices in a certain marketplace. used with `--find-min` | `--location=eu` or `--location=us` |
 | `--no-color` | disables color |  |
 | `--no-header` | hides the header containing disclaimers and donation addresses |  |
-| `--fixed-speed=X` | (for fixed orders) the requested speed to be used in price calculations, unit changes with algo | `--fixed-speed=1`
+| `--fixed-speed=X` | (for fixed orders) the requested speed to be used in price calculations, unit changes with algo | `--fixed-speed=1` |
 
-Additionally, you can use the names or abbreviations or in some cases algos to enable them. If you specify any coins only those you specify will be enabled. For example `ts-node index xmr decred ethash`
+Additionally, you can use the names or abbreviations or in some cases algos of coins to enable them. If you specify any coins the defaults will all be disabled (except for any you choose to enable). For example `ts-node index xmr decred ethash`
 
 ## supported coins
 ```
