@@ -1,11 +1,20 @@
 # nicehash profit calculator
-a customizable script to calculate the profitability of buying hashing power on nicehash
+a customizable script to calculate the profitability of buying hashing power on nicehash (spoiler: don't expect much)
+
+## installation
+1. install [git](https://git-scm.com/)
+2. install [node](https://nodejs.org/en/) 8 or 9 or whatever the latest is
+3. these commands:
+```bash
+git clone https://github.com/GarboMuffin/nicehash-calculator
+cd nicehash-calculator
+npm install
+npm install -g ts-node typescript
+```
 
 ## usage
 ```bash
-$ npm install
-$ npm install -g ts-node typescript
-$ ts-node index [...args]
+ts-node index [...args]
 ```
 
 ## arguments
@@ -24,7 +33,7 @@ there's lots of them. you can put things in arguments.txt for them to be read au
 | `--no-header` | hides the header containing disclaimers and donation addresses |  |
 | `--fixed-speed=X` | (for fixed orders) the requested speed to be used in price calculations, unit changes with algo | `--fixed-speed=1` |
 
-Additionally, you can use the names or abbreviations or in some cases algos of coins to enable them. If you specify any coins the defaults will all be disabled (except for any you choose to enable). For example `ts-node index xmr decred ethash`
+Additionally, you can specify names, abbreviations, or algos to enable only those coins. For example `ts-node index xmr decred ethash` would run this script on monero, decred, ethereum, and ethereum classic.
 
 ## supported coins
 ```
