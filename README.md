@@ -88,3 +88,13 @@ Supported coins:
 ```
 
 Most of these coins are unprofitable to mine and thus are not aliased to their algo. (eg. cryptonight does not include quazarcoin or whatever, just monero)
+
+## Disclaimer
+I am not responsible for any losses that come as a result of this program. The results of this program do not neccessarily reflect real world results. Your money is your responsibility. This does not account for fees (nicehash, pool, withdraw, exchange, transaction fees when the mempool is full...) or pool luck (this assumes constant 100% pool luck, which is not realistic. i've seen pool luck of >8000% one time...). Conservsion rates can change very quickly making any results here obsolete.
+
+## tips
+send me money even though i don't deserve it
+
+BTC: 1EecFw5Nq8ACAUKVptUPkakgXb2sbPQa7Z  
+BTC/Native SegWit: bc1qvwfx77aqe2ssu4as39mskmhp22v0dmjtapvmjw  
+ETH: 0x86dd805eb129Bfb268F21455451cD3C4dAA1c5F9  
