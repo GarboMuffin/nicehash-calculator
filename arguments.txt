@@ -14,7 +14,7 @@
 # --find-min
 
 # Disables color
-# --no-color
+--no-color
 
 # Disables showing additional details if the profit is below X BTC or %
 # Note that the revenue will still be outputted.

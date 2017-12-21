@@ -3,13 +3,13 @@
  */
 
 export class HashRate {
-  constructor(hashrate: number, name: string){
+  constructor(hashrate: number, name: string) {
     this.hashrate = hashrate;
     this.name = name;
   }
 
-  hashrate: number
-  name: string
+  hashrate: number;
+  name: string;
 }
 
 export class Hash {

@@ -1,7 +1,7 @@
-import {coins as AllCoins, Coin} from "./coins";
-import {NiceHashLocation, Locations} from "./location";
-import {NHOrderType} from "./order";
-import {NHOptions} from "./nicehash";
+import { coins as AllCoins, Coin } from "./coins";
+import { NiceHashLocation, Locations } from "./location";
+import { NHOrderType } from "./order";
+import { NHOptions } from "./nicehash";
 
 import * as chalk from "chalk";
 
@@ -71,13 +71,13 @@ const EUROPE_ALIASES = [
  * @param {string} str The string to be read
  * @returns The number or null
  */
-function parseNumber(str: string): number|null {
+function parseNumber(str: string): number | null {
   var match = str.match(/[1234567890\.-]*/g);
-  if (match === null){
+  if (match === null) {
     return null;
   }
   var num = Number(match[0]);
-  if (isNaN(num)){
+  if (isNaN(num)) {
     return null;
   }
   return num;
@@ -89,20 +89,20 @@ function parseNumber(str: string): number|null {
  * @param {string} c The name of the the coins.
  * @returns {Coin[]} The coins with that name, if any.
  */
-function getCoins(c: string): Coin[]{
-  if (c.startsWith("-")){
+function getCoins(c: string): Coin[] {
+  if (c.startsWith("-")) {
     c = c.substring(1);
   }
 
   c = c.toLowerCase();
 
-  if (c === "all"){
+  if (c === "all") {
     return AllCoins;
   }
 
   var ret = [];
-  for (var coin of AllCoins){
-    if (coin.name.toLowerCase() === c || (coin.names && coin.names.indexOf(c) > -1)){
+  for (var coin of AllCoins) {
+    if (coin.name.toLowerCase() === c || (coin.names && coin.names.indexOf(c) > -1)) {
       ret.push(coin);
     }
   }
@@ -114,8 +114,8 @@ function getCoins(c: string): Coin[]{
  * @export
  * @class OptionsParser
  */
-export class OptionsParser{
-  constructor(args: string[]){
+export class OptionsParser {
+  constructor(args: string[]) {
     this.args = args;
   }
 
@@ -125,18 +125,18 @@ export class OptionsParser{
   coins: Coin[] = AllCoins;
   options: Options = DefaultOptions;
 
-  parse(){
-    for (var i = 0; i < this.args.length; i++){
+  parse() {
+    for (var i = 0; i < this.args.length; i++) {
       var arg = this.args[i];
 
       var result: boolean;
-      if (arg.startsWith("--")){
+      if (arg.startsWith("--")) {
         result = this.argParser(arg);
-      }else{
+      } else {
         result = this.coinParser(arg);
       }
 
-      if (!result){
+      if (!result) {
         this.invalidOption(arg);
       }
     }
@@ -144,11 +144,11 @@ export class OptionsParser{
     this.checkCompatibility();
   }
 
-  private invalidOption(option: string){
+  private invalidOption(option: string) {
     console.warn(chalk.red(`Invalid option: ${chalk.underline(option)}`));
   }
 
-  private argParser(_arg: string): boolean{
+  private argParser(_arg: string): boolean {
     var split = _arg.split("=");
     var arg = split[0];
 
@@ -159,7 +159,7 @@ export class OptionsParser{
     // TODO: only count occurence if valid arg
     this.occurences[arg] = (this.occurences[arg] || 0) + 1;
 
-    switch (arg.toLowerCase()){
+    switch (arg.toLowerCase()) {
       case "--show-percent":
         this.options.showPercent = true;
         break;
@@ -205,9 +205,9 @@ export class OptionsParser{
     return true;
   }
 
-  private fixedSpeedParser(args: string[]){
+  private fixedSpeedParser(args: string[]) {
     var value = parseNumber(args[1]);
-    if (value === null){
+    if (value === null) {
       return false;
     }
 
@@ -216,17 +216,17 @@ export class OptionsParser{
     return true;
   }
 
-  private minProfitParser(args: string[]){
+  private minProfitParser(args: string[]) {
     var value = parseNumber(args[1]);
-    if (value === null){
+    if (value === null) {
       return false;
     }
 
     // TODO: move this into own function
     var unit;
-    if (args[1].endsWith("%")){
+    if (args[1].endsWith("%")) {
       unit = Unit.Percent;
-    }else{
+    } else {
       unit = Unit.BTC;
     }
 
@@ -237,17 +237,17 @@ export class OptionsParser{
 
     return true;
   }
-  
-  private offsetParser(args: string[]){
+
+  private offsetParser(args: string[]) {
     var value = parseNumber(args[1]);
-    if (value === null){
+    if (value === null) {
       return false;
     }
 
     var unit;
-    if (args[1].endsWith("%")){
+    if (args[1].endsWith("%")) {
       unit = Unit.Percent;
-    }else{
+    } else {
       unit = Unit.BTC;
     }
 
@@ -259,13 +259,13 @@ export class OptionsParser{
     return true;
   }
 
-  private locationParser(args: string[]){
-    if (args.length === 2){
+  private locationParser(args: string[]) {
+    if (args.length === 2) {
       var country = args[1];
-      if (USA_ALIASES.indexOf(country) > -1){
+      if (USA_ALIASES.indexOf(country) > -1) {
         this.options.locations = [NiceHashLocation.US];
         return true;
-      }else if (EUROPE_ALIASES.indexOf(country) > -1){
+      } else if (EUROPE_ALIASES.indexOf(country) > -1) {
         this.options.locations = [NiceHashLocation.EU];
         return true;
       }
@@ -273,46 +273,46 @@ export class OptionsParser{
     return false;
   }
 
-  private coinParser(_arg: string): boolean{
+  private coinParser(_arg: string): boolean {
     var arg = _arg;
 
-    enum Action {Hide = 0, Show = 1};
+    enum Action { Hide = 0, Show = 1 };
     var action;
-    if (arg[0] === "-"){
+    if (arg[0] === "-") {
       arg = arg.substring(1);
       action = Action.Hide;
-    }else{
+    } else {
       action = Action.Show;
     }
 
     var coins = getCoins(arg);
 
-    if (coins.length === 0){
+    if (coins.length === 0) {
       return false;
     }
 
-    if (action === Action.Show){
-      if (!this.customized){
+    if (action === Action.Show) {
+      if (!this.customized) {
         this.customized = true;
-        for (var i of this.coins){
+        for (var i of this.coins) {
           i.enabled = false;
         }
-      } 
+      }
     }
 
-    for (var coin of coins){
+    for (var coin of coins) {
       coin.enabled = !!action;
     }
 
     return true;
   }
 
-  private checkCompatibility(){
-    function warn(msg: string){
+  private checkCompatibility() {
+    function warn(msg: string) {
       console.warn(chalk.red(msg) + " Behavior may be unexpected!");
     }
 
-    function underline(msg: string){
+    function underline(msg: string) {
       return chalk.underline(msg);
     }
 
@@ -321,14 +321,14 @@ export class OptionsParser{
     var onlyRevenueIncompatible = [];
 
     // catch duplicates
-    for (var arg in this.occurences){
+    for (var arg in this.occurences) {
       var occurences = this.occurences[arg];
 
-      if (occurences > 1){
+      if (occurences > 1) {
         warn(`Duplicate ${underline(arg)} arguments found!`);
       }
 
-      if (ONLY_REVENUE_COMPATIBLE.indexOf(arg) === -1){
+      if (ONLY_REVENUE_COMPATIBLE.indexOf(arg) === -1) {
         onlyRevenueIncompatible.push(arg);
       }
     }
@@ -336,9 +336,9 @@ export class OptionsParser{
     // other edge cases
 
     // --only-revenue is not compatible with pretty much anything
-    if (this.occurences["--only-revenue"] > 0){
+    if (this.occurences["--only-revenue"] > 0) {
       var ul = underline("--only-revenue");
-      for (var thing of onlyRevenueIncompatible){
+      for (var thing of onlyRevenueIncompatible) {
         warn(`${ul} is not compatible with ${underline(thing)}!`);
       }
     }

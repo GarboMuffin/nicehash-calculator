@@ -1,5 +1,5 @@
-import {Hash} from "../../hash";
-import {Algorithms} from "../../algorithms";
+import { Hash } from "../../hash";
+import { Algorithms } from "../../algorithms";
 
 export var coin = {
   name: "Ethereum",
@@ -15,4 +15,4 @@ export var coin = {
     id: 151,
   },
   enabled: true,
-}
+};

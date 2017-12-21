@@ -1,4 +1,4 @@
-// Defines the different market locations of nicehash
+// defines the different market locations of nicehash
 
 export enum NiceHashLocation {
   EU = 0,

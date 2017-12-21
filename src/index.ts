@@ -3,20 +3,20 @@
  * This is where profits are actually calculated and outputted to the console.
  */
 
-import {NiceHashLocation, Locations} from "./location";
-import {NiceHashAPI, NHCoinStat} from "./nicehash";
-import {WhatToMine} from "./whattomine";
-import {coins, Coin} from "./coins";
-import {Hash} from "./hash";
-import {Options, DefaultOptions, ProfitUnit, Unit} from "./options";
-import {Algorithms} from "./algorithms";
-import {NHOrderType} from "./order";
+import { NiceHashLocation, Locations } from "./location";
+import { NiceHashAPI, NHCoinStat } from "./nicehash";
+import { WhatToMine } from "./whattomine";
+import { coins, Coin } from "./coins";
+import { Hash } from "./hash";
+import { Options, DefaultOptions, ProfitUnit, Unit } from "./options";
+import { Algorithms } from "./algorithms";
+import { NHOrderType } from "./order";
 
 import * as chalk from "chalk";
 
 const PRECISION = 6; // decimal places
 
-function pad(text: string, i: number){
+function pad(text: string, i: number) {
   // not exactly the fastest, but it works
   return " ".repeat(i) + text;
 }
@@ -28,11 +28,11 @@ function pad(text: string, i: number){
  * @param {number} percent The profit in %
  * @returns
  */
-function minProfitCheck(options: ProfitUnit, btc: number, percent: number){
-  if (options.unit === Unit.BTC){
+function minProfitCheck(options: ProfitUnit, btc: number, percent: number) {
+  if (options.unit === Unit.BTC) {
     return options.amount <= btc;
   }
-  if (options.unit === Unit.Percent){
+  if (options.unit === Unit.Percent) {
     return options.amount <= percent;
   }
   return false;
@@ -44,22 +44,22 @@ function minProfitCheck(options: ProfitUnit, btc: number, percent: number){
  * @param {number} profit
  * @returns
  */
-function applyOffset(options: ProfitUnit, profit: number){
-  if (options.unit === Unit.BTC){
+function applyOffset(options: ProfitUnit, profit: number) {
+  if (options.unit === Unit.BTC) {
     profit += options.amount;
   }
-  if (options.unit === Unit.Percent){
+  if (options.unit === Unit.Percent) {
     profit *= (options.amount / 100) + 1;
   }
   return profit;
 }
 
-export function shouldUseUnifiedOutput(options: Options){
+export function shouldUseUnifiedOutput(options: Options) {
   return !options.findMin && options.orderType === NHOrderType.Standard;
 }
 
-export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashAPI){
-  function output(text: string){
+export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashAPI) {
+  function output(text: string) {
     // chalk.white fixes invisible text in some terminals
     // eg. cmder and other terminal emulators
     // ironically windows command prompt works perfectly without this
@@ -78,7 +78,7 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
   output(pad(`Revenue: ${chalk.underline(revenue.toFixed(PRECISION))} ${hash}`, 1));
 
   // --only-revenue only outputs revenues
-  if (options.onlyShowRevenue){
+  if (options.onlyShowRevenue) {
     return;
   }
 
@@ -86,14 +86,14 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
 
   var useUnifiedOutput = shouldUseUnifiedOutput(options);
 
-  if (useUnifiedOutput){
+  if (useUnifiedOutput) {
     // if not --find-min or --fixed then both eu and us have the same details
 
-    // NOTE: the location argument is IGNORED
+    // nOTE: the location argument is IGNORED
     var price = await nicehash.get(i.NiceHash.id, null, options);
     outputData(Number(price), OutputMethods.Unified);
-  }else{
-    for (var l of options.locations){
+  } else {
+    for (var l of options.locations) {
       var price = await nicehash.get(i.NiceHash.id, l, options);
       outputData(Number(price), OutputMethods.Divided, {
         location: l,
@@ -101,7 +101,7 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
     }
   }
 
-  function outputData(price: number, method: OutputMethodMeta, doptions?: OutputOptions){
+  function outputData(price: number, method: OutputMethodMeta, doptions?: OutputOptions) {
     var methodMeta = method;
     var padding = methodMeta.padding;
     var showLocation = methodMeta.showLocation;
@@ -109,45 +109,45 @@ export async function run(i: Coin, options = DefaultOptions, nicehash: NiceHashA
     price = applyOffset(options.priceOffset, price);
 
     var profit = revenue - price;
-    var percent = profit / price * 100
+    var percent = profit / price * 100;
 
     var color = profit > 0 ? chalk.green : chalk.red;
     color = color.underline;
 
-    if (!minProfitCheck(options.minProfit, profit, percent)){
+    if (!minProfitCheck(options.minProfit, profit, percent)) {
       return;
     }
 
-    if (showLocation){
+    if (showLocation) {
       output(pad(`${NiceHashLocation[l]}:`, 1));
     }
 
     output(pad(`Price: ${color(price.toFixed(PRECISION))} ${hash}`, padding));
     output(pad(`Profit: ${color(profit.toFixed(PRECISION))} ${hash}`, padding));
 
-    if (options.showPercent){
+    if (options.showPercent) {
       output(pad(`%: ${color(percent.toFixed(PRECISION))}%`, padding));
     }
   }
 }
 
-// Defines the different methods of outputting and their options
+// defines the different methods of outputting and their options
 interface OutputMethodMeta {
-  padding: number,
-  showLocation: boolean,
+  padding: number;
+  showLocation: boolean;
 }
 interface OutputOptions {
-  location: NiceHashLocation
+  location: NiceHashLocation;
 }
 
 class OutputMethods {
   static Unified: OutputMethodMeta = {
     padding: 1,
     showLocation: false,
-  }
+  };
 
   static Divided: OutputMethodMeta = {
     padding: 2,
     showLocation: true,
-  }
+  };
 }
