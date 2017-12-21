@@ -5,7 +5,7 @@
 # Visual Studio Code - https://code.visualstudio.com/
 .settings/
 .vscode/
-tsconfig.json
+# tsconfig.json
 jsconfig.json
 
 ### Node ###
@@ -94,3 +94,6 @@ $RECYCLE.BIN/
 
 # typescript output directory
 dist
+
+# personal settings
+arguments.txt

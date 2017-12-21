@@ -338,8 +338,8 @@ export class OptionsParser{
     // --only-revenue is not compatible with pretty much anything
     if (this.occurences["--only-revenue"] > 0){
       var ul = underline("--only-revenue");
-      for (var arg of onlyRevenueIncompatible){
-        warn(`${ul} is not compatible with ${underline(arg)}!`);
+      for (var thing of onlyRevenueIncompatible){
+        warn(`${ul} is not compatible with ${underline(thing)}!`);
       }
     }
   }
