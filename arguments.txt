@@ -14,7 +14,8 @@
 # --find-min
 
 # Disables color
---no-color
+# Some terminals do weird stuff with colors so you may want to enable this
+# --no-color
 
 # Disables showing additional details if the profit is below X BTC or %
 # Note that the revenue will still be outputted.
