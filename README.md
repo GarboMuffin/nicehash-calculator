@@ -1,10 +1,10 @@
-# nicehash profit calculator
-a customizable script to calculate the profitability of buying hashing power on nicehash (spoiler: don't expect much)
+# NiceHash Profit Calculator
+A customizable script to calculate the profitability of buying hashing power on nicehash (spoiler: don't expect much)
 
-## installation
-1. install [git](https://git-scm.com/)
-2. install [node](https://nodejs.org/en/) 8 or 9 or whatever the latest is
-3. these commands:
+## Installation
+1. Install [git](https://git-scm.com/)
+2. Install a recent version of [node](https://nodejs.org/en/), whatever the current LTS is will work
+3. Run these commands:
 ```bash
 git clone https://github.com/GarboMuffin/nicehash-calculator
 cd nicehash-calculator
@@ -12,13 +12,13 @@ npm install
 npm install -g ts-node typescript
 ```
 
-## usage
+## Usage
 ```bash
 ts-node index [...args]
 ```
 
-## arguments
-there's lots of them. you can put things in arguments.txt for them to be read automatically.
+## Arguments
+There's lots of them. You can put things in arguments.txt for them to be read automatically. (see the existing arguments.txt for an example)
 
 | argument | description | usage |
 |:----------------:|:---------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------:|
@@ -92,9 +92,9 @@ Most of these coins are unprofitable to mine and thus are not aliased to their a
 ## Disclaimer
 I am not responsible for any losses that come as a result of this program. The results of this program do not neccessarily reflect real world results. Your money is your responsibility. This does not account for fees (nicehash, pool, withdraw, exchange, transaction fees when the mempool is full...) or pool luck (this assumes constant 100% pool luck, which is not realistic. i've seen pool luck of >8000% one time...). Conservsion rates can change very quickly making any results here obsolete.
 
-## tips
-send me money even though i don't deserve it
+## Tips
+Send me money even though I don't deserve it.
 
 BTC: 1EecFw5Nq8ACAUKVptUPkakgXb2sbPQa7Z  
-BTC/Native SegWit: bc1qvwfx77aqe2ssu4as39mskmhp22v0dmjtapvmjw  
+BTC (SegWit): bc1qvwfx77aqe2ssu4as39mskmhp22v0dmjtapvmjw  
 ETH: 0x86dd805eb129Bfb268F21455451cD3C4dAA1c5F9  
