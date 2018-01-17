@@ -25,7 +25,9 @@ async function run(coins: Coin[], options: Options) {
     console.log("I am not responsible for any losses.");
 
     console.log("");
-    console.log(chalk.reset(`BTC: ${chalk.underline("1EecFw5Nq8ACAUKVptUPkakgXb2sbPQa7Z")}`));
+    console.log(chalk.reset(`BTC: ${chalk.underline("1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ")}`));
+    console.log(chalk.reset(`LTC: ${chalk.underline("LfRV8T392L7M2n3pLk2DAus6bFhtqcfAht")}`));
+    console.log(chalk.reset(`ETH: ${chalk.underline("0x86dd805eb129Bfb268F21455451cD3C4dAA1c5F9")}`));
     console.log("");
   }
 

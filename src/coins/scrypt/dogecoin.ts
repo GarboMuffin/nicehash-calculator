@@ -7,11 +7,11 @@ export var coin = {
     "doge", "scrypt",
   ],
   NiceHash: {
-    hashrate: Hash.GIGA,
+    hashrate: Hash.TERA,
     id: Algorithms.Scrypt,
   },
   WhatToMine: {
-    hashrate: 1000,
+    hashrate: 1000 * 1000,
     id: 6,
   },
   enabled: false,
