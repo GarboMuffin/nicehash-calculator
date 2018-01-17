@@ -1,3 +1,5 @@
+(I'm making some changes to how to use this script among many other changes, so this documentation or anything the script says to run might be inaccurate. This file is correct about installation and usage.)
+
 # NiceHash Profit Calculator
 
 A customizable script to calculate the profitability of buying hashing power on nicehash (spoiler: don't expect much)
