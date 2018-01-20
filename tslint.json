@@ -1,0 +1,40 @@
+{
+  "defaultSeverity": "error",
+  "extends": [
+    "tslint:recommended"
+  ],
+  "jsRules": {},
+  "rules": {
+    "max-classes-per-file": false,
+    "no-empty": false,
+    "variable-name": [
+      true,
+      "check-format",
+      "allow-leading-underscore"
+    ],
+    "no-console": false,
+    "member-ordering": [
+      true, {
+        "order": [
+          "static-field",
+          "static-method",
+          "instance-field",
+          "constructor",
+          "instance-method"
+        ]
+      }
+    ],
+    "object-literal-sort-keys": false,
+    "member-access": [
+      true, "check-parameter-property"
+    ],
+    "no-unused-expression": false,
+    "ordered-imports": false,
+    "interface-name": false,
+    "prefer-for-of": false,
+    "object-literal-key-quotes": [
+      true, "as-needed"
+    ]
+  },
+  "rulesDirectory": []
+}

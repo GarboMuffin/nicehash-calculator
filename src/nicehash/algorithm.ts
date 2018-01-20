@@ -1,5 +1,5 @@
-// note: most of these are not supported
-export enum Algorithms {
+// Algorithms and their corresponding nicehash API id
+export enum NHAlgorithm {
   Scrypt = 0,
   SHA256 = 1,
   ScryptNf = 2,

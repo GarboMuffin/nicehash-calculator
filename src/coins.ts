@@ -1,164 +1,158 @@
-/*
- * All coins supported by this script.
- */
+import * as request from "request-promise";
+import { WhatToMineAPI } from "./whattomine/WhatToMine";
+import { NHAlgorithm } from "./nicehash/algorithm";
+import { HashRate } from "./hashrate";
 
-import { Hash, HashRate } from "./hash";
-import { Algorithms as Algorithm } from "./algorithms";
-
-// sHA
-import { coin as Bitcoin } from "./coins/sha/bitcoin";
-import { coin as BitcoinCash } from "./coins/sha/bitcoincash";
-
-// eTHASH
-import { coin as Ethereum } from "./coins/ethash/ethereum";
-import { coin as EthereumClassic } from "./coins/ethash/ethereumclassic";
-import { coin as Expanse } from "./coins/ethash/expanse";
-import { coin as Musicoin } from "./coins/ethash/musicoin";
-import { coin as Ubiq } from "./coins/ethash/ubiq";
-import { coin as Krypton } from "./coins/ethash/krypton";
-import { coin as Shift } from "./coins/ethash/shift";
-import { coin as Soilcoin } from "./coins/ethash/soilcoin";
-
-// sCRYPT
-import { coin as Litecoin } from "./coins/scrypt/litecoin";
-import { coin as Dogecoin } from "./coins/scrypt/dogecoin";
-import { coin as Gamecredits } from "./coins/scrypt/gamecredits";
-
-// lYRA2REV2
-import { coin as Vertcoin } from "./coins/lyra2rev2/vertcoin";
-import { coin as Monacoin } from "./coins/lyra2rev2/monacoin";
-
-// eQUIHASH
-import { coin as ZCash } from "./coins/equihash/zcash";
-import { coin as ZClassic } from "./coins/equihash/zclassic";
-import { coin as Hush } from "./coins/equihash/hush";
-import { coin as Komodo } from "./coins/equihash/komodo";
-import { coin as Zencash } from "./coins/equihash/zencash";
-
-// pASCAL
-import { coin as Pascal } from "./coins/pascal/pascal";
-
-// cRYPTONIGHT
-import { coin as Monero } from "./coins/cryptonight/monero";
-import { coin as Aeon } from "./coins/cryptonight/aeon";
-import { coin as Bipcoin } from "./coins/cryptonight/bipcoin";
-import { coin as Bytecoin } from "./coins/cryptonight/bytecoin";
-import { coin as Dashcoin } from "./coins/cryptonight/dashcoin";
-import { coin as Digitalnote } from "./coins/cryptonight/digitalnote";
-import { coin as Fantomcoin } from "./coins/cryptonight/fantomcoin";
-import { coin as Karbowanec } from "./coins/cryptonight/karbowanec";
-import { coin as Sumokoin } from "./coins/cryptonight/sumokoin";
-import { coin as Quazarcoin } from "./coins/cryptonight/quazarcoin";
-
-// kECCAK
-import { coin as Maxcoin } from "./coins/keccak/maxcoin";
-import { coin as Creativecoin } from "./coins/keccak/creativecoin";
-import { coin as ThreeSixtyFiveCoin } from "./coins/keccak/365coin"; // variables can't start with numbers
-import { coin as Smartcash } from "./coins/keccak/smartcash";
-
-// nEOSCRYPT
-import { coin as Feathercoin } from "./coins/neoscrypt/feathercoin";
-import { coin as Halcyon } from "./coins/neoscrypt/halcyon";
-import { coin as Orbitcoin } from "./coins/neoscrypt/orbitcoin";
-import { coin as Phoenixcoin } from "./coins/neoscrypt/phoenixcoin";
-import { coin as Vivo } from "./coins/neoscrypt/vivo";
-
-// oTHER
-import { coin as Siacoin } from "./coins/sia";
-import { coin as Decred } from "./coins/decred";
-import { coin as Dash } from "./coins/x11/dash";
-import { coin as Lbry } from "./coins/lbry";
-import { coin as Sibcoin } from "./coins/sibcoin";
-import { coin as Signatum } from "./coins/signatum";
-
-export interface Coin {
-  name: string;
-  names?: string[];
-
-  NiceHash: {
-    hashrate: HashRate
-    id: Algorithm
-  };
-
-  WhatToMine: {
-    hashrate: number
-    id: number
-  };
-
-  enabled: boolean;
+interface IAlgorithmMetadata {
+  niceHashAlgo: NHAlgorithm;
+  niceHashUnit: HashRate;
+  whatToMineUnit: HashRate;
 }
 
-export var coins: Coin[] = [
-  // sHA
-  Bitcoin,
-  BitcoinCash,
+// We convert IWhatToMineCoin to this
+export interface ICoin extends IAlgorithmMetadata {
+  name: string;
+  id: number;
+}
 
-  // eTHASH
-  Ethereum,
-  EthereumClassic,
-  Expanse,
-  Musicoin,
-  Ubiq,
-  Krypton,
-  Shift,
-  Soilcoin,
+function getAlgorithm(algo: string): IAlgorithmMetadata | null {
+  // Some algorithms are missing from this list
+  // To add: blake (so many weird variations) and sia (uses blake?)
+  const ALGO_MAP: {[s: string]: IAlgorithmMetadata} = {
+    LBRY: {
+      niceHashAlgo: NHAlgorithm.Lbry,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    Ethash: {
+      niceHashAlgo: NHAlgorithm.DaggerHashimoto,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    NeoScrypt: {
+      niceHashAlgo: NHAlgorithm.NeoScrypt,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.KILO,
+    },
+    Skunkhash: {
+      niceHashAlgo: NHAlgorithm.Skunk,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    Equihash: {
+      niceHashAlgo: NHAlgorithm.Equihash,
+      niceHashUnit: HashRate.MSOL,
+      whatToMineUnit: HashRate.HASH,
+    },
+    CryptoNight: {
+      niceHashAlgo: NHAlgorithm.CryptoNight,
+      niceHashUnit: HashRate.MEGA,
+      whatToMineUnit: HashRate.HASH,
+    },
+    // not to be confused with Lyra2RE
+    Lyra2REv2: {
+      niceHashAlgo: NHAlgorithm.Lyra2REv2,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.KILO,
+    },
+    Pascal: {
+      niceHashAlgo: NHAlgorithm.Pascal,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    X11Gost: {
+      niceHashAlgo: NHAlgorithm.X11,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    Keccak: {
+      niceHashAlgo: NHAlgorithm.Keccak,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    X11: {
+      niceHashAlgo: NHAlgorithm.X11,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    X13: {
+      niceHashAlgo: NHAlgorithm.X13,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    Scrypt: {
+      niceHashAlgo: NHAlgorithm.X11,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    "SHA-256": {
+      niceHashAlgo: NHAlgorithm.SHA256,
+      niceHashUnit: HashRate.PETA,
+      whatToMineUnit: HashRate.GIGA,
+    },
+    Quark: {
+      niceHashAlgo: NHAlgorithm.Quark,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    NIST5: {
+      niceHashAlgo: NHAlgorithm.Nist5,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    // not to be confused with Lyra2REv2
+    Lyra2RE: {
+      niceHashAlgo: NHAlgorithm.Lyra2RE,
+      niceHashUnit: HashRate.GIGA,
+      whatToMineUnit: HashRate.KILO,
+    },
+    Qubit: {
+      niceHashAlgo: NHAlgorithm.Qubit,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    "Blake (2s)": {
+      niceHashAlgo: NHAlgorithm.Blake2s,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+  };
 
-  // sCRYPT
-  Litecoin,
-  Dogecoin,
-  Gamecredits,
+  const match = ALGO_MAP[algo];
+  if (!match) {
+    return null;
+  } else {
+    return match;
+  }
+}
 
-  // lYRA2REV2
-  Vertcoin,
-  Monacoin,
+export async function getWhatToMineCoins(): Promise<ICoin[]> {
+  const whatToMine = new WhatToMineAPI();
 
-  // eQUIHASH
-  ZCash,
-  ZClassic,
-  Hush,
-  Komodo,
-  Zencash,
+  const whatToMineCalculators = await whatToMine.getCalculators();
+  const coins: ICoin[] = [];
 
-  // pASCAL
-  Pascal,
+  // Convert the coins to our own thing
+  for (const whatToMineCalculator of whatToMineCalculators) {
+    const coin: ICoin = {} as any; // as any tricks typescript into ignoring all the errors
 
-  // cRYPTONIGHT
-  Monero,
-  Aeon,
-  Bipcoin,
-  Bytecoin,
-  Dashcoin,
-  Digitalnote,
-  Fantomcoin,
-  Karbowanec,
-  Sumokoin,
-  Quazarcoin,
+    // copy over properties
+    coin.name = whatToMineCalculator.name;
+    coin.id = whatToMineCalculator.id;
 
-  // kECCAK
-  Maxcoin,
-  Smartcash,
-  ThreeSixtyFiveCoin,
-  Creativecoin,
+    // set algo
+    const algorithm = getAlgorithm(whatToMineCalculator.algorithm);
+    if (algorithm === null) {
+      // This coin doesn't have a matching algorithm on nicehash so don't add it
+      // console.warn("Unknown algo: " + whatToMineCalculator.algorithm); // for debugging
+      continue;
+    }
+    coin.whatToMineUnit = algorithm.whatToMineUnit;
+    coin.niceHashAlgo = algorithm.niceHashAlgo;
+    coin.niceHashUnit = algorithm.niceHashUnit;
 
-  // nEOSCRYPT
-  Feathercoin,
-  Halcyon,
-  Orbitcoin,
-  Phoenixcoin,
-  Vivo,
+    coins.push(coin);
+  }
 
-  // oTHER
-  Siacoin,
-  Decred,
-  Dash,
-  Lbry,
-  Sibcoin,
-  Signatum,
-];
-
-// sorts the coins alphabetically
-coins.sort(function (a, b) {
-  var atext = a.name.toUpperCase();
-  var btext = b.name.toUpperCase();
-  return (atext < btext) ? -1 : (atext > btext) ? 1 : 0;
-});
+  return coins;
+}

@@ -1,12 +1,11 @@
 {
   "compilerOptions": {
     "target": "es6",
-    "strict": false,
+    "strict": true,
     "module": "commonjs",
     "outDir": "dist",
   },
   "include": [
-    "index.ts",
     "src/**/*",
   ],
   "exclude": [
