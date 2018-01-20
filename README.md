@@ -1,4 +1,6 @@
-(I'm making some changes to how to use this script among many other changes, so this documentation or anything the script says to run might be inaccurate. This file is correct about installation and usage.)
+I'm currently rewriting pretty much the entire program in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's not done yet but it's a WIP.
+
+This README and anything the program says to run might be a litte outdated (made some changes to how you're supposed to run it) but the installation, usage, and arguments section of this README are accurate.
 
 # NiceHash Profit Calculator
 
