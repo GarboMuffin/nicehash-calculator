@@ -1,11 +1,13 @@
 const fs = require("fs");
 const chalk = require("chalk");
+const childProcess = require("child_process");
 
-const stat = fs.statSync("dist");
-if (stat.isDirectory()) {
-  require("./dist/index");
-} else {
-  console.error(chalk.red("Couldn't find TypeScript (tsc) output!"));
-  console.error(chalk.red("Please run: ") + chalk.reset("npm run build"));
-  process.exit(1);
+try {
+  const stat = fs.lstatSync("dist/index.js").isFile();
+} catch (e) {
+  console.log(" > TypeScript (tsc) build files missing. Building them now.");
+  childProcess.execSync("npm run build");
+  console.log(" > Done");
 }
+
+require("./dist/index");

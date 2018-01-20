@@ -2,22 +2,5 @@
 # Lines starting with # are ingored
 # One argument per line
 
-# You can specify coins here but I would highly recommend against it.
-
-# Adds a % detail to the output
---show-percent
-
-# Changes the method of finding price
-# Switches from using average global prices to finding the minimum order in EU and US that has SOME amount of miners.
-# Changes the output to list EU and US seperately
-# Average prices are much faster because they involve MUCH, MUCH fewer api requests. (1 inital, 1 for each coin to calculate profit)
-# --find-min
-
-# Disables color
-# Some terminals do weird stuff with colors so you may want to enable this
-# --no-color
-
-# Disables showing additional details if the profit is below X BTC or %
-# Note that the revenue will still be outputted.
-# --min-profit=0.001
-# --min-profit=10%
+# for debugging it's just easier and i'll probably make the warning itself shorter
+--no-header

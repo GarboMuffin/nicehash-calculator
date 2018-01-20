@@ -1,27 +1,52 @@
 import * as minimist from "minimist";
-import { clone } from "./utils";
+import * as util from "util";
 
 export interface IOptions {
   debug: boolean;
+  showHeader: boolean;
   coins: string[];
+  sleepTime: number;
+  unrecognized: string[];
 }
 
-const DEFAULT_OPTIONS: IOptions = {
-  debug: false,
-  coins: [],
-};
-
 export function parse(args: string[]): IOptions {
+  const unrecognizedOptions: string[] = [];
+
+  // After getting used to using my own (terrible) option parser minimist is really weird
+  // I looked into yargs/commander but minimist is the easiest
+
   // TODO: option parsing
   // return DEFAULT_OPTIONS;
   const argv = minimist(args, {
     boolean: [
-      "only-revenue",
+      "debug",
+      "header",
     ],
+    string: [
+      "sleep-time",
+    ],
+    default: {
+      header: true,
+      debug: false,
+      "sleep-time": 1000,
+    },
+    unknown: (arg) => {
+      if (arg.startsWith("-")) {
+        unrecognizedOptions.push(arg);
+        return false;
+      } else {
+        return true;
+      }
+    },
   });
 
-  const options = clone(DEFAULT_OPTIONS);
-  options.coins = options.coins.concat(argv._);
+  const options: IOptions = {} as any;
+
+  options.unrecognized = unrecognizedOptions;
+  options.coins = argv._.map((i) => i.toString().toLowerCase());
+  options.sleepTime = Number(argv["sleep-time"]);
+  options.debug = argv.debug;
+  options.showHeader = argv.header;
 
   return options;
 }

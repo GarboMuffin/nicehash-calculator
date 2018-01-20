@@ -12,6 +12,8 @@ interface IAlgorithmMetadata {
 // We convert IWhatToMineCoin to this
 export interface ICoin extends IAlgorithmMetadata {
   name: string;
+  names: string[]; // more names
+  abbreviation: string;
   id: number;
 }
 
@@ -116,6 +118,17 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
+    // These blake ones are just really weird.
+    "Blake (2b)": {
+      niceHashAlgo: NHAlgorithm.Sia,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
+    "Blake (14r)": {
+      niceHashAlgo: NHAlgorithm.Decred,
+      niceHashUnit: HashRate.TERA,
+      whatToMineUnit: HashRate.MEGA,
+    },
   };
 
   const match = ALGO_MAP[algo];
@@ -123,6 +136,17 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
     return null;
   } else {
     return match;
+  }
+}
+
+function getAdditionalNames(coin: ICoin): string[] {
+  // Due to the switch to using whattomine to know coins we no longer have control over the data
+  // And as a result some "less than good" work is done for this
+  switch (coin.name) {
+    // bcash is a shorter and one word version of bitcoin cash
+    // i do not have any opinion really on bitcoin cash vs bitcoin
+    case "Bitcoin Cash": return ["bcash"];
+    default: return [];
   }
 }
 
@@ -138,13 +162,16 @@ export async function getWhatToMineCoins(): Promise<ICoin[]> {
 
     // copy over properties
     coin.name = whatToMineCalculator.name;
+    coin.abbreviation = whatToMineCalculator.tag;
+    coin.names = [coin.name, coin.abbreviation.toLowerCase()]; // name and abbreviation
+    coin.names = coin.names.concat(getAdditionalNames(coin));
     coin.id = whatToMineCalculator.id;
 
     // set algo
     const algorithm = getAlgorithm(whatToMineCalculator.algorithm);
     if (algorithm === null) {
       // This coin doesn't have a matching algorithm on nicehash so don't add it
-      // console.warn("Unknown algo: " + whatToMineCalculator.algorithm); // for debugging
+      // console.warn(`Unknown algo: ${whatToMineCalculator.algorithm} (${whatToMineCalculator.name})`);
       continue;
     }
     coin.whatToMineUnit = algorithm.whatToMineUnit;
@@ -153,6 +180,9 @@ export async function getWhatToMineCoins(): Promise<ICoin[]> {
 
     coins.push(coin);
   }
+
+  // Sort the coins, low ids first (Bitcoin, Litecoin, etc.)
+  coins.sort((a, b) => a.id - b.id);
 
   return coins;
 }
