@@ -42,9 +42,9 @@ export class WhatToMineAPI {
     return data;
   }
 
-  private async getRawProfit(id: number | string): Promise<IWhatToMineCoin> {
+  private async getRawProfit(id: number | string, hashrate: number): Promise<IWhatToMineCoin> {
     // https://whattomine.com/coins/1.json?cost=0
-    const rq = await request(`https://whattomine.com/coins/${id}.json?cost=0`);
+    const rq = await request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}&cost=0`);
     const data = JSON.parse(rq) as IWhatToMineCoin;
     return data;
   }
@@ -62,6 +62,10 @@ export class WhatToMineAPI {
       if (value.tag === "NICEHASH") {
         continue;
       }
+      // Remove lagging coins (profitability calculating won't work)
+      if (value.lagging) {
+        continue;
+      }
       // Set the name property
       value.name = key;
       coins.push(value);
@@ -71,8 +75,8 @@ export class WhatToMineAPI {
   }
 
   // Returns WhatToMine's list of coins in a more usable format
-  public async getProfit(id: number | string): Promise<number> {
-    const data = await this.getRawProfit(id);
+  public async getProfit(id: number | string, hashrate: number): Promise<number> {
+    const data = await this.getRawProfit(id, hashrate);
 
     return Number(data.btc_revenue);
   }

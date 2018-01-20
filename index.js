@@ -7,4 +7,5 @@ if (stat.isDirectory()) {
 } else {
   console.error(chalk.red("Couldn't find TypeScript (tsc) output!"));
   console.error(chalk.red("Please run: ") + chalk.reset("npm run build"));
+  process.exit(1);
 }

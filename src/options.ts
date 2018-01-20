@@ -1,24 +1,27 @@
-import * as yargs from "yargs";
+import * as minimist from "minimist";
+import { clone } from "./utils";
 
 export interface IOptions {
   debug: boolean;
+  coins: string[];
 }
 
 const DEFAULT_OPTIONS: IOptions = {
   debug: false,
+  coins: [],
 };
 
 export function parse(args: string[]): IOptions {
   // TODO: option parsing
-  return DEFAULT_OPTIONS;
-  // const argv = yargs.command("npm start -- [...arguments]", "starts the program", (yargs) => {
-  //   yargs.positional("action", {
+  // return DEFAULT_OPTIONS;
+  const argv = minimist(args, {
+    boolean: [
+      "only-revenue",
+    ],
+  });
 
-  //   })
-  // }).option("debug", {
-  //     default: false,
-  //   })
-  //   .argv;
+  const options = clone(DEFAULT_OPTIONS);
+  options.coins = options.coins.concat(argv._);
 
-  // return argv;
+  return options;
 }
