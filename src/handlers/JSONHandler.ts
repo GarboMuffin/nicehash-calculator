@@ -8,6 +8,6 @@ import { AbstractHandler } from "./AbstractHandler";
 export class JSONHandler extends AbstractHandler {
   public handle(data: ICoinData, calculator: NiceHashCalculator) {
     // really advanced
-    console.log(data);
+    console.log(JSON.stringify(data));
   }
 }
