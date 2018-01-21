@@ -14,6 +14,7 @@ interface IWhatToMineCalculator {
   lagging: boolean;
   listed: boolean;
   testing: boolean;
+  status: string;
 
   // Not actually part of the response, just something this program needs to function
   name: string;
@@ -69,8 +70,8 @@ export class WhatToMineAPI {
       if (value.tag === "NICEHASH") {
         continue;
       }
-      // Remove lagging coins (profitability calculating won't work)
-      if (value.lagging) {
+      // Remove coins that aren't active (profitability calculating won't work)
+      if (value.status !== "Active") {
         continue;
       }
       // Set the name property

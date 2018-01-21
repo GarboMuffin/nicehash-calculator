@@ -15,10 +15,8 @@ export function parse(args: string[]): IOptions {
   const unrecognizedOptions: string[] = [];
 
   // After getting used to using my own (terrible) option parser minimist is really weird
-  // I looked into yargs/commander but minimist is the easiest
+  // I looked into yargs/commander but minimist is the simplest it seems
 
-  // TODO: option parsing
-  // return DEFAULT_OPTIONS;
   const argv = minimist(args, {
     boolean: [
       "debug",
