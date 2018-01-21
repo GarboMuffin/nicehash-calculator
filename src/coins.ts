@@ -1,7 +1,6 @@
-import * as request from "request-promise";
-import { WhatToMineAPI } from "./whattomine/WhatToMine";
-import { NHAlgorithm } from "./nicehash/algorithm";
 import { HashRate } from "./hashrate";
+import { NHAlgorithm } from "./nicehash/algorithm";
+import { NiceHashCalculator } from "./NiceHashCalculator";
 
 interface IAlgorithmMetadata {
   niceHashAlgo: NHAlgorithm;
@@ -160,10 +159,8 @@ function getAdditionalNames(coin: ICoin): ICoinNames {
   }
 }
 
-export async function getWhatToMineCoins(): Promise<ICoin[]> {
-  const whatToMine = new WhatToMineAPI();
-
-  const whatToMineCalculators = await whatToMine.getCalculators();
+export async function getWhatToMineCoins(calculator: NiceHashCalculator): Promise<ICoin[]> {
+  const whatToMineCalculators = await calculator.whatToMine.getCalculators();
   const coins: ICoin[] = [];
 
   // Convert the coins to our own thing

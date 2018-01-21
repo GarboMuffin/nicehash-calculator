@@ -4,7 +4,7 @@ import * as request from "request-promise";
 // If it's possible to do something like WhatToMineAPI.ICoin instead of IWhatToMineCoin that would be much preffered
 
 ///
-/// https://whattomine.com/calculators.json
+/// for https://whattomine.com/calculators.json
 ///
 interface IWhatToMineCalculator {
   // There's more properties that aren't one here
@@ -26,17 +26,14 @@ interface IWhatToMineCalculators {
 }
 
 ///
-/// https://whattomine.com/coins/1.json
+/// for https://whattomine.com/coins/1.json (and other coins)
 ///
-
 interface IWhatToMineCoin {
   btc_revenue: string;
 }
 
 export class WhatToMineAPI {
   private async getRawCalculators(): Promise<IWhatToMineCalculators> {
-    // also see: https://whattomine.com/coins.json
-    // has more coins but doesn't have revenue information which would mean requiring more
     const rq = await request("https://whattomine.com/calculators.json");
     const data = JSON.parse(rq) as IWhatToMineCalculators;
     return data;
@@ -75,9 +72,8 @@ export class WhatToMineAPI {
   }
 
   // Returns WhatToMine's list of coins in a more usable format
-  public async getProfit(id: number | string, hashrate: number): Promise<number> {
+  public async getProfit(id: number, hashrate: number, allowCache: boolean = true): Promise<number> {
     const data = await this.getRawProfit(id, hashrate);
-
     return Number(data.btc_revenue);
   }
 }

@@ -1,5 +1,4 @@
 import * as minimist from "minimist";
-import * as util from "util";
 
 export interface IOptions {
   debug: boolean;

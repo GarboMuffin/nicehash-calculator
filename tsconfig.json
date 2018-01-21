@@ -4,7 +4,6 @@
     "strict": true,
     "module": "commonjs",
     "outDir": "dist",
-    "experimentalDecorators": true
   },
   "include": [
     "src/**/*",

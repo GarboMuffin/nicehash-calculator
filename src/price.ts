@@ -1,8 +1,7 @@
-import { NiceHashAPI } from "./nicehash/NiceHash";
+import { NiceHashCalculator } from "./NiceHashCalculator";
 
-export async function getGlobalNiceHashPrices(): Promise<number[]> {
-  const niceHash = new NiceHashAPI();
-  const data = await niceHash.getGlobalProfit();
+export async function getGlobalNiceHashPrices(calculator: NiceHashCalculator): Promise<number[]> {
+  const data = await calculator.niceHash.getGlobalProfit();
 
   const result: number[] = [];
   for (const niceHashCost of data) {
