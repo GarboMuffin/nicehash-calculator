@@ -33,8 +33,8 @@ async function run(coins: Coin[], options: Options) {
 
   if (process.argv.length === 2) {
     console.log("Did you know that this script supports more coins than listed here?");
-    console.log("Run this again like: `ts-node index list` to see all supported coins. (there's lots!)");
-    console.log("You can enable coins like so: `ts-node index monero bitcoin litecoin`");
+    console.log("Run this again like: `node index list` to see all supported coins. (there's lots!)");
+    console.log("You can enable coins like so: `node index monero bitcoin litecoin`");
     console.log("");
   }
 

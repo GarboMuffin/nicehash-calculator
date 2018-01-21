@@ -4,7 +4,7 @@ This is a customizable script to calculate the profitability of buying hashing p
 
 ## Web Version and Rewrite
 
-**A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/)** ([source code](https://github.com/GarboMuffin/nicehash-calculator)). It is based on the ongoing rewrite of the entire program. You can find the current rewrite source code in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's now to a point where you could actually use it if you knew how.
+**A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/)** ([source code](https://github.com/GarboMuffin/nicehash-calculator-web)). It is based on the ongoing rewrite of the entire program. You can find the current rewrite source code in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's now to a point where you could actually use it if you know how.
 
 (Everything below is the for the old version which works well enough)
 
@@ -23,14 +23,16 @@ npm install
 ## Usage
 
 ```bash
-# Build the files, run this once when you download it and whenver you make changes
+# Builds the files. Run this once when you download it and whenver you make changes to the source
 $ npm run build
 
-# Run the thing, make sure you ran the above first!
-# Of course replace [...arguments] with any arguments or remove it.
-$ npm start -- [...arguments]
-# If you don't like the above this will also work
+# Running the program:
+# Make sure you ran the above first or else you will get errors!
+# Any of these will work...
+$ node index [...arguments]
+$ node . [...arguments]
 $ node dist/index [...arguments]
+$ npm start -- [...arguments]
 ```
 
 ## Arguments
@@ -55,7 +57,7 @@ Additionally, you can specify names, abbreviations, or algos to enable only thos
 ## Supported Coins
 
 ```bash
-$ ts-node index list
+$ npm start -- list
 Supported coins:
  * 365Coin (Keccak) (disabled by default)
  * Aeon (CryptoNight) (disabled by default)
@@ -107,13 +109,15 @@ Supported coins:
 
 ## Disclaimer
 
-I am not responsible for any losses that come as a result of this program. The results of this program do not neccessarily reflect real world results. Your money is your responsibility. This does not account for fees (nicehash, pool, withdraw, exchange, transaction fees when the mempool is full...) or pool luck (this assumes constant 100% pool luck, which is not realistic. i've seen pool luck of >8000% one time...). Conservsion rates can change very quickly making any results here obsolete.
+I am not responsible for any losses that come as a result of this program. The results of this program do not neccessarily reflect real world results. Your money is your responsibility. This does not account for fees (nicehash, pool, withdraw, exchange, transaction fees when the mempool is full...) or pool luck (this assumes constant 100% pool luck which is not realistic. I've seen pool luck of >8000% one time...). Conservsion rates can change very quickly making any results here obsolete.
 
 ## Send me money
 
 If this is useful consider sending some money my way.
 
-BTC: 1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ  
-BTC (SegWit): bc1qvwfx77aqe2ssu4as39mskmhp22v0dmjtapvmjw  
-LTC: LfRV8T392L7M2n3pLk2DAus6bFhtqcfAht  
-ETH: 0x86dd805eb129Bfb268F21455451cD3C4dAA1c5F9  
+```plain
+BTC: 1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ
+BTC (SegWit): bc1qvwfx77aqe2ssu4as39mskmhp22v0dmjtapvmjw
+LTC: LfRV8T392L7M2n3pLk2DAus6bFhtqcfAht
+ETH: 0x86dd805eb129Bfb268F21455451cD3C4dAA1c5F9
+```
