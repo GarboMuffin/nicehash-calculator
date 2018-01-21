@@ -1,15 +1,17 @@
-I'm currently rewriting pretty much the entire program in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's not done yet but it's a WIP.
-
-This README and anything the program says to run might be a litte outdated (made some changes to how you're supposed to run it) but the installation, usage, and arguments section of this README are accurate.
-
 # NiceHash Profit Calculator
 
-A customizable script to calculate the profitability of buying hashing power on nicehash (spoiler: don't expect much)
+This is a customizable script to calculate the profitability of buying hashing power on NiceHash.
+
+## Web Version and Rewrite
+
+**A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/)** ([source code](https://github.com/GarboMuffin/nicehash-calculator)). It is based on the ongoing rewrite of the entire program. You can find the current rewrite source code in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's now to a point where you could actually use it if you knew how.
+
+(Everything below is the for the old version which works well enough)
 
 ## Installation
 
-1. Install [git](https://git-scm.com/)
-1. Install a recent version of [node](https://nodejs.org/en/), whatever the current LTS is will work
+1. Install [Git](https://git-scm.com/)
+1. Install a recent version of [Node JS](https://nodejs.org/en/), whatever the current LTS is will work (8 or later)
 1. Run these commands:
 
 ```bash
