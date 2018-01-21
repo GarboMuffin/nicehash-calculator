@@ -8,6 +8,9 @@
     "watch": "tsc -w",
     "start": "node dist/index"
   },
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "author": "GarboMuffin",
   "license": "MIT",
   "dependencies": {

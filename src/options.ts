@@ -33,9 +33,6 @@ export function parse(args: string[]): IOptions {
       "sleep-time": 1000,
       "json-output": false,
     },
-    alias: {
-      "json-output": "raw-output",
-    },
     unknown: (arg) => {
       if (arg.startsWith("-")) {
         unrecognizedOptions.push(arg);
