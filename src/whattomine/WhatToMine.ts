@@ -34,7 +34,7 @@ interface IWhatToMineCoin {
 }
 
 export class WhatToMineAPI {
-  public USER_AGENT = "https://github.com/GarboMuffin/nicehash-calculator";
+  public USER_AGENT: string = "https://github.com/GarboMuffin/nicehash-calculator";
 
   private async getRawCalculators(): Promise<IWhatToMineCalculators> {
     const rq = await request("https://whattomine.com/calculators.json", {

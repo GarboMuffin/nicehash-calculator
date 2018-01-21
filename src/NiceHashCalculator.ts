@@ -19,7 +19,7 @@ export interface ICoinData {
   revenue: number;
   profit: number;
   price: number;
-
+  returnOnInvestment: number;
   percentChange: number;
 }
 
@@ -43,7 +43,7 @@ export class NiceHashCalculator {
     }
 
     if (this.options.userAgent !== "") {
-      this.whatToMine.USER_AGENT += " " + this.options.userAgent;
+      this.whatToMine.USER_AGENT = this.options.userAgent;
     }
 
     for (const unrecognizedOption of this.options.unrecognized) {
@@ -64,7 +64,8 @@ export class NiceHashCalculator {
       const price = globalNiceHashCosts[coin.niceHashAlgo];
       const profit = revenue - price;
 
-      const percentChange = revenue / price;
+      const returnOnInvestment = revenue / price;
+      const percentChange = 1 - returnOnInvestment;
 
       // data is now passed onto any handlers
       const data: ICoinData = {
@@ -72,6 +73,7 @@ export class NiceHashCalculator {
         revenue,
         price,
         profit,
+        returnOnInvestment,
         percentChange,
       };
 

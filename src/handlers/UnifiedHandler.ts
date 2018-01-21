@@ -26,7 +26,7 @@ export class UnifiedHandler extends AbstractHandler {
     console.log(` Revenue: ${underline(revenue)} BTC/${hashRateUnit}/day`);
 
     const profit = fancyFormatNumber(data.profit);
-    const percentChange = fancyFormatNumber(((data.percentChange) - 1) * 100);
+    const percentChange = fancyFormatNumber(data.percentChange * 100);
     console.log(` Profit: ${underline(profit)} BTC/${hashRateUnit}/day (${percentChange}%)`);
   }
 }

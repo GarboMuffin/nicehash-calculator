@@ -1,12 +1,6 @@
-# This is the WIP rewrite of nicehash-calculator
+# NiceHash Calculator Rewrite
 
-# You shouldn't use it
-
-## Below is a WIP readme for when this branch is merged into master
-
----
-
-# NiceHash Calculator
+## This is not yet ready for normal use
 
 A JavaScript program to calculate the profitability of buying hashing power on NiceHash.
 
@@ -30,7 +24,8 @@ node . [...arguments]
 
 - [X] Improve the code
 - [X] Support more types of outputs (json output maybe?)
-- [ ] Add better support for fixed order (doubt this is gonna happen)
-- [ ] Create a website showing the results of this program in an easier to access form.
-- [X] Avoid hard coding coins and instead download them from the What To Mine API
+- [ ] Add better support for fixed orders (doubt this is gonna happen)
+- [X] [Create a website showing the results of this program in an easier to access form.](https://nicehash.garbomuffin.com/)
+- [X] Avoid hard coding coins and instead download them from the WhatToMine API
 - [ ] Include fees
+- [ ] Add back `--find-min` or similar
