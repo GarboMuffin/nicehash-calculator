@@ -6,6 +6,7 @@ export interface IOptions {
   coins: string[];
   sleepTime: number;
   unrecognized: string[];
+  userAgent: string;
 
   useJsonOutput: boolean;
 }
@@ -26,12 +27,14 @@ export function parse(args: string[]): IOptions {
     ],
     string: [
       "sleep-time",
+      "user-agent",
     ],
     default: {
       header: true,
       debug: false,
       "sleep-time": 1000,
       "json-output": false,
+      "user-agent": "",
     },
     unknown: (arg) => {
       if (arg.startsWith("-")) {
@@ -51,6 +54,7 @@ export function parse(args: string[]): IOptions {
   options.debug = argv.debug;
   options.showHeader = argv.header;
   options.useJsonOutput = argv["json-output"];
+  options.userAgent = argv["user-agent"];
 
   return options;
 }

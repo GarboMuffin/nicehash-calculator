@@ -42,6 +42,10 @@ export class NiceHashCalculator {
       console.log("");
     }
 
+    if (this.options.userAgent !== "") {
+      this.whatToMine.USER_AGENT += " " + this.options.userAgent;
+    }
+
     for (const unrecognizedOption of this.options.unrecognized) {
       console.warn("Unrecognized option: " + unrecognizedOption);
     }

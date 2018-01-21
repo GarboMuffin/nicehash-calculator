@@ -33,15 +33,25 @@ interface IWhatToMineCoin {
 }
 
 export class WhatToMineAPI {
+  public USER_AGENT = "https://github.com/GarboMuffin/nicehash-calculator";
+
   private async getRawCalculators(): Promise<IWhatToMineCalculators> {
-    const rq = await request("https://whattomine.com/calculators.json");
+    const rq = await request("https://whattomine.com/calculators.json", {
+      headers: {
+        "User-Agent": this.USER_AGENT,
+      },
+    });
     const data = JSON.parse(rq) as IWhatToMineCalculators;
     return data;
   }
 
-  private async getRawProfit(id: number | string, hashrate: number): Promise<IWhatToMineCoin> {
+  private async getRawProfit(id: number, hashrate: number): Promise<IWhatToMineCoin> {
     // https://whattomine.com/coins/1.json?cost=0
-    const rq = await request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}&cost=0`);
+    const rq = await request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}&cost=0`, {
+      headers: {
+        "User-Agent": this.USER_AGENT,
+      },
+    });
     const data = JSON.parse(rq) as IWhatToMineCoin;
     return data;
   }
