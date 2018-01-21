@@ -7,6 +7,8 @@ export interface IOptions {
   coins: string[];
   sleepTime: number;
   unrecognized: string[];
+
+  useJsonOutput: boolean;
 }
 
 export function parse(args: string[]): IOptions {
@@ -21,6 +23,7 @@ export function parse(args: string[]): IOptions {
     boolean: [
       "debug",
       "header",
+      "json-output",
     ],
     string: [
       "sleep-time",
@@ -29,6 +32,10 @@ export function parse(args: string[]): IOptions {
       header: true,
       debug: false,
       "sleep-time": 1000,
+      "json-output": false,
+    },
+    alias: {
+      "json-output": "raw-output",
     },
     unknown: (arg) => {
       if (arg.startsWith("-")) {
@@ -47,6 +54,7 @@ export function parse(args: string[]): IOptions {
   options.sleepTime = Number(argv["sleep-time"]);
   options.debug = argv.debug;
   options.showHeader = argv.header;
+  options.useJsonOutput = argv["json-output"];
 
   return options;
 }

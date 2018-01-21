@@ -1,18 +1,12 @@
 import { NiceHashAPI } from "./nicehash/NiceHash";
 
-interface IPrice {
-  price: number;
-}
-
-export async function getGlobalNiceHashPrices(): Promise<IPrice[]> {
+export async function getGlobalNiceHashPrices(): Promise<number[]> {
   const niceHash = new NiceHashAPI();
   const data = await niceHash.getGlobalProfit();
 
-  const result: IPrice[] = [];
+  const result: number[] = [];
   for (const niceHashCost of data) {
-    const price: IPrice = {} as any;
-    price.price = Number(niceHashCost.price);
-    result[niceHashCost.algo] = price;
+    result[niceHashCost.algo] = Number(niceHashCost.price);
   }
   return result;
 }

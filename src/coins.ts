@@ -11,10 +11,15 @@ interface IAlgorithmMetadata {
 
 // We convert IWhatToMineCoin to this
 export interface ICoin extends IAlgorithmMetadata {
-  name: string;
+  displayName: string;
   names: string[]; // more names
   abbreviation: string;
   id: number;
+}
+
+interface ICoinNames {
+  displayName?: string;
+  names?: string[];
 }
 
 function getAlgorithm(algo: string): IAlgorithmMetadata | null {
@@ -83,7 +88,7 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
       whatToMineUnit: HashRate.MEGA,
     },
     Scrypt: {
-      niceHashAlgo: NHAlgorithm.X11,
+      niceHashAlgo: NHAlgorithm.Scrypt,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
@@ -139,14 +144,19 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
   }
 }
 
-function getAdditionalNames(coin: ICoin): string[] {
+function getAdditionalNames(coin: ICoin): ICoinNames {
   // Due to the switch to using whattomine to know coins we no longer have control over the data
   // And as a result some "less than good" work is done for this
-  switch (coin.name) {
-    // bcash is a shorter and one word version of bitcoin cash
-    // i do not have any opinion really on bitcoin cash vs bitcoin
-    case "Bitcoin Cash": return ["bcash"];
-    default: return [];
+
+  // WhatToMine doesn't always provide very good display names so some manual converting is done
+  // some additional names may also be given
+
+  switch (coin.displayName) {
+    // don't kill me for using 'bcash', you don't have to use bcash but using bcash will enable bitcoin cash
+    case "BitcoinCash": return {displayName: "Bitcoin Cash", names: ["bcash"]};
+    case "BitcoinGold": return {displayName: "Bitcoin Gold"};
+    case "EthereumClassic": return {displayName: "Ethereum Classic"};
+    default: return {};
   }
 }
 
@@ -160,11 +170,20 @@ export async function getWhatToMineCoins(): Promise<ICoin[]> {
   for (const whatToMineCalculator of whatToMineCalculators) {
     const coin: ICoin = {} as any; // as any tricks typescript into ignoring all the errors
 
-    // copy over properties
-    coin.name = whatToMineCalculator.name;
+    coin.displayName = whatToMineCalculator.name;
     coin.abbreviation = whatToMineCalculator.tag;
-    coin.names = [coin.name, coin.abbreviation.toLowerCase()]; // name and abbreviation
-    coin.names = coin.names.concat(getAdditionalNames(coin));
+    coin.names = [coin.displayName.toLowerCase(), coin.abbreviation.toLowerCase()]; // name and abbreviation
+
+    // Additional names/User friendly display names
+    const additionalNames = getAdditionalNames(coin);
+    if (additionalNames.displayName) {
+      coin.displayName = additionalNames.displayName;
+      coin.names.push(coin.displayName.toLowerCase());
+    }
+    if (additionalNames.names) {
+      coin.names = coin.names.concat(additionalNames.names);
+    }
+
     coin.id = whatToMineCalculator.id;
 
     // set algo

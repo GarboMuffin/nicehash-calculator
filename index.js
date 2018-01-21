@@ -2,12 +2,12 @@ const fs = require("fs");
 const chalk = require("chalk");
 const childProcess = require("child_process");
 
-try {
-  const stat = fs.lstatSync("dist/index.js").isFile();
-} catch (e) {
-  console.log(" > TypeScript (tsc) build files missing. Building them now.");
-  childProcess.execSync("npm run build");
-  console.log(" > Done");
-}
+fs.lstat("dist/index.js", (err, stats) => {
+  if (err || !stats.isFile()) {
+    console.log(chalk.green(" > TypeScript output missing. Building them now. This may take a few seconds."));
+    childProcess.execSync("npm run build");
+    console.log(chalk.green(" > Done"));
+  }
 
-require("./dist/index");
+  require("./dist/index");
+});

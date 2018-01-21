@@ -2,10 +2,23 @@ import * as chalk from "chalk";
 import * as fs from "fs";
 
 import { getWhatToMineCoins, ICoin } from "./coins";
-import { parse as _parseOptions } from "./options";
+import { parse as _parseOptions, IOptions } from "./options";
 import { getGlobalNiceHashPrices } from "./price";
 import { getWhatToMineRevenue } from "./revenue";
 import { sleep } from "./utils";
+import { BUG_REPORTS } from "./config";
+import { AbstractHandler } from "./handlers/AbstractHandler";
+import { UnifiedHandler } from "./handlers/UnifiedHandler";
+import { JSONHandler } from "./handlers/JSONHandler";
+
+export interface ICoinData {
+  coin: ICoin;
+  revenue: number;
+  profit: number;
+  price: number;
+
+  percentChange: number;
+}
 
 function readArgumentFile(file: string): string[] {
   const content = fs.readFileSync(file);
@@ -43,7 +56,36 @@ function parseOptions() {
 function filterCoins(requested: string[], allCoins: ICoin[]): ICoin[] {
   // I've worked on this a bit and it's complicated.
 
-  return allCoins;
+  // Here's what I want:
+  // If a user types in an algorithm it enables all coins of that algorithm
+  // If a user types in the ticker/abbrevation of a coin it will enable it
+  // If a user types in the name of a coin it will enable it, maybe using levenshtein distance to be more safe?
+
+  // If none are specified then return all of them
+  // TODO: defaults to bitcoin, eth, ltc, equihash, etc.
+  if (requested.length === 0) {
+    return allCoins;
+  }
+
+  const result: ICoin[] = [];
+
+  for (const coin of allCoins) {
+    for (const str of requested) {
+      if (coin.names.indexOf(str) > -1) {
+        result.push(coin);
+        break;
+      }
+    }
+  }
+
+  return result;
+}
+
+function chooseHandler(options: IOptions): AbstractHandler {
+  if (options.useJsonOutput) {
+    return new JSONHandler();
+  }
+  return new UnifiedHandler();
 }
 
 async function start() {
@@ -54,12 +96,9 @@ async function start() {
     console.log(`Estimations are based on the NiceHash and WhatToMine APIs and have no guarantee of accuracy.`);
     console.log(`Only spend what you can afford to lose. I am not responsible for any losses.`);
     console.log("");
-    console.log("If this is useful then consider sending me a few tips:");
-    console.log("BTC: 1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ");
-    console.log("LTC: LfRV8T392L7M2n3pLk2DAus6bFhtqcfAht");
-    console.log("ETH: 0x86dd805eb129Bfb268F21455451cD3C4dAA1c5F9");
+    console.log("BTC: " + chalk.underline("1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ"));
     console.log("");
-    console.log("Please report bugs: https://github.com/GarboMuffin/nicehash-calculator/issues/new");
+    console.log("Please report bugs: " + chalk.underline(BUG_REPORTS));
     console.log("");
   }
 
@@ -71,27 +110,45 @@ async function start() {
   const globalNiceHashCosts = await getGlobalNiceHashPrices();
 
   const coins = filterCoins(options.coins, whatToMineCoins);
+  const outputHandler = chooseHandler(options);
 
   for (const coin of coins) {
     // Calculate the numbers
     const revenue = await getWhatToMineRevenue(coin);
-    const cost = globalNiceHashCosts[coin.niceHashAlgo];
-    const profit = revenue - cost.price;
+    const price = globalNiceHashCosts[coin.niceHashAlgo];
+    const profit = revenue - price;
+
+    const percentChange = revenue / price;
 
     // data is now passed onto any handlers
-    const data = {coin, revenue, cost, profit};
+    const data: ICoinData = {
+      // Kinda important things to be included in the data
+      coin,
+      revenue,
+      price,
+      profit,
 
-    console.log(data);
+      // Other garbage
+      percentChange,
+    };
 
+    outputHandler.handle(data, options);
+
+    // TODO: don't wait after the last coin
     await sleep(options.sleepTime);
   }
+
+  outputHandler.finished(options);
 }
 
 (async () => {
-  // Provides better and more useful error messages than node normally does it promises
+  // Provides better and more useful error messages than node normally does with promises
   try {
     await start();
   } catch (e) {
+    console.error(chalk.red(" > Program crashed with error:"));
+    console.error(chalk.red(" > Please report this: https://github.com/GarboMuffin/nicehash-calculator/issues/new"));
+    console.error(chalk.red(" > Please provide details such as what you were doing, arguments, etc. in your report."));
     console.error(e.stack);
   }
 })();
