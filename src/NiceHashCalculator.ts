@@ -1,16 +1,16 @@
 import * as chalk from "chalk";
 import * as fs from "fs";
 
-import { getWhatToMineCoins, ICoin } from "./coins";
+import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { AbstractHandler } from "./handlers/AbstractHandler";
 import { JSONHandler } from "./handlers/JSONHandler";
 import { UnifiedHandler } from "./handlers/UnifiedHandler";
-import { NiceHashAPI } from "./nicehash/NiceHash";
 import { IOptions, parse as _parseOptions } from "./options";
 import { getGlobalNiceHashPrices } from "./price";
 import { getWhatToMineRevenue } from "./revenue";
 import { sleep } from "./utils";
-import { WhatToMineAPI } from "./whattomine/WhatToMine";
+import { NiceHash } from "./nicehash/NiceHash";
+import { WhatToMine } from "./whattomine/WhatToMine";
 
 const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
 
@@ -25,8 +25,8 @@ export interface ICoinData {
 
 export class NiceHashCalculator {
   public options: IOptions;
-  public whatToMine: WhatToMineAPI = new WhatToMineAPI();
-  public niceHash: NiceHashAPI = new NiceHashAPI();
+  public whatToMine: WhatToMine.API = new WhatToMine.API();
+  public niceHash: NiceHash.API = new NiceHash.API();
 
   constructor() {
     this.options = this.parseOptions();

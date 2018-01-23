@@ -12,7 +12,7 @@ A JavaScript program to calculate the profitability of buying hashing power on N
 
 ### Downloading
 
-TODO
+TODO (use tags and releases instead of `git clone`?)
 
 ## Usage
 
@@ -22,6 +22,14 @@ node . [...arguments]
 
 ---
 
+## Features being removed
+
+- `--show-percent` - Always enabled
+- `--min-profit=XX` - Useless
+- `--only-revenue` - Useless
+
+## Major TODOs
+
 - [X] Improve the code
 - [X] Support more types of outputs (json output maybe?)
 - [ ] Add better support for fixed orders (doubt this is gonna happen)
@@ -29,3 +37,4 @@ node . [...arguments]
 - [X] Avoid hard coding coins and instead download them from the WhatToMine API
 - [ ] Include fees
 - [ ] Add back `--find-min` or similar
+- [ ] Useful API

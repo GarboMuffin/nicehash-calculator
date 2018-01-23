@@ -34,7 +34,8 @@
     "prefer-for-of": false,
     "object-literal-key-quotes": [
       true, "as-needed"
-    ]
+    ],
+    "no-namespace": false
   },
   "rulesDirectory": []
 }

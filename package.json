@@ -1,12 +1,13 @@
 {
   "name": "nicehash-calculator",
-  "version": "2.0.0-alpha-please-dont-use-this-yet",
+  "version": "2.0.0-alpha-not-ready-for-production-but-youre-going-to-use-it-anyway-arent-you",
   "description": "Calculate the profitability of buying hashing power on NiceHash",
   "main": "index.js",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "start": "node dist/index"
+    "start": "node dist/index",
+    "postinstall": "npm run build"
   },
   "engines": {
     "node": ">=8.0.0"

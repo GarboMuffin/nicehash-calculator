@@ -1,3 +1,9 @@
 # Specify arguments you want to be enabled by default here
 # Lines starting with # are ingored
 # One argument per line
+
+# You can also specify coins in here
+bitcoin
+litecoin
+ethereum
+ethereumclassic

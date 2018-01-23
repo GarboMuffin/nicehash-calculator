@@ -1,9 +1,9 @@
 import { HashRate } from "./hashrate";
-import { NHAlgorithm } from "./nicehash/algorithm";
 import { NiceHashCalculator } from "./NiceHashCalculator";
+import { NiceHash } from "./nicehash/NiceHash";
 
 interface IAlgorithmMetadata {
-  niceHashAlgo: NHAlgorithm;
+  niceHashAlgo: NiceHash.Algorithm;
   niceHashUnit: HashRate;
   whatToMineUnit: HashRate;
 }
@@ -26,121 +26,117 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
   // To add: blake (so many weird variations) and sia (uses blake?)
   const ALGO_MAP: {[s: string]: IAlgorithmMetadata} = {
     LBRY: {
-      niceHashAlgo: NHAlgorithm.Lbry,
+      niceHashAlgo: NiceHash.Algorithm.Lbry,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     Ethash: {
-      niceHashAlgo: NHAlgorithm.DaggerHashimoto,
+      niceHashAlgo: NiceHash.Algorithm.DaggerHashimoto,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.MEGA,
     },
     NeoScrypt: {
-      niceHashAlgo: NHAlgorithm.NeoScrypt,
+      niceHashAlgo: NiceHash.Algorithm.NeoScrypt,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.KILO,
     },
     Skunkhash: {
-      niceHashAlgo: NHAlgorithm.Skunk,
+      niceHashAlgo: NiceHash.Algorithm.Skunk,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.MEGA,
     },
     Equihash: {
-      niceHashAlgo: NHAlgorithm.Equihash,
+      niceHashAlgo: NiceHash.Algorithm.Equihash,
       niceHashUnit: HashRate.MSOL,
       whatToMineUnit: HashRate.HASH,
     },
     CryptoNight: {
-      niceHashAlgo: NHAlgorithm.CryptoNight,
+      niceHashAlgo: NiceHash.Algorithm.CryptoNight,
       niceHashUnit: HashRate.MEGA,
       whatToMineUnit: HashRate.HASH,
     },
     // not to be confused with Lyra2RE
     Lyra2REv2: {
-      niceHashAlgo: NHAlgorithm.Lyra2REv2,
+      niceHashAlgo: NiceHash.Algorithm.Lyra2REv2,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.KILO,
     },
     Pascal: {
-      niceHashAlgo: NHAlgorithm.Pascal,
+      niceHashAlgo: NiceHash.Algorithm.Pascal,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     X11Gost: {
-      niceHashAlgo: NHAlgorithm.X11,
+      niceHashAlgo: NiceHash.Algorithm.X11,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.MEGA,
     },
     Keccak: {
-      niceHashAlgo: NHAlgorithm.Keccak,
+      niceHashAlgo: NiceHash.Algorithm.Keccak,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     X11: {
-      niceHashAlgo: NHAlgorithm.X11,
+      niceHashAlgo: NiceHash.Algorithm.X11,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     X13: {
-      niceHashAlgo: NHAlgorithm.X13,
+      niceHashAlgo: NiceHash.Algorithm.X13,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.MEGA,
     },
     Scrypt: {
-      niceHashAlgo: NHAlgorithm.Scrypt,
+      niceHashAlgo: NiceHash.Algorithm.Scrypt,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     "SHA-256": {
-      niceHashAlgo: NHAlgorithm.SHA256,
+      niceHashAlgo: NiceHash.Algorithm.SHA256,
       niceHashUnit: HashRate.PETA,
       whatToMineUnit: HashRate.GIGA,
     },
     Quark: {
-      niceHashAlgo: NHAlgorithm.Quark,
+      niceHashAlgo: NiceHash.Algorithm.Quark,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     NIST5: {
-      niceHashAlgo: NHAlgorithm.Nist5,
+      niceHashAlgo: NiceHash.Algorithm.Nist5,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.MEGA,
     },
     // not to be confused with Lyra2REv2
     Lyra2RE: {
-      niceHashAlgo: NHAlgorithm.Lyra2RE,
+      niceHashAlgo: NiceHash.Algorithm.Lyra2RE,
       niceHashUnit: HashRate.GIGA,
       whatToMineUnit: HashRate.KILO,
     },
     Qubit: {
-      niceHashAlgo: NHAlgorithm.Qubit,
+      niceHashAlgo: NiceHash.Algorithm.Qubit,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     "Blake (2s)": {
-      niceHashAlgo: NHAlgorithm.Blake2s,
+      niceHashAlgo: NiceHash.Algorithm.Blake2s,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     // These blake ones are just really weird.
     "Blake (2b)": {
-      niceHashAlgo: NHAlgorithm.Sia,
+      niceHashAlgo: NiceHash.Algorithm.Sia,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
     "Blake (14r)": {
-      niceHashAlgo: NHAlgorithm.Decred,
+      niceHashAlgo: NiceHash.Algorithm.Decred,
       niceHashUnit: HashRate.TERA,
       whatToMineUnit: HashRate.MEGA,
     },
   };
 
   const match = ALGO_MAP[algo];
-  if (!match) {
-    return null;
-  } else {
-    return match;
-  }
+  return match || null;
 }
 
 function getAdditionalNames(coin: ICoin): ICoinNames {
@@ -152,14 +148,14 @@ function getAdditionalNames(coin: ICoin): ICoinNames {
 
   switch (coin.displayName) {
     // don't kill me for using 'bcash', you don't have to use bcash but using bcash will enable bitcoin cash
-    case "BitcoinCash": return {displayName: "Bitcoin Cash", names: ["bcash"]};
+    case "BitcoinCash": return {displayName: "Bitcoin Cash", names: ["bcash", "bcc"]};
     case "BitcoinGold": return {displayName: "Bitcoin Gold"};
     case "EthereumClassic": return {displayName: "Ethereum Classic"};
     default: return {};
   }
 }
 
-export async function getWhatToMineCoins(calculator: NiceHashCalculator): Promise<ICoin[]> {
+export async function getCoins(calculator: NiceHashCalculator): Promise<ICoin[]> {
   const whatToMineCalculators = await calculator.whatToMine.getCalculators();
   const coins: ICoin[] = [];
 
