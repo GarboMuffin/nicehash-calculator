@@ -27,6 +27,7 @@ export class NiceHashCalculator {
   public options: IOptions;
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
+  private globalNiceHashPrices: number[];
 
   constructor() {
     this.options = this.parseOptions();
@@ -53,7 +54,7 @@ export class NiceHashCalculator {
 
   public async start() {
     const whatToMineCoins = await getWhatToMineCoins(this);
-    const globalNiceHashCosts = await getGlobalNiceHashPrices(this);
+    this.globalNiceHashPrices = await getGlobalNiceHashPrices(this);
 
     const coins = this.filterCoins(whatToMineCoins);
     const outputHandler = this.chooseHandler();
@@ -61,7 +62,7 @@ export class NiceHashCalculator {
     for (const coin of coins) {
       // Calculate the numbers
       const revenue = await getWhatToMineRevenue(coin, this);
-      const price = globalNiceHashCosts[coin.niceHashAlgo];
+      const price = await this.getAlgoPrice(coin.niceHashAlgo);
       const profit = revenue - price;
 
       const returnOnInvestment = revenue / price;
@@ -84,6 +85,18 @@ export class NiceHashCalculator {
     }
 
     outputHandler.finished(this);
+  }
+
+  private isUsingMinimumPrices(): boolean {
+    return this.options.useMinimumPrices;
+  }
+
+  private async getAlgoPrice(algo: number): Promise<number> {
+    if (this.isUsingMinimumPrices()) {
+      return await this.niceHash.getAlgoMinimumPrice(algo);
+    } else {
+      return this.globalNiceHashPrices[algo];
+    }
   }
 
   private filterCoins(allCoins: ICoin[]): ICoin[] {

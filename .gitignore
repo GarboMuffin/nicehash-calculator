@@ -95,8 +95,5 @@ $RECYCLE.BIN/
 # typescript output directory
 dist
 
-# personal settings
-arguments.txt
-
 # pnpm
 shrinkwrap.yaml

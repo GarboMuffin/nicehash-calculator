@@ -55,7 +55,7 @@ export namespace WhatToMine {
       return data;
     }
 
-    // Returns WhatToMine's list of coins in a more usable format
+    // Returns WhatToMine's list of calculators in a more usable format
     public async getCalculators(): Promise<IWhatToMineCalculator[]> {
       // Get the raw data
       const data = (await this.getRawCalculators()).coins;
@@ -80,7 +80,6 @@ export namespace WhatToMine {
       return coins;
     }
 
-    // Returns WhatToMine's list of coins in a more usable format
     public async getProfit(id: number, hashrate: number, allowCache: boolean = true): Promise<number> {
       const data = await this.getRawProfit(id, hashrate);
       return Number(data.btc_revenue);

@@ -7,7 +7,7 @@ export interface IOptions {
   sleepTime: number;
   unrecognized: string[];
   userAgent: string;
-
+  useMinimumPrices: boolean;
   useJsonOutput: boolean;
 }
 
@@ -22,6 +22,7 @@ export function parse(args: string[]): IOptions {
       "debug",
       "header",
       "json-output",
+      "use-minimum",
     ],
     string: [
       "sleep-time",
@@ -32,7 +33,11 @@ export function parse(args: string[]): IOptions {
       debug: false,
       "sleep-time": 1000,
       "json-output": false,
+      "use-minimum": false,
       "user-agent": "",
+    },
+    alias: {
+      "use-minimum": ["find-min", "use-min"],
     },
     unknown: (arg) => {
       if (arg.startsWith("-")) {
@@ -53,6 +58,7 @@ export function parse(args: string[]): IOptions {
   options.showHeader = argv.header;
   options.useJsonOutput = argv["json-output"];
   options.userAgent = argv["user-agent"];
+  options.useMinimumPrices = argv["use-minimum"];
 
   return options;
 }
