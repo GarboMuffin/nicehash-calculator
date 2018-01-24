@@ -59,6 +59,11 @@ export class NiceHashCalculator {
     const coins = this.filterCoins(whatToMineCoins);
     const outputHandler = this.chooseHandler();
 
+    if (this.isUsingMinimumPrices()) {
+      console.log(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
+      console.log("");
+    }
+
     for (const coin of coins) {
       // Calculate the numbers
       const revenue = await getWhatToMineRevenue(coin, this);
@@ -66,7 +71,7 @@ export class NiceHashCalculator {
       const profit = revenue - price;
 
       const returnOnInvestment = revenue / price;
-      const percentChange = 1 - returnOnInvestment;
+      const percentChange = returnOnInvestment - 1;
 
       // data is now passed onto any handlers
       const data: ICoinData = {
@@ -80,8 +85,11 @@ export class NiceHashCalculator {
 
       outputHandler.handle(data, this);
 
-      // TODO: don't wait after the last coin
-      await sleep(this.options.sleepTime);
+      // Only sleep when not on the last coin
+      const isLastCoin = coins.indexOf(coin) === coins.length - 1;
+      if (!isLastCoin) {
+        await sleep(this.options.sleepTime);
+      }
     }
 
     outputHandler.finished(this);

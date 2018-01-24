@@ -12,9 +12,9 @@ async function start() {
   try {
     await start();
   } catch (e) {
-    console.error(chalk.red(" > Program crashed with error:"));
-    console.error(chalk.red(" > Please report this: https://github.com/GarboMuffin/nicehash-calculator/issues/new"));
-    console.error(chalk.red(" > Please provide details such as what you were doing, arguments, etc. in your report."));
+    console.error(chalk.red(" > FATAL ERROR"));
+    console.error(chalk.red(" > This is a bug, please report it: https://github.com/GarboMuffin/nicehash-calculator/issues/new"));
+    console.error(chalk.red(" > The exact error is below:"));
     console.error(e.stack);
   }
 })();

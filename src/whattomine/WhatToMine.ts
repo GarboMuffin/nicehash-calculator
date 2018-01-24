@@ -28,6 +28,7 @@ interface IWhatToMineCalculators {
 ///
 interface IWhatToMineCoin {
   btc_revenue: string;
+  // There's other things that we don't care about
 }
 
 export namespace WhatToMine {

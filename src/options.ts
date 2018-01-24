@@ -17,6 +17,11 @@ export function parse(args: string[]): IOptions {
   // After getting used to using my own (terrible) option parser minimist is really weird
   // I looked into yargs/commander but minimist is the simplest it seems
 
+  // I am still considering just creating my own that doesn't try to do any of the fancy parsing most things do
+  // The old one:
+  // Didn't try to turn --no-x into --x=false
+  // Forced consistency by only supporting --x=x and not --x x (which likely causes many problems in this)
+
   const argv = minimist(args, {
     boolean: [
       "debug",
