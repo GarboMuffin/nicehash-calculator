@@ -4,9 +4,11 @@ This is a customizable script to calculate the profitability of buying hashing p
 
 ## Web Version and Rewrite
 
-**A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/)** ([source code](https://github.com/GarboMuffin/nicehash-calculator-web)). It is based on the ongoing rewrite of the entire program. You can find the current rewrite source code in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's now to a point where you could actually use it if you know how.
+### A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/) ([source code](https://github.com/GarboMuffin/nicehash-calculator-web))
 
-(Everything below is the for the old version which works well enough)
+It is based on the ongoing rewrite of the entire program. You can find the current rewrite source code in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's now to a point where you could actually use it if you know how.
+
+(Everything below is the for the old version which works well enough. The rewrite branch will be merged with master when I believe it is done)
 
 ## Installation
 
@@ -15,9 +17,9 @@ This is a customizable script to calculate the profitability of buying hashing p
 1. Run these commands:
 
 ```bash
-git clone https://github.com/GarboMuffin/nicehash-calculator
-cd nicehash-calculator
-npm install
+$ git clone https://github.com/GarboMuffin/nicehash-calculator
+$ cd nicehash-calculator
+$ npm install
 ```
 
 ## Usage
