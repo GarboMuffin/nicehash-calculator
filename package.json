@@ -1,6 +1,6 @@
 {
   "name": "nicehash-calculator",
-  "version": "2.0.0-alpha-not-ready-for-production-but-youre-going-to-use-it-anyway-arent-you",
+  "version": "2.0.0-alpha.0",
   "description": "Calculate the profitability of buying hashing power on NiceHash",
   "main": "index.js",
   "scripts": {

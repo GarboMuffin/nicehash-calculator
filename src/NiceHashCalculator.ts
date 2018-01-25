@@ -52,6 +52,13 @@ export class NiceHashCalculator {
     }
   }
 
+  public debug(...args: any[]) {
+    if (this.isInDebugMode()) {
+      args.unshift(chalk.gray("debug"));
+      console.log.apply(console, args);
+    }
+  }
+
   public async start() {
     const whatToMineCoins = await getWhatToMineCoins(this);
     this.globalNiceHashPrices = await getGlobalNiceHashPrices(this);
@@ -95,25 +102,23 @@ export class NiceHashCalculator {
     outputHandler.finished(this);
   }
 
-  private isUsingMinimumPrices(): boolean {
-    return this.options.useMinimumPrices;
-  }
-
-  private async getAlgoPrice(algo: number): Promise<number> {
+  private async getAlgoPrice(algo: NiceHash.Algorithm): Promise<number> {
     if (this.isUsingMinimumPrices()) {
       return await this.niceHash.getAlgoMinimumPrice(algo);
     } else {
-      return this.globalNiceHashPrices[algo];
+      return this.globalNiceHashPrices[algo.id];
     }
   }
 
+  // Option related things
   private filterCoins(allCoins: ICoin[]): ICoin[] {
     // I've worked on this a bit and it's complicated.
 
     // Here's what I want:
-    // If a user types in an algorithm it enables all coins of that algorithm
-    // If a user types in the ticker/abbrevation of a coin it will enable it
-    // If a user types in the name of a coin it will enable it, maybe using levenshtein distance to be more safe?
+    // [X] If a user types in an algorithm it enables all coins of that algorithm
+    // [X] If a user types in the ticker/abbrevation of a coin it will enable it
+    // [X] If a user types in the name of a coin it will enable it
+    // [ ] maybe using levenshtein distance to be more safe?
 
     // If none are specified then return all of them
     // TODO: defaults to bitcoin, eth, ltc, equihash, etc.
@@ -125,7 +130,8 @@ export class NiceHashCalculator {
 
     for (const coin of allCoins) {
       for (const str of this.options.coins) {
-        if (coin.names.indexOf(str) > -1) {
+        if (coin.names.indexOf(str) > -1 || coin.niceHashAlgo.names.indexOf(str) > -1) {
+          this.debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
           result.push(coin);
           break;
         }
@@ -133,6 +139,13 @@ export class NiceHashCalculator {
     }
 
     return result;
+  }
+
+  private chooseHandler(): AbstractHandler {
+    if (this.options.useJsonOutput) {
+      return new JSONHandler();
+    }
+    return new UnifiedHandler();
   }
 
   private parseOptions() {
@@ -168,10 +181,11 @@ export class NiceHashCalculator {
     return options;
   }
 
-  private chooseHandler(): AbstractHandler {
-    if (this.options.useJsonOutput) {
-      return new JSONHandler();
-    }
-    return new UnifiedHandler();
+  private isUsingMinimumPrices(): boolean {
+    return this.options.useMinimumPrices;
+  }
+
+  public isInDebugMode(): boolean {
+    return this.options.debug;
   }
 }

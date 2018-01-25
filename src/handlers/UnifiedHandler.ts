@@ -15,7 +15,8 @@ function fancyFormatNumber(num: number): string {
 
 export class UnifiedHandler extends AbstractHandler {
   public handle(data: ICoinData, calculator: NiceHashCalculator) {
-    console.log(`${data.coin.displayName}:`);
+    const algo = chalk.gray(`(${data.coin.niceHashAlgo.displayName})`);
+    console.log(`${data.coin.displayName}: ${algo}`);
 
     const hashRateUnit = data.coin.niceHashUnit.displayName;
 

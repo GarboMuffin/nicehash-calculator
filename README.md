@@ -36,6 +36,7 @@ node . [...arguments]
 - [X] [Create a website showing the results of this program in an easier to access form.](https://nicehash.garbomuffin.com/)
 - [X] Avoid hard coding coins and instead download them from the WhatToMine API
 - [ ] Include fees
+  - Thinking about where to apply the fee
 - [X] Add back `--find-min` or similar
 - [ ] Add back `--location=XX` or similar for `--find-min`
 - [ ] Useful API
