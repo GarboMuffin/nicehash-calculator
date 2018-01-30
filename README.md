@@ -2,6 +2,8 @@
 
 This is a customizable script to calculate the profitability of buying hashing power on NiceHash.
 
+_To be clear, this is for people wanting to make a profit by **buying** hashing power on NiceHash. It isn't for sellers (or miners). Use [NiceHash's official calculator](https://www.nicehash.com/profitability-calculator) for that_
+
 ## Web Version and Rewrite
 
 ### A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/) ([source code](https://github.com/GarboMuffin/nicehash-calculator-web))
@@ -11,6 +13,8 @@ It is based on the ongoing rewrite of the entire program. You can find the curre
 (Everything below is the for the old version which works well enough. The rewrite branch will be merged with master when I believe it is done)
 
 ## Installation
+
+If you have any problems with getting this to work then [make an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new).
 
 1. Install [Git](https://git-scm.com/)
 1. Install a recent version of [Node JS](https://nodejs.org/en/), whatever the current LTS is will work (8 or later)
