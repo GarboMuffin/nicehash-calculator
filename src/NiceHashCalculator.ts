@@ -1,6 +1,8 @@
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as fs from "fs";
 
+import * as NiceHash from "./apis/nicehash";
+import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { AbstractHandler } from "./handlers/AbstractHandler";
 import { JSONHandler } from "./handlers/JSONHandler";
@@ -9,8 +11,6 @@ import { IOptions, parse as _parseOptions } from "./options";
 import { getGlobalNiceHashPrices } from "./price";
 import { getWhatToMineRevenue } from "./revenue";
 import { sleep } from "./utils";
-import { NiceHash } from "./nicehash/NiceHash";
-import { WhatToMine } from "./whattomine/WhatToMine";
 
 const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
 
@@ -27,7 +27,7 @@ export class NiceHashCalculator {
   public options: IOptions;
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
-  private globalNiceHashPrices: number[];
+  private globalNiceHashPrices: number[] = [];
 
   constructor() {
     this.options = this.parseOptions();
@@ -53,7 +53,7 @@ export class NiceHashCalculator {
   }
 
   public debug(...args: any[]) {
-    if (this.isInDebugMode()) {
+    if (this.inDebugMode) {
       args.unshift(chalk.gray("debug"));
       console.log.apply(console, args);
     }
@@ -120,22 +120,50 @@ export class NiceHashCalculator {
     // [X] If a user types in the name of a coin it will enable it
     // [ ] maybe using levenshtein distance to be more safe?
 
-    // If none are specified then return all of them
-    // TODO: defaults to bitcoin, eth, ltc, equihash, etc.
-    if (this.options.coins.length === 0) {
-      return allCoins;
-    }
+    // // If none are specified then return all of them
+    // // TODO: defaults to bitcoin, eth, ltc, equihash, etc.
+    // if (this.options.coins.length === 0) {
+    //   return allCoins;
+    // }
 
-    const result: ICoin[] = [];
+    let result: ICoin[] = allCoins;
+    let userEnabledCoins = false;
 
     for (const coin of allCoins) {
       for (const str of this.options.coins) {
-        if (coin.names.indexOf(str) > -1 || coin.niceHashAlgo.names.indexOf(str) > -1) {
-          this.debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
-          result.push(coin);
-          break;
+        const isDisablingCoin = str.startsWith("-");
+
+        let name: string = "";
+        if (isDisablingCoin) {
+          name = str.substr(1);
+        } else {
+          name = str;
+        }
+
+        if (coin.names.indexOf(name) > -1 || coin.niceHashAlgo.names.indexOf(name) > -1) {
+          if (isDisablingCoin) {
+            const index = result.indexOf(coin);
+            if (index === -1) {
+              console.warn(chalk.yellow(`WARN: Can't disable coin '${name}': not found`));
+            } else {
+              this.debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
+              result.splice(index, 1);
+            }
+          } else {
+            this.debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
+            if (!userEnabledCoins) {
+              result = [];
+            }
+            userEnabledCoins = true;
+            result.push(coin);
+            break;
+          }
         }
       }
+    }
+
+    if (!userEnabledCoins) {
+      return allCoins;
     }
 
     return result;
@@ -185,7 +213,11 @@ export class NiceHashCalculator {
     return this.options.useMinimumPrices;
   }
 
-  public isInDebugMode(): boolean {
+  ///
+  /// ACCESSORS
+  ///
+
+  get inDebugMode(): boolean {
     return this.options.debug;
   }
 }

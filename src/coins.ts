@@ -1,6 +1,6 @@
+import * as NiceHash from "./apis/nicehash/";
 import { HashRate } from "./hashrate";
 import { NiceHashCalculator } from "./NiceHashCalculator";
-import { NiceHash } from "./nicehash/NiceHash";
 
 interface IAlgorithmMetadata {
   niceHashAlgo: NiceHash.Algorithm;

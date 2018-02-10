@@ -1,10 +1,10 @@
-import * as chalk from "chalk";
-import { underline } from "chalk";
+import chalk from "chalk";
 
 import { ICoinData, NiceHashCalculator } from "../NiceHashCalculator";
 import { AbstractHandler } from "./AbstractHandler";
 
 const PRECISION = 4;
+const underline = chalk.underline;
 
 function fancyFormatNumber(num: number): string {
   const isPositive = num > 0;
