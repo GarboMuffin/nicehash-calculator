@@ -1,11 +1,11 @@
 import * as NiceHash from "./apis/nicehash/";
-import { HashRate } from "./hashrate";
+import { HashRateUnit } from "./HashRateUnit";
 import { NiceHashCalculator } from "./NiceHashCalculator";
 
 interface IAlgorithmMetadata {
   niceHashAlgo: NiceHash.Algorithm;
-  niceHashUnit: HashRate;
-  whatToMineUnit: HashRate;
+  niceHashUnit: HashRateUnit;
+  whatToMineUnit: HashRateUnit;
 }
 
 // We convert IWhatToMineCoin to this
@@ -27,111 +27,111 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
   const ALGO_MAP: {[s: string]: IAlgorithmMetadata} = {
     LBRY: {
       niceHashAlgo: NiceHash.Algorithm.Lbry,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     Ethash: {
       niceHashAlgo: NiceHash.Algorithm.DaggerHashimoto,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     NeoScrypt: {
       niceHashAlgo: NiceHash.Algorithm.NeoScrypt,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.KILO,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.KILO,
     },
     Skunkhash: {
       niceHashAlgo: NiceHash.Algorithm.Skunk,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     Equihash: {
       niceHashAlgo: NiceHash.Algorithm.Equihash,
-      niceHashUnit: HashRate.MSOL,
-      whatToMineUnit: HashRate.HASH,
+      niceHashUnit: HashRateUnit.MSOL,
+      whatToMineUnit: HashRateUnit.HASH,
     },
     CryptoNight: {
       niceHashAlgo: NiceHash.Algorithm.CryptoNight,
-      niceHashUnit: HashRate.MEGA,
-      whatToMineUnit: HashRate.HASH,
+      niceHashUnit: HashRateUnit.MEGA,
+      whatToMineUnit: HashRateUnit.HASH,
     },
     // not to be confused with Lyra2RE
     Lyra2REv2: {
       niceHashAlgo: NiceHash.Algorithm.Lyra2REv2,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.KILO,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.KILO,
     },
     Pascal: {
       niceHashAlgo: NiceHash.Algorithm.Pascal,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     X11Gost: {
       niceHashAlgo: NiceHash.Algorithm.X11,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     Keccak: {
       niceHashAlgo: NiceHash.Algorithm.Keccak,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     X11: {
       niceHashAlgo: NiceHash.Algorithm.X11,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     X13: {
       niceHashAlgo: NiceHash.Algorithm.X13,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     Scrypt: {
       niceHashAlgo: NiceHash.Algorithm.Scrypt,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     "SHA-256": {
       niceHashAlgo: NiceHash.Algorithm.SHA256,
-      niceHashUnit: HashRate.PETA,
-      whatToMineUnit: HashRate.GIGA,
+      niceHashUnit: HashRateUnit.PETA,
+      whatToMineUnit: HashRateUnit.GIGA,
     },
     Quark: {
       niceHashAlgo: NiceHash.Algorithm.Quark,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     NIST5: {
       niceHashAlgo: NiceHash.Algorithm.Nist5,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     // not to be confused with Lyra2REv2
     Lyra2RE: {
       niceHashAlgo: NiceHash.Algorithm.Lyra2RE,
-      niceHashUnit: HashRate.GIGA,
-      whatToMineUnit: HashRate.KILO,
+      niceHashUnit: HashRateUnit.GIGA,
+      whatToMineUnit: HashRateUnit.KILO,
     },
     Qubit: {
       niceHashAlgo: NiceHash.Algorithm.Qubit,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     "Blake (2s)": {
       niceHashAlgo: NiceHash.Algorithm.Blake2s,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     // These blake ones are just really weird.
     "Blake (2b)": {
       niceHashAlgo: NiceHash.Algorithm.Sia,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
     "Blake (14r)": {
       niceHashAlgo: NiceHash.Algorithm.Decred,
-      niceHashUnit: HashRate.TERA,
-      whatToMineUnit: HashRate.MEGA,
+      niceHashUnit: HashRateUnit.TERA,
+      whatToMineUnit: HashRateUnit.MEGA,
     },
   };
 

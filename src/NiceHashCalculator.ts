@@ -4,6 +4,7 @@ import * as fs from "fs";
 import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
+import { debug, state as _debugState } from "./debug";
 import { AbstractHandler } from "./handlers/AbstractHandler";
 import { JSONHandler } from "./handlers/JSONHandler";
 import { UnifiedHandler } from "./handlers/UnifiedHandler";
@@ -16,7 +17,7 @@ const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/n
 
 export interface ICoinData {
   coin: ICoin;
-  revenue: number;
+  revenue: WhatToMine.IRevenueResponse;
   profit: number;
   price: number;
   returnOnInvestment: number;
@@ -47,15 +48,12 @@ export class NiceHashCalculator {
       this.whatToMine.USER_AGENT = this.options.userAgent;
     }
 
+    if (this.options.debug) {
+      _debugState.enabled = true;
+    }
+
     for (const unrecognizedOption of this.options.unrecognized) {
       console.warn("Unrecognized option: " + unrecognizedOption);
-    }
-  }
-
-  public debug(...args: any[]) {
-    if (this.inDebugMode) {
-      args.unshift(chalk.gray("debug"));
-      console.log.apply(console, args);
     }
   }
 
@@ -63,17 +61,22 @@ export class NiceHashCalculator {
     const whatToMineCoins = await getWhatToMineCoins(this);
     this.globalNiceHashPrices = await getGlobalNiceHashPrices(this);
 
+    if (this.options.useCoinCache) {
+      await this.whatToMine.populateCoinRevenueCache();
+    }
+
     const coins = this.filterCoins(whatToMineCoins);
     const outputHandler = this.chooseHandler();
 
-    if (this.isUsingMinimumPrices()) {
+    if (this.usingMinimumPrices) {
       console.log(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
       console.log("");
     }
 
     for (const coin of coins) {
       // Calculate the numbers
-      const revenue = await getWhatToMineRevenue(coin, this);
+      const revenueData = await getWhatToMineRevenue(coin, this);
+      const revenue = revenueData.revenue;
       const price = await this.getAlgoPrice(coin.niceHashAlgo);
       const profit = revenue - price;
 
@@ -83,7 +86,7 @@ export class NiceHashCalculator {
       // data is now passed onto any handlers
       const data: ICoinData = {
         coin,
-        revenue,
+        revenue: revenueData,
         price,
         profit,
         returnOnInvestment,
@@ -103,7 +106,7 @@ export class NiceHashCalculator {
   }
 
   private async getAlgoPrice(algo: NiceHash.Algorithm): Promise<number> {
-    if (this.isUsingMinimumPrices()) {
+    if (this.usingMinimumPrices) {
       return await this.niceHash.getAlgoMinimumPrice(algo);
     } else {
       return this.globalNiceHashPrices[algo.id];
@@ -146,11 +149,11 @@ export class NiceHashCalculator {
             if (index === -1) {
               console.warn(chalk.yellow(`WARN: Can't disable coin '${name}': not found`));
             } else {
-              this.debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
+              debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
               result.splice(index, 1);
             }
           } else {
-            this.debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
+            debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
             if (!userEnabledCoins) {
               result = [];
             }
@@ -209,13 +212,13 @@ export class NiceHashCalculator {
     return options;
   }
 
-  private isUsingMinimumPrices(): boolean {
-    return this.options.useMinimumPrices;
-  }
-
   ///
   /// ACCESSORS
   ///
+
+  get usingMinimumPrices(): boolean {
+    return this.options.useMinimumPrices;
+  }
 
   get inDebugMode(): boolean {
     return this.options.debug;

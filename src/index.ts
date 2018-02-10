@@ -12,7 +12,7 @@ async function start() {
   try {
     await start();
   } catch (e) {
-    console.error(chalk.red(" > FATAL ERROR"));
+    console.error(chalk.red(" > !!! FATAL ERROR !!!"));
     console.error(chalk.red(" > This is a bug, please report it: https://github.com/GarboMuffin/nicehash-calculator/issues/new"));
     console.error(chalk.red(" > The exact error is below:"));
     console.error(e.stack);

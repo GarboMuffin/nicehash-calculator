@@ -21,10 +21,11 @@ export class UnifiedHandler extends AbstractHandler {
     const hashRateUnit = data.coin.niceHashUnit.displayName;
 
     const price = data.price.toFixed(PRECISION);
-    console.log(` Price: ${underline(price)} BTC/${hashRateUnit}/day`);
+    console.log(` Price:   ${underline(price)} BTC/${hashRateUnit}/day`);
 
-    const revenue = data.revenue.toFixed(PRECISION);
-    console.log(` Revenue: ${underline(revenue)} BTC/${hashRateUnit}/day`);
+    const revenue = data.revenue.revenue.toFixed(PRECISION);
+    const revenueTimestamp = chalk.gray("(" + (new Date(data.revenue.timestamp)).toLocaleString() + ")");
+    console.log(` Revenue: ${underline(revenue)} BTC/${hashRateUnit}/day ${revenueTimestamp}`);
 
     const profit = fancyFormatNumber(data.profit);
     const percentChange = fancyFormatNumber(data.percentChange * 100);

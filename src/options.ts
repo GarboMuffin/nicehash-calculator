@@ -9,6 +9,7 @@ export interface IOptions {
   userAgent: string;
   useMinimumPrices: boolean;
   useJsonOutput: boolean;
+  useCoinCache: boolean;
 }
 
 export function parse(args: string[]): IOptions {
@@ -28,6 +29,7 @@ export function parse(args: string[]): IOptions {
       "header",
       "json-output",
       "use-minimum",
+      "use-coin-cache",
     ],
     string: [
       "sleep-time",
@@ -40,6 +42,7 @@ export function parse(args: string[]): IOptions {
       "json-output": false,
       "use-minimum": false,
       "user-agent": "",
+      "use-coin-cache": true,
     },
     alias: {
       "use-minimum": ["find-min", "use-min"],
@@ -64,6 +67,7 @@ export function parse(args: string[]): IOptions {
   options.useJsonOutput = argv["json-output"];
   options.userAgent = argv["user-agent"];
   options.useMinimumPrices = argv["use-minimum"];
+  options.useCoinCache = argv["use-coin-cache"];
 
   return options;
 }

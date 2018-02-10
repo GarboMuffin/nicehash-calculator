@@ -1,6 +1,6 @@
 import * as request from "request-promise";
 
-import { Algorithm } from ".";
+import { Algorithm, Location } from ".";
 
 interface INHApiResult<T> {
   result: T;
