@@ -84,14 +84,13 @@ export interface IRevenueResponse {
 }
 
 export class API {
-  public USER_AGENT: string = "";
   private coinRevenueCache: ICoinRevenueCacheEntry[] = [];
 
   // Raw requests
   private async request(url: string): Promise<any> {
     const rq = await request(url, {
       headers: {
-        "User-Agent": this.USER_AGENT,
+        // perhaps define a user-agent or referrer?
       },
     });
     return rq;

@@ -8,13 +8,14 @@ import { debug, state as _debugState } from "./debug";
 import { AbstractHandler } from "./handlers/AbstractHandler";
 import { JSONHandler } from "./handlers/JSONHandler";
 import { UnifiedHandler } from "./handlers/UnifiedHandler";
-import { IOptions, parse as _parseOptions } from "./options";
+import * as OptionParser from "./options/";
 import { getGlobalNiceHashPrices } from "./price";
 import { getWhatToMineRevenue } from "./revenue";
 import { sleep } from "./utils";
 
 const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
 
+// This is the data that is passed onto handlers
 export interface ICoinData {
   coin: ICoin;
   revenue: WhatToMine.IRevenueResponse;
@@ -24,55 +25,116 @@ export interface ICoinData {
   percentChange: number;
 }
 
+// Prices type
+export enum Prices {
+  // global nicehash averages
+  Average,
+
+  // minimum order with workers
+  Minimum,
+
+  // TODO: "MinimumWithWorkers" and "MinimumWithHashrate"
+}
+
+// Support handlers
+export enum OutputHandler {
+  // The normal handler, "unified" or "pretty"
+  Pretty,
+
+  // Outputs formatted JSON, can be parsed by anything
+  // Best used with --no-header
+  JSON,
+}
+
+// Program config
+export interface IOptions {
+  // output debug messages?
+  debug: boolean;
+
+  // show the header at the start?
+  showHeader: boolean;
+
+  // user specified coins
+  coins: string[];
+
+  // how long to wait between each coin, ms
+  sleepTime: number;
+
+  // unrecognized options
+  unrecognized: string[];
+
+  // what type of prices to use?
+  prices: Prices;
+
+  // what output handler to use?
+  outputHandler: OutputHandler;
+}
+
 export class NiceHashCalculator {
   public options: IOptions;
+  private globalNiceHashPrices: number[] = [];
+  // API objects
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
-  private globalNiceHashPrices: number[] = [];
 
   constructor() {
+    // Parse options
     this.options = this.parseOptions();
 
+    // Conditionally output a header
+    // Disclaimer, donation addresses, etc.
     if (this.options.showHeader) {
       console.log(`This program ${chalk.bold("**estimates**")} the profitability of buying hashing power on NiceHash`);
       console.log(`Estimations are based on the NiceHash and WhatToMine APIs and have no guarantee of accuracy.`);
       console.log(`Only spend what you can afford to lose. I am not responsible for any losses.`);
       console.log("");
+      // please do send me money that would be great
       console.log("BTC: " + chalk.underline("1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ"));
       console.log("");
       console.log("Please report bugs: " + chalk.underline(BUG_REPORTS));
       console.log("");
     }
 
-    if (this.options.userAgent !== "") {
-      this.whatToMine.USER_AGENT = this.options.userAgent;
-    }
-
+    // If debug was enabled then tell the debug method to start outputting things
     if (this.options.debug) {
       _debugState.enabled = true;
+      // and also print some things to debug right away
+      debug("options", this.options);
     }
 
+    // For each unrecognized option log a warning to the user
     for (const unrecognizedOption of this.options.unrecognized) {
-      console.warn("Unrecognized option: " + unrecognizedOption);
+      console.warn(chalk.red("Unrecognized option: " + unrecognizedOption));
     }
   }
 
+  // Has to be seperate from constructor to use async
+  // Asnyc constructors would be terrible
   public async start() {
+    // get all coins on what to mine
     const whatToMineCoins = await getWhatToMineCoins(this);
+    // load cache of many whattomine coins
+    await this.whatToMine.populateCoinRevenueCache();
+    // get nicehash average prices
+    // TODO: if options.prices !== minimum then don't do this?
     this.globalNiceHashPrices = await getGlobalNiceHashPrices(this);
 
-    if (this.options.useCoinCache) {
-      await this.whatToMine.populateCoinRevenueCache();
-    }
-
+    // read the coins the user specified and get them
     const coins = this.filterCoins(whatToMineCoins);
+
+    // determine the output handler to be used
     const outputHandler = this.chooseHandler();
 
+    // using minimum prices is heavily discouraged
+    // so output a warning
     if (this.usingMinimumPrices) {
       console.log(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
       console.log("");
     }
 
+    // TODO: other warnings
+
+    // For every coin...
     for (const coin of coins) {
       // Calculate the numbers
       const revenueData = await getWhatToMineRevenue(coin, this);
@@ -83,7 +145,7 @@ export class NiceHashCalculator {
       const returnOnInvestment = revenue / price;
       const percentChange = returnOnInvestment - 1;
 
-      // data is now passed onto any handlers
+      // create the data structure
       const data: ICoinData = {
         coin,
         revenue: revenueData,
@@ -93,15 +155,19 @@ export class NiceHashCalculator {
         percentChange,
       };
 
+      // pass it onto the handler
       outputHandler.handle(data, this);
 
-      // Only sleep when not on the last coin
+      // wait before going onto the next coin unless this is the last coin
       const isLastCoin = coins.indexOf(coin) === coins.length - 1;
       if (!isLastCoin) {
         await sleep(this.options.sleepTime);
       }
     }
 
+    // tell the output handler that everything has finished
+    // nothing uses this yet but it may be used in the future
+    // (eg. "summarizing" results)
     outputHandler.finished(this);
   }
 
@@ -173,10 +239,14 @@ export class NiceHashCalculator {
   }
 
   private chooseHandler(): AbstractHandler {
-    if (this.options.useJsonOutput) {
+    if (this.options.outputHandler === OutputHandler.JSON) {
       return new JSONHandler();
+    } else if (this.options.outputHandler === OutputHandler.Pretty) {
+      return new UnifiedHandler();
+    } else {
+      console.warn("chooseHandler(): unknown handler?");
+      return new UnifiedHandler();
     }
-    return new UnifiedHandler();
   }
 
   private parseOptions() {
@@ -208,7 +278,67 @@ export class NiceHashCalculator {
     // append arguments.txt
     args = args.concat(readArgumentsFile());
 
-    const options = _parseOptions(args);
+    const parsedOptions = OptionParser.parse(args, {
+      arguments: {
+        /* tslint:disable:object-literal-key-quotes */
+        "debug": {
+          type: "boolean",
+          default: false,
+        },
+        "no-header": {
+          type: "boolean",
+          default: false,
+        },
+        "output": {
+          type: "string",
+          default: "pretty",
+        },
+        "prices": {
+          type: "string",
+          default: "average",
+        },
+        "sleep-time": {
+          aliases: [],
+          type: "number",
+          default: 1000,
+        },
+        /* tslint:enable:object-literal-key-quotes */
+      },
+    });
+
+    const getPricesOption = (): Prices => {
+      const value = parsedOptions.arguments.prices;
+      if (value === "average") {
+        return Prices.Average;
+      } else if (value === "minimum") {
+        return Prices.Minimum;
+      } else {
+        console.warn("unknown value specified for --prices, accepted values are 'average' (default) and 'minimum'");
+        return Prices.Average;
+      }
+    };
+
+    const getOutputHandlerOption = (): OutputHandler => {
+      const value = parsedOptions.arguments.output;
+      if (value === "pretty") {
+        return OutputHandler.Pretty;
+      } else if (value === "json") {
+        return OutputHandler.JSON;
+      } else {
+        console.warn("unknown value specified for --output, accepted values are 'pretty' (default) and 'json'");
+        return OutputHandler.Pretty;
+      }
+    };
+
+    const options: IOptions = {
+      unrecognized: parsedOptions.unrecognized,
+      coins: parsedOptions.plain,
+      debug: parsedOptions.arguments.debug as boolean,
+      showHeader: !parsedOptions.arguments["no-header"] as boolean,
+      sleepTime: parsedOptions.arguments["sleep-time"] as number,
+      prices: getPricesOption(),
+      outputHandler: getOutputHandlerOption(),
+    };
     return options;
   }
 
@@ -217,7 +347,7 @@ export class NiceHashCalculator {
   ///
 
   get usingMinimumPrices(): boolean {
-    return this.options.useMinimumPrices;
+    return this.options.prices === Prices.Minimum;
   }
 
   get inDebugMode(): boolean {
