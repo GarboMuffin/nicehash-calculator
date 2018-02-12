@@ -1,3 +1,5 @@
+// Different units of hashrate
+
 export class HashRateUnit {
   public static readonly HASH = new HashRateUnit(1, "H");
   public static readonly KILO = new HashRateUnit(1000, "KH");

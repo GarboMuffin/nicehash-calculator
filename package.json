@@ -15,13 +15,13 @@
   "author": "GarboMuffin",
   "license": "MIT",
   "dependencies": {
-    "@types/request": "^2.47.0",
-    "@types/request-promise": "^4.1.41",
-    "chalk": "^2.3.0",
+    "chalk": "^2.3.1",
     "request": "^2.83.0",
     "request-promise": "^4.2.2"
   },
   "devDependencies": {
+    "@types/request": "^2.47.0",
+    "@types/request-promise": "^4.1.41",
     "typescript": "^2.7.1"
   },
   "private": true

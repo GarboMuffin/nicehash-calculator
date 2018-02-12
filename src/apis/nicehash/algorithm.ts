@@ -1,3 +1,6 @@
+// All algorithms supported by Nicehash
+// ids, names, aliases
+
 export class Algorithm {
   /* tslint:disable:variable-name */
   public static readonly Scrypt = new Algorithm(0, "Scrypt", []);

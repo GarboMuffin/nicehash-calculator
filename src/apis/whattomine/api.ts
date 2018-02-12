@@ -176,9 +176,10 @@ export class API {
 
       // if the data is more than an hour old then skip it
       const currentDate = new Date();
-      const age = (new Date()).getTime() - timestamp;
-      if (age >= 1000 * 60 * 60) {
-        debug(`skipping cache data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
+      const age = (currentDate.getTime() - (new Date(timestamp).getTime())) / 1000;
+      // if it s older than an hour then don't use the data (too old, unreliable)
+      if (age >= 60 * 60) {
+        debug(`skipping cache data for ${coin.id} (${coin.algorithm}): too old (${age} sec)`);
         continue;
       }
 

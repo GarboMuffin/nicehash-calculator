@@ -1,6 +1,6 @@
 import * as request from "request-promise";
 
-import { Algorithm, Location } from ".";
+import * as NiceHash from ".";
 
 interface INHApiResult<T> {
   result: T;
@@ -43,7 +43,7 @@ export class API {
     return data.result.stats;
   }
 
-  private async getRawOrders(algo: Algorithm, location?: Location): Promise<INHApiResult<INHRawOrders>> {
+  private async getRawOrders(algo: NiceHash.Algorithm, location?: NiceHash.Location): Promise<INHApiResult<INHRawOrders>> {
     const getEndpoint = (): string => {
       let path = "https://api.nicehash.com/api?method=orders.get";
       path += "&algo=" + algo;
@@ -58,7 +58,7 @@ export class API {
     return data;
   }
 
-  public async getAlgoMinimumPrice(algo: Algorithm, location?: Location): Promise<number> {
+  public async getAlgoMinimumPrice(algo: NiceHash.Algorithm, location?: NiceHash.Location): Promise<number> {
     const data = await this.getRawOrders(algo, location);
     const orders = data.result.orders;
 

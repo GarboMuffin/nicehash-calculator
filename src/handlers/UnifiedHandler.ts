@@ -15,21 +15,25 @@ function fancyFormatNumber(num: number): string {
 
 export class UnifiedHandler extends AbstractHandler {
   public handle(data: ICoinData, calculator: NiceHashCalculator) {
+    // output coin name & algo
     const algo = chalk.gray(`(${data.coin.niceHashAlgo.displayName})`);
     console.log(`${data.coin.displayName}: ${algo}`);
 
+    // the unit of hashrate
     const hashRateUnit = data.coin.niceHashUnit.displayName;
 
-    const price = data.price.toFixed(PRECISION);
-    console.log(` Price:   ${underline(price)} BTC/${hashRateUnit}/day`);
+    // output price
+    const price = underline(data.price.toFixed(PRECISION));
+    // additional spaces make the output alligned
+    console.log(` Price:   ${price} BTC/${hashRateUnit}/day`);
 
-    const revenue = data.revenue.revenue.toFixed(PRECISION);
+    const revenue = underline(data.revenue.revenue.toFixed(PRECISION));
     const revenueTimestamp = chalk.gray("(" + (new Date(data.revenue.timestamp)).toLocaleString() + ")");
-    console.log(` Revenue: ${underline(revenue)} BTC/${hashRateUnit}/day ${revenueTimestamp}`);
+    console.log(` Revenue: ${revenue} BTC/${hashRateUnit}/day ${revenueTimestamp}`);
 
-    const profit = fancyFormatNumber(data.profit);
-    const percentChange = fancyFormatNumber(data.percentChange * 100);
-    console.log(` Profit: ${underline(profit)} BTC/${hashRateUnit}/day (${percentChange}%)`);
+    const profit = underline(fancyFormatNumber(data.profit));
+    const percentChange = underline(fancyFormatNumber(data.percentChange * 100));
+    console.log(` Profit: ${profit} BTC/${hashRateUnit}/day (${percentChange}%)`);
 
     console.log("");
   }

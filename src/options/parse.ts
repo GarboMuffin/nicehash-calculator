@@ -101,6 +101,7 @@ export function parse(argv: string[], opts: IOptions): IParsedOptions {
   }
 
   for (const str of argv) {
+    // arguments (starts with --) are more complicated so the majority of the work is done elsewhere
     if (str.startsWith("--")) {
       handleArgument(result, opts, str);
     } else {

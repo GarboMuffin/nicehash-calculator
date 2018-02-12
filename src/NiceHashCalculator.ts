@@ -5,12 +5,8 @@ import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { debug, state as _debugState } from "./debug";
-import { AbstractHandler } from "./handlers/AbstractHandler";
-import { JSONHandler } from "./handlers/JSONHandler";
-import { UnifiedHandler } from "./handlers/UnifiedHandler";
+import * as Handlers from "./handlers";
 import * as OptionParser from "./options/";
-import { getGlobalNiceHashPrices } from "./price";
-import { getWhatToMineRevenue } from "./revenue";
 import { sleep } from "./utils";
 
 const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
@@ -117,7 +113,7 @@ export class NiceHashCalculator {
     await this.whatToMine.populateCoinRevenueCache();
     // get nicehash average prices
     // TODO: if options.prices !== minimum then don't do this?
-    this.globalNiceHashPrices = await getGlobalNiceHashPrices(this);
+    this.globalNiceHashPrices = await this.getGlobalNiceHashPrices();
 
     // read the coins the user specified and get them
     const coins = this.filterCoins(whatToMineCoins);
@@ -137,7 +133,7 @@ export class NiceHashCalculator {
     // For every coin...
     for (const coin of coins) {
       // Calculate the numbers
-      const revenueData = await getWhatToMineRevenue(coin, this);
+      const revenueData = await this.getCoinRevenue(coin);
       const revenue = revenueData.revenue;
       const price = await this.getAlgoPrice(coin.niceHashAlgo);
       const profit = revenue - price;
@@ -171,6 +167,16 @@ export class NiceHashCalculator {
     outputHandler.finished(this);
   }
 
+  private async getGlobalNiceHashPrices(): Promise<number[]> {
+    const data = await this.niceHash.getGlobalPrices();
+
+    const result: number[] = [];
+    for (const niceHashCost of data) {
+      result[niceHashCost.algo] = Number(niceHashCost.price);
+    }
+    return result;
+  }
+
   private async getAlgoPrice(algo: NiceHash.Algorithm): Promise<number> {
     if (this.usingMinimumPrices) {
       return await this.niceHash.getAlgoMinimumPrice(algo);
@@ -179,27 +185,23 @@ export class NiceHashCalculator {
     }
   }
 
+  private async getCoinRevenue(coin: ICoin): Promise<WhatToMine.IRevenueResponse> {
+    const hashrate = coin.niceHashUnit.hashes / coin.whatToMineUnit.hashes;
+    return await this.whatToMine.getRevenue(coin.id, hashrate);
+  }
+
   // Option related things
   private filterCoins(allCoins: ICoin[]): ICoin[] {
-    // I've worked on this a bit and it's complicated.
-
-    // Here's what I want:
-    // [X] If a user types in an algorithm it enables all coins of that algorithm
-    // [X] If a user types in the ticker/abbrevation of a coin it will enable it
-    // [X] If a user types in the name of a coin it will enable it
-    // [ ] maybe using levenshtein distance to be more safe?
-
-    // // If none are specified then return all of them
-    // // TODO: defaults to bitcoin, eth, ltc, equihash, etc.
-    // if (this.options.coins.length === 0) {
-    //   return allCoins;
-    // }
+    // If a user types in an algorithm it enables all coins of that algorithm
+    // If a user types in the ticker/abbrevation of a coin it will enable it
+    // If a user types in the name of a coin it will enable it
 
     let result: ICoin[] = allCoins;
     let userEnabledCoins = false;
 
     for (const coin of allCoins) {
       for (const str of this.options.coins) {
+        // disabling a coin
         const isDisablingCoin = str.startsWith("-");
 
         let name: string = "";
@@ -238,14 +240,14 @@ export class NiceHashCalculator {
     return result;
   }
 
-  private chooseHandler(): AbstractHandler {
+  private chooseHandler(): Handlers.AbstractHandler {
     if (this.options.outputHandler === OutputHandler.JSON) {
-      return new JSONHandler();
+      return new Handlers.JSONHandler();
     } else if (this.options.outputHandler === OutputHandler.Pretty) {
-      return new UnifiedHandler();
+      return new Handlers.UnifiedHandler();
     } else {
       console.warn("chooseHandler(): unknown handler?");
-      return new UnifiedHandler();
+      return new Handlers.UnifiedHandler();
     }
   }
 
@@ -298,7 +300,6 @@ export class NiceHashCalculator {
           default: "average",
         },
         "sleep-time": {
-          aliases: [],
           type: "number",
           default: 1000,
         },

@@ -2,6 +2,8 @@ export interface IAlgorithm {
   defaultSpeed: number;
 }
 
+// What to mine algorithms
+// Default speed of each algorithm
 // Also see coins.ts in the root of src
 
 export class Algorithm {
