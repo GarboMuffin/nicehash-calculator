@@ -143,9 +143,9 @@ export class API {
   }
 
   // Returns BTC revenue of mining coin id with hashrate hashrate
-  public async getRevenue(id: number, hashrate: number, allowCache: boolean = true): Promise<IRevenueResponse> {
+  public async getRevenue(id: number, hashrate: number, forceRequest: boolean = false): Promise<IRevenueResponse> {
     // If a coin is present in the cache then return it from there
-    if (allowCache && this.coinRevenueCache[id]) {
+    if (!forceRequest && this.coinRevenueCache[id]) {
       const item = this.coinRevenueCache[id];
       const revenue = item.revenue * (hashrate / item.hashrate);
       return {

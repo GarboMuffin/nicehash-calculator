@@ -64,6 +64,9 @@ export interface IOptions {
 
   // what output handler to use?
   outputHandler: OutputHandler;
+
+  // disable some "caching" features?
+  alwaysRequest: boolean;
 }
 
 export class NiceHashCalculator {
@@ -109,8 +112,10 @@ export class NiceHashCalculator {
   public async start() {
     // get all coins on what to mine
     const whatToMineCoins = await getWhatToMineCoins(this);
-    // load cache of many whattomine coins
-    await this.whatToMine.populateCoinRevenueCache();
+    if (!this.options.alwaysRequest) {
+      // load cache of many whattomine coins
+      await this.whatToMine.populateCoinRevenueCache();
+    }
     // get nicehash average prices
     // TODO: if options.prices !== minimum then don't do this?
     this.globalNiceHashPrices = await this.getGlobalNiceHashPrices();
@@ -189,6 +194,10 @@ export class NiceHashCalculator {
     const hashrate = coin.niceHashUnit.hashes / coin.whatToMineUnit.hashes;
     return await this.whatToMine.getRevenue(coin.id, hashrate);
   }
+
+  ///
+  /// OPTIONS (parsing, filtering, anything directly doing things with options)
+  ///
 
   // Option related things
   private filterCoins(allCoins: ICoin[]): ICoin[] {
@@ -303,9 +312,15 @@ export class NiceHashCalculator {
           type: "number",
           default: 1000,
         },
+        "always-request": {
+          type: "boolean",
+          default: false,
+        },
         /* tslint:enable:object-literal-key-quotes */
       },
     });
+
+    // TODO: remove some of this ugly duplication somehow?
 
     const getPricesOption = (): Prices => {
       const value = parsedOptions.arguments.prices;
@@ -339,6 +354,7 @@ export class NiceHashCalculator {
       sleepTime: parsedOptions.arguments["sleep-time"] as number,
       prices: getPricesOption(),
       outputHandler: getOutputHandlerOption(),
+      alwaysRequest: parsedOptions.arguments["always-request"] as boolean,
     };
     return options;
   }
@@ -349,9 +365,5 @@ export class NiceHashCalculator {
 
   get usingMinimumPrices(): boolean {
     return this.options.prices === Prices.Minimum;
-  }
-
-  get inDebugMode(): boolean {
-    return this.options.debug;
   }
 }
