@@ -165,7 +165,8 @@ export class API {
     }
   }
 
-  public async populateCoinRevenueCache(): Promise<void> {
+  // maxAge: milliseconds
+  public async populateCoinRevenueCache(maxAge: number): Promise<void> {
     const data = await this.getRawCoins();
     const cache = [];
     for (const key of Object.keys(data.coins)) {
@@ -182,10 +183,10 @@ export class API {
 
       // if the data is more than an hour old then skip it
       const currentDate = new Date();
-      const age = (currentDate.getTime() - (new Date(timestamp).getTime())) / 1000;
+      const age = currentDate.getTime() - (new Date(timestamp).getTime());
       // if it s older than an hour then don't use the data (too old, unreliable)
-      if (age >= 60 * 60) {
-        debug(`skipping cache data for ${coin.id} (${coin.algorithm}): too old (${age} sec)`);
+      if (age >= maxAge) {
+        debug(`skipping cache data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
         continue;
       }
 

@@ -65,8 +65,8 @@ export interface IOptions {
   // what output handler to use?
   outputHandler: OutputHandler;
 
-  // disable some "caching" features?
-  alwaysRequest: boolean;
+  // max age of things loaded from https://whattomine.com/coins.json
+  maxCacheAge: number;
 }
 
 export class NiceHashCalculator {
@@ -112,9 +112,9 @@ export class NiceHashCalculator {
   public async start() {
     // get all coins on what to mine
     const whatToMineCoins = await getWhatToMineCoins(this);
-    if (!this.options.alwaysRequest) {
+    if (this.options.maxCacheAge > 0) {
       // load cache of many whattomine coins
-      await this.whatToMine.populateCoinRevenueCache();
+      await this.whatToMine.populateCoinRevenueCache(this.options.maxCacheAge);
     }
     // get nicehash average prices
     // TODO: if options.prices !== minimum then don't do this?
@@ -122,7 +122,6 @@ export class NiceHashCalculator {
 
     // read the coins the user specified and get them
     const coins = this.filterCoins(whatToMineCoins);
-    debug("coins", coins);
 
     // determine the output handler to be used
     const outputHandler = this.chooseHandler();
@@ -313,9 +312,9 @@ export class NiceHashCalculator {
           type: "number",
           default: 1000,
         },
-        "always-request": {
-          type: "boolean",
-          default: false,
+        "max-age": {
+          type: "number",
+          default: 60 * 5, // 5 minutes
         },
         /* tslint:enable:object-literal-key-quotes */
       },
@@ -355,7 +354,7 @@ export class NiceHashCalculator {
       sleepTime: parsedOptions.arguments["sleep-time"] as number,
       prices: getPricesOption(),
       outputHandler: getOutputHandlerOption(),
-      alwaysRequest: parsedOptions.arguments["always-request"] as boolean,
+      maxCacheAge: (parsedOptions.arguments["max-age"] as number) * 1000,
     };
     return options;
   }
