@@ -88,6 +88,7 @@ export class API {
 
   // Raw requests
   private async request(url: string): Promise<any> {
+    debug("WhatToMine.API: requested " + url);
     const rq = await request(url, {
       headers: {
         // perhaps define a user-agent or referrer?
@@ -169,6 +170,11 @@ export class API {
     const cache = [];
     for (const key of Object.keys(data.coins)) {
       const coin = data.coins[key];
+
+      // skip nicehash coins
+      if (coin.tag === "NICEHASH") {
+        continue;
+      }
 
       // get properties from response
       const timestamp = coin.timestamp * 1000;

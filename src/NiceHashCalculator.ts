@@ -122,6 +122,7 @@ export class NiceHashCalculator {
 
     // read the coins the user specified and get them
     const coins = this.filterCoins(whatToMineCoins);
+    debug("coins", coins);
 
     // determine the output handler to be used
     const outputHandler = this.chooseHandler();
