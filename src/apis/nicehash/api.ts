@@ -1,6 +1,7 @@
 import * as request from "request-promise";
 
 import * as NiceHash from ".";
+import { debug } from "../../debug";
 
 interface INHApiResult<T> {
   result: T;
@@ -32,8 +33,19 @@ interface INHRawOrders {
 }
 
 export class API {
+  // also see request() in apis/whattomine/api.ts
+  private async request(url: string): Promise<any> {
+    debug("NiceHash.request(): requested " + url);
+    const rq = await request(url, {
+      headers: {
+        // perhaps define a user-agent or referrer?
+      },
+    });
+    return rq;
+  }
+
   private async getRawGlobalPrices(): Promise<INHApiResult<INHRawGlobalPrices>> {
-    const rq = await request("https://api.nicehash.com/api?method=stats.global.current");
+    const rq = await this.request("https://api.nicehash.com/api?method=stats.global.current");
     const data = JSON.parse(rq) as INHApiResult<INHRawGlobalPrices>;
     return data;
   }
@@ -53,7 +65,7 @@ export class API {
       return path;
     };
 
-    const rq = await request(getEndpoint());
+    const rq = await this.request(getEndpoint());
     const data = JSON.parse(rq) as INHApiResult<INHRawOrders>;
     return data;
   }
