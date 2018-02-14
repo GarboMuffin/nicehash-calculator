@@ -1,12 +1,12 @@
 import chalk from "chalk";
-import * as fs from "fs";
 
+import * as Handlers from "./handlers";
 import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { debug, state as _debugState } from "./debug";
-import * as Handlers from "./handlers";
-import * as OptionParser from "./options/";
+import { CoinFilterer } from "./filterer";
+import { IOptions, OptionParser, OutputHandler, Prices } from "./options";
 import { sleep } from "./utils";
 
 const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
@@ -21,54 +21,6 @@ export interface ICoinData {
   percentChange: number;
 }
 
-// Prices type
-export enum Prices {
-  // global nicehash averages
-  Average,
-
-  // minimum order with workers
-  Minimum,
-
-  // TODO: "MinimumWithWorkers" and "MinimumWithHashrate"
-}
-
-// Support handlers
-export enum OutputHandler {
-  // The normal handler, "unified" or "pretty"
-  Pretty,
-
-  // Outputs formatted JSON, can be parsed by anything
-  // Best used with --no-header
-  JSON,
-}
-
-// Program config
-export interface IOptions {
-  // output debug messages?
-  debug: boolean;
-
-  // show the header at the start?
-  showHeader: boolean;
-
-  // user specified coins
-  coins: string[];
-
-  // how long to wait between each coin, ms
-  sleepTime: number;
-
-  // unrecognized options
-  unrecognized: string[];
-
-  // what type of prices to use?
-  prices: Prices;
-
-  // what output handler to use?
-  outputHandler: OutputHandler;
-
-  // max age of things loaded from https://whattomine.com/coins.json
-  maxCacheAge: number;
-}
-
 export class NiceHashCalculator {
   public options: IOptions;
   private globalNiceHashPrices: number[] = [];
@@ -76,9 +28,12 @@ export class NiceHashCalculator {
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
 
+  private optionParser: OptionParser = new OptionParser();
+  private coinFilterer: CoinFilterer = new CoinFilterer();
+
   constructor() {
     // Parse options
-    this.options = this.parseOptions();
+    this.options = this.optionParser.parseOptions();
 
     // Conditionally output a header
     // Disclaimer, donation addresses, etc.
@@ -121,7 +76,7 @@ export class NiceHashCalculator {
     this.globalNiceHashPrices = await this.getGlobalNiceHashPrices();
 
     // read the coins the user specified and get them
-    const coins = this.filterCoins(whatToMineCoins);
+    const coins = this.coinFilterer.filter(whatToMineCoins, this.options);
 
     // determine the output handler to be used
     const outputHandler = this.chooseHandler();
@@ -195,60 +150,6 @@ export class NiceHashCalculator {
     return await this.whatToMine.getRevenue(coin.id, hashrate);
   }
 
-  ///
-  /// OPTIONS (parsing, filtering, anything directly doing things with options)
-  ///
-
-  // Option related things
-  private filterCoins(allCoins: ICoin[]): ICoin[] {
-    // If a user types in an algorithm it enables all coins of that algorithm
-    // If a user types in the ticker/abbrevation of a coin it will enable it
-    // If a user types in the name of a coin it will enable it
-
-    let result: ICoin[] = allCoins;
-    let userEnabledCoins = false;
-
-    for (const coin of allCoins) {
-      for (const str of this.options.coins) {
-        // disabling a coin
-        const isDisablingCoin = str.startsWith("-");
-
-        let name: string = "";
-        if (isDisablingCoin) {
-          name = str.substr(1);
-        } else {
-          name = str;
-        }
-
-        if (coin.names.indexOf(name) > -1 || coin.niceHashAlgo.names.indexOf(name) > -1) {
-          if (isDisablingCoin) {
-            const index = result.indexOf(coin);
-            if (index === -1) {
-              console.warn(chalk.yellow(`WARN: Can't disable coin '${name}': not found`));
-            } else {
-              debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
-              result.splice(index, 1);
-            }
-          } else {
-            debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
-            if (!userEnabledCoins) {
-              result = [];
-            }
-            userEnabledCoins = true;
-            result.push(coin);
-            break;
-          }
-        }
-      }
-    }
-
-    if (!userEnabledCoins) {
-      return allCoins;
-    }
-
-    return result;
-  }
-
   private chooseHandler(): Handlers.AbstractHandler {
     if (this.options.outputHandler === OutputHandler.JSON) {
       return new Handlers.JSONHandler();
@@ -258,105 +159,6 @@ export class NiceHashCalculator {
       console.warn("chooseHandler(): unknown handler?");
       return new Handlers.UnifiedHandler();
     }
-  }
-
-  private parseOptions() {
-    const readArgumentsFile = () => {
-      const content = fs.readFileSync("arguments.txt");
-      const lines = content.toString().split("\n");
-      const result: string[] = [];
-
-      for (const line of lines) {
-        // Lines that starti with # are comments
-        if (line.startsWith("#")) {
-          continue;
-        }
-        // Trim it to avoid newlines and other characters
-        const trimmed = line.trim();
-        // Ignore empty lines
-        if (trimmed === "") {
-          continue;
-        }
-        result.push(trimmed);
-      }
-
-      return result;
-    };
-
-    // get the arguments to pass to the parser
-    // remove the first 2 things from argv because that's node and this file
-    let args = process.argv.splice(2);
-    // append arguments.txt
-    args = args.concat(readArgumentsFile());
-
-    const parsedOptions = OptionParser.parse(args, {
-      arguments: {
-        /* tslint:disable:object-literal-key-quotes */
-        "debug": {
-          type: "boolean",
-          default: false,
-        },
-        "no-header": {
-          type: "boolean",
-          default: false,
-        },
-        "output": {
-          type: "string",
-          default: "pretty",
-        },
-        "prices": {
-          type: "string",
-          default: "average",
-        },
-        "sleep-time": {
-          type: "number",
-          default: 1000,
-        },
-        "max-age": {
-          type: "number",
-          default: 60 * 5, // 5 minutes
-        },
-        /* tslint:enable:object-literal-key-quotes */
-      },
-    });
-
-    // TODO: remove some of this ugly duplication somehow?
-
-    const getPricesOption = (): Prices => {
-      const value = parsedOptions.arguments.prices;
-      if (value === "average") {
-        return Prices.Average;
-      } else if (value === "minimum") {
-        return Prices.Minimum;
-      } else {
-        console.warn("unknown value specified for --prices, accepted values are 'average' (default) and 'minimum'");
-        return Prices.Average;
-      }
-    };
-
-    const getOutputHandlerOption = (): OutputHandler => {
-      const value = parsedOptions.arguments.output;
-      if (value === "pretty") {
-        return OutputHandler.Pretty;
-      } else if (value === "json") {
-        return OutputHandler.JSON;
-      } else {
-        console.warn("unknown value specified for --output, accepted values are 'pretty' (default) and 'json'");
-        return OutputHandler.Pretty;
-      }
-    };
-
-    const options: IOptions = {
-      unrecognized: parsedOptions.unrecognized,
-      coins: parsedOptions.plain,
-      debug: parsedOptions.arguments.debug as boolean,
-      showHeader: !parsedOptions.arguments["no-header"] as boolean,
-      sleepTime: parsedOptions.arguments["sleep-time"] as number,
-      prices: getPricesOption(),
-      outputHandler: getOutputHandlerOption(),
-      maxCacheAge: (parsedOptions.arguments["max-age"] as number) * 1000,
-    };
-    return options;
   }
 
   ///

@@ -128,6 +128,8 @@ export class API {
     const coins = [];
     for (const key of Object.keys(data)) {
       const value = data[key];
+      // TODO: debug() messages
+
       // Ignore Nicehash coins
       if (value.tag === "NICEHASH") {
         continue;
@@ -136,6 +138,11 @@ export class API {
       if (value.status !== "Active") {
         continue;
       }
+      // Remove coins that are lagging
+      if (value.lagging) {
+        continue;
+      }
+
       // Set the name property
       value.name = key;
       coins.push(value);
