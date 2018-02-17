@@ -73,7 +73,6 @@ export class API {
   }
 
   public async getAlgoMinimumPrice(algo: NiceHash.Algorithm, location?: NiceHash.Location): Promise<number> {
-    debugger;
     if (this.cachedMinimumPrices[algo.id]) {
       debug("NiceHash.getAlgoMinimumPrice(): returned from cache for " + algo.id);
       return this.cachedMinimumPrices[algo.id];
