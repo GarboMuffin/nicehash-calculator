@@ -155,7 +155,7 @@ export class API {
   public async getRevenue(id: number, hashrate: number, forceRequest: boolean = false): Promise<IRevenueResponse> {
     // If a coin is present in the cache then return it from there
     if (!forceRequest && this.coinRevenueCache[id]) {
-      debug("getRevenue(): returning from cache for " + id);
+      debug("WhatToMine.getRevenue(): returning from cache for " + id);
       const item = this.coinRevenueCache[id];
       const revenue = item.revenue * (hashrate / item.hashrate);
       return {
@@ -164,7 +164,7 @@ export class API {
         revenue,
       };
     } else {
-      debug("getRevenue(): returning from web for " + id);
+      debug("WhatToMine.getRevenue(): returning from web for " + id);
       const data = await this.getRawCoin(id, hashrate);
       const revenue = Number(data.btc_revenue);
       return {
@@ -199,14 +199,14 @@ export class API {
       const age = currentDate.getTime() - (new Date(timestamp).getTime());
       // if its older than an hour then don't use the data (too old, unreliable)
       if (age >= maxAge) {
-        debug(`populateCoinRevenueCache(): skipping cache data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
+        debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
         continue;
       }
 
       // get algorithm
       const algorithm = (WhatToMine.Algorithm as any)[coin.algorithm];
       if (!algorithm) {
-        debug(`populateCoinRevenueCache(): skipping cache data for ${coin.id} (${coin.algorithm}): no matching algo`);
+        debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): no matching algo`);
         continue;
       }
       const hashrate = algorithm.defaultSpeed;

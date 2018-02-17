@@ -33,6 +33,8 @@ interface INHRawOrders {
 }
 
 export class API {
+  private cachedMinimumPrices: number[] = [];
+
   // also see request() in apis/whattomine/api.ts
   private async request(url: string): Promise<any> {
     debug("NiceHash.request(): requested " + url);
@@ -58,7 +60,7 @@ export class API {
   private async getRawOrders(algo: NiceHash.Algorithm, location?: NiceHash.Location): Promise<INHApiResult<INHRawOrders>> {
     const getEndpoint = (): string => {
       let path = "https://api.nicehash.com/api?method=orders.get";
-      path += "&algo=" + algo;
+      path += "&algo=" + algo.id;
       if (location !== undefined) {
         path += "&location=" + location;
       }
@@ -71,18 +73,28 @@ export class API {
   }
 
   public async getAlgoMinimumPrice(algo: NiceHash.Algorithm, location?: NiceHash.Location): Promise<number> {
+    debugger;
+    if (this.cachedMinimumPrices[algo.id]) {
+      debug("NiceHash.getAlgoMinimumPrice(): returned from cache for " + algo.id);
+      return this.cachedMinimumPrices[algo.id];
+    }
+
     const data = await this.getRawOrders(algo, location);
     const orders = data.result.orders;
 
     // find the lowest order with workers
-    let minimum: INHOrder = orders[0];
+    let minimumOrder: INHOrder = orders[0];
     for (const order of orders) {
       const price = Number(order.price);
       const workers = order.workers;
-      if (price < Number(minimum.price) && workers > 0) {
-        minimum = order;
+      if (price < Number(minimumOrder.price) && workers > 0) {
+        minimumOrder = order;
       }
     }
-    return Number(minimum.price) || Infinity;
+
+    debug("NiceHash.getAlgoMinimumPrice(): returned from web for " + algo.id);
+    const minimumPrice = minimumOrder ? Number(minimumOrder.price) : Infinity;
+    this.cachedMinimumPrices[algo.id] = minimumPrice;
+    return minimumPrice;
   }
 }
