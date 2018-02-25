@@ -126,7 +126,7 @@ function getAlgorithm(algo: string): IAlgorithmMetadata | null {
     "Blake (2b)": {
       niceHashAlgo: NiceHash.Algorithm.Sia,
       niceHashUnit: HashRateUnit.TERA,
-      whatToMineUnit: HashRateUnit.MEGA,
+      whatToMineUnit: HashRateUnit.GIGA,
     },
     "Blake (14r)": {
       niceHashAlgo: NiceHash.Algorithm.Decred,
