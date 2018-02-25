@@ -26,7 +26,7 @@ export class Algorithm {
   public static NIST5 = new Algorithm(57);
   public static Lyra2RE = new Algorithm(13800);
   public static Qubit = new Algorithm(150);
-  public static "Blake (2s)" = new Algorithm(100);
+  public static "Blake (2s)" = new Algorithm(815);
   public static "Blake (2b)" = new Algorithm(3450);
   public static "Blake (14r)" = new Algorithm(5910);
   /* tslint:enable:variable-name */
