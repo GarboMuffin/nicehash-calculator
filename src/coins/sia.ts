@@ -11,7 +11,7 @@ export var coin = {
     id: Algorithms.Sia,
   },
   WhatToMine: {
-    hashrate: 1000 * 1000,
+    hashrate: 1000 * 1000 * 1000,
     id: 161,
   },
   enabled: false,
