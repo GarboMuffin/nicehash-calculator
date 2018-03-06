@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { NiceHashCalculator } from "./NiceHashCalculator";
+import { NiceHashCalculator, BUG_REPORTS } from "./NiceHashCalculator";
 
 async function start() {
   const calculator = new NiceHashCalculator();
@@ -13,7 +13,7 @@ async function start() {
     await start();
   } catch (e) {
     console.error(chalk.red(" > !!! FATAL ERROR !!!"));
-    console.error(chalk.red(" > This is a bug, please report it: https://github.com/GarboMuffin/nicehash-calculator/issues/new"));
+    console.error(chalk.red(" > This is a bug, please report it: " + BUG_REPORTS));
     console.error(chalk.red(" > The exact error is below:"));
     console.error(e.stack);
   }

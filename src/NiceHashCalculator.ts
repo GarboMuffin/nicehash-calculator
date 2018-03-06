@@ -1,15 +1,16 @@
 import chalk from "chalk";
 
-import * as Handlers from "./handlers";
 import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { debug, state as _debugState } from "./debug";
-import { CoinFilterer } from "./filterer";
-import { IOptions, OptionParser, OutputHandler, Prices } from "./options";
+import { filter as filterCoins } from "./filter";
+import * as Handlers from "./handlers";
+import { IOptions, OutputHandlerOption, parseOptions, PricesOption } from "./options";
 import { sleep } from "./utils";
+import { Algorithm } from "./Algorithm";
 
-const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
+export const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
 
 // This is the data that is passed onto handlers
 export interface ICoinData {
@@ -28,12 +29,9 @@ export class NiceHashCalculator {
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
 
-  private optionParser: OptionParser = new OptionParser();
-  private coinFilterer: CoinFilterer = new CoinFilterer();
-
   constructor() {
     // Parse options
-    this.options = this.optionParser.parseOptions();
+    this.options = parseOptions();
 
     // Conditionally output a header
     // Disclaimer, donation addresses, etc.
@@ -67,7 +65,9 @@ export class NiceHashCalculator {
   public async start() {
     // get all coins on what to mine
     const whatToMineCoins = await getWhatToMineCoins(this);
-    if (this.options.maxCacheAge > 0) {
+    // only populate the cache if the max age wouldn't remove everything there's more than 2 coins active
+    // with only 2 coins active it doesn't save any requests
+    if (this.options.maxCacheAge > 0 && this.options.coins.length >= 2) {
       // load cache of many whattomine coins
       await this.whatToMine.populateCoinRevenueCache(this.options.maxCacheAge);
     }
@@ -76,14 +76,14 @@ export class NiceHashCalculator {
     this.globalNiceHashPrices = await this.getGlobalNiceHashPrices();
 
     // read the coins the user specified and get them
-    const coins = this.coinFilterer.filter(whatToMineCoins, this.options);
+    const coins = filterCoins(whatToMineCoins, this.options);
 
     // determine the output handler to be used
     const outputHandler = this.chooseHandler();
 
     // using minimum prices is heavily discouraged
     // so output a warning
-    if (this.usingMinimumPrices) {
+    if (this.isUsingMinimumPrices) {
       console.log(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
       console.log("");
     }
@@ -95,7 +95,7 @@ export class NiceHashCalculator {
       // Calculate the numbers
       const revenueData = await this.getCoinRevenue(coin);
       const revenue = revenueData.revenue;
-      const price = await this.getAlgoPrice(coin.niceHashAlgo);
+      const price = await this.getAlgoPrice(coin.algorithm.niceHash);
       const profit = revenue - price;
 
       const returnOnInvestment = revenue / price;
@@ -138,7 +138,7 @@ export class NiceHashCalculator {
   }
 
   private async getAlgoPrice(algo: NiceHash.Algorithm): Promise<number> {
-    if (this.usingMinimumPrices) {
+    if (this.isUsingMinimumPrices) {
       return await this.niceHash.getAlgoMinimumPrice(algo);
     } else {
       return this.globalNiceHashPrices[algo.id];
@@ -146,14 +146,14 @@ export class NiceHashCalculator {
   }
 
   private async getCoinRevenue(coin: ICoin): Promise<WhatToMine.IRevenueResponse> {
-    const hashrate = coin.niceHashUnit.hashes / coin.whatToMineUnit.hashes;
+    const hashrate = coin.algorithm.niceHash.unit.hashes / coin.algorithm.whatToMine.unit.hashes;
     return await this.whatToMine.getRevenue(coin.id, hashrate);
   }
 
   private chooseHandler(): Handlers.AbstractHandler {
-    if (this.options.outputHandler === OutputHandler.JSON) {
+    if (this.options.outputHandler === OutputHandlerOption.JSON) {
       return new Handlers.JSONHandler();
-    } else if (this.options.outputHandler === OutputHandler.Pretty) {
+    } else if (this.options.outputHandler === OutputHandlerOption.Pretty) {
       return new Handlers.UnifiedHandler();
     } else {
       console.warn("chooseHandler(): unknown handler?");
@@ -165,7 +165,7 @@ export class NiceHashCalculator {
   /// ACCESSORS
   ///
 
-  get usingMinimumPrices(): boolean {
-    return this.options.prices === Prices.Minimum;
+  get isUsingMinimumPrices(): boolean {
+    return this.options.prices === PricesOption.Minimum;
   }
 }
