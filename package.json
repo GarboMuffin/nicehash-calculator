@@ -6,8 +6,7 @@
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
-    "start": "node dist/index",
-    "postinstall": "npm run build"
+    "start": "node dist/index"
   },
   "engines": {
     "node": ">=8.0.0"
