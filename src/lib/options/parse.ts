@@ -1,5 +1,4 @@
 import * as OptionParser from ".";
-import { debug } from "../debug";
 
 export interface IOptions {
   arguments: {
