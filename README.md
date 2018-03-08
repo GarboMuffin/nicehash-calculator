@@ -2,15 +2,11 @@
 
 This is a customizable script to calculate the profitability of buying hashing power on NiceHash.
 
-_To be clear, this is for people wanting to make a profit by **buying** hashing power on NiceHash. It isn't for sellers (or miners). Use [NiceHash's official calculator](https://www.nicehash.com/profitability-calculator) for that_
+_To be clear, this is for people wanting to make a profit by **buying** hashing power on NiceHash. It isn't for miners (sellers). Use [NiceHash's official profit calculator](https://www.nicehash.com/profitability-calculator) for that_
 
-## Web Version and Rewrite
+## Web Version
 
 ### A web version now exists so you can view the stats without downloading anything! [nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/) ([source code](https://github.com/GarboMuffin/nicehash-calculator-web))
-
-It is based on the ongoing rewrite of the entire program. You can find the current rewrite source code in the [rewrite branch](https://github.com/GarboMuffin/nicehash-calculator/tree/rewrite). It's now to a point where you could actually use it if you know how.
-
-(Everything below is the for the old version which works well enough. The rewrite branch will be merged with master when I believe it is done)
 
 ## Installation
 
