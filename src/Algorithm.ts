@@ -127,7 +127,7 @@ export class Algorithm {
   constructor(opts: IAlgorithmOptions) {
     this.displayName = opts.name;
     this.names = opts.aliases || [];
-    this.names.unshift(this.displayName);
+    this.names.unshift(this.displayName.toLowerCase());
     this.whatToMine = opts.whatToMine;
     this.niceHash = opts.niceHash;
   }

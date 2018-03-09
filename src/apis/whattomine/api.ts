@@ -112,7 +112,7 @@ export class API {
 
   private async getRawCoin(id: number, hashrate: number): Promise<IAPICoin> {
     // https://whattomine.com/coins/1.json?cost=0
-    const raw = await this.request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}&cost=0`);
+    const raw = await this.request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}`);
     const data = JSON.parse(raw) as IAPICoin;
     return data;
   }

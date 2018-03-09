@@ -11,7 +11,7 @@ export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
   // If a user types in the name of a coin it will enable it
 
   let result: ICoin[] = clone(allCoins);
-  let userEnabledCoins = false;
+  let userDefinedCoins = false;
 
   for (const coin of allCoins) {
     for (const str of options.coins) {
@@ -34,18 +34,18 @@ export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
           }
         } else {
           debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
-          if (!userEnabledCoins) {
+          if (!userDefinedCoins) {
             result = [];
           }
-          userEnabledCoins = true;
           result.push(coin);
-          break;
         }
+        userDefinedCoins = true;
+        break;
       }
     }
   }
 
-  if (!userEnabledCoins) {
+  if (!userDefinedCoins) {
     return allCoins;
   }
 
