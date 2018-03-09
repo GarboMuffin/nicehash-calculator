@@ -3,13 +3,14 @@ import chalk from "chalk";
 import { ICoin } from "./coins";
 import { debug } from "./debug";
 import { IOptions } from "./options";
+import { clone } from "./utils";
 
 export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
   // If a user types in an algorithm it enables all coins of that algorithm
   // If a user types in the ticker/abbrevation of a coin it will enable it
   // If a user types in the name of a coin it will enable it
 
-  let result: ICoin[] = allCoins;
+  let result: ICoin[] = clone(allCoins);
   let userEnabledCoins = false;
 
   for (const coin of allCoins) {
@@ -17,11 +18,9 @@ export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
       // disabling a coin
       const isDisablingCoin = str.startsWith("-");
 
-      let name: string = "";
+      let name: string = str;
       if (isDisablingCoin) {
-        name = str.substr(1);
-      } else {
-        name = str;
+        name = name.substr(1);
       }
 
       if (coin.names.indexOf(name) > -1 || coin.algorithm.names.indexOf(name) > -1) {
