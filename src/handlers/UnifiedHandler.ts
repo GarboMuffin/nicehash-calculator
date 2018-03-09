@@ -15,25 +15,60 @@ function fancyFormatNumber(num: number): string {
 
 export class UnifiedHandler extends AbstractHandler {
   public handle(data: ICoinData, calculator: NiceHashCalculator) {
-    // output coin name & algo
-    const algo = chalk.gray(`(${data.coin.algorithm.displayName})`);
-    console.log(`${data.coin.displayName}: ${algo}`);
-
     // the unit of hashrate
     const hashRateUnit = data.coin.algorithm.niceHash.unit.displayName;
+    let indent = 0;
 
-    // output price
-    const price = underline(data.price.toFixed(PRECISION));
-    // additional spaces make the output alligned
-    console.log(` Price:   ${price} BTC/${hashRateUnit}/day`);
+    const log = (message: string, newLine: boolean = true) => {
+      const spacing = " ".repeat(indent);
+      const messageToPrint = spacing + message;
+      if (newLine) {
+        console.log(messageToPrint);
+      } else {
+        process.stdout.write(messageToPrint);
+      }
+    };
 
-    const revenue = underline(data.revenue.revenue.toFixed(PRECISION));
-    const revenueTimestamp = chalk.gray("(" + (new Date(data.revenue.timestamp)).toLocaleString() + ")");
-    console.log(` Revenue: ${revenue} BTC/${hashRateUnit}/day ${revenueTimestamp}`);
+    const printTitle = () => {
+      // output coin name & algo
+      const algo = chalk.gray(`(${data.coin.algorithm.displayName})`);
+      log(`${data.coin.displayName}: ${algo}`);
+    };
 
-    const profit = underline(fancyFormatNumber(data.profit));
-    const percentChange = underline(fancyFormatNumber(data.percentChange * 100));
-    console.log(` Profit: ${profit} BTC/${hashRateUnit}/day (${percentChange}%)`);
+    const printPrice = () => {
+      const price = underline(data.price.toFixed(PRECISION));
+      log(`Price:   ${price} BTC/${hashRateUnit}/day`);
+    };
+
+    const printRevenue = () => {
+      const revenue = underline(data.revenue.revenue.toFixed(PRECISION));
+      const revenueTimestamp = chalk.gray("(" + (new Date(data.revenue.timestamp)).toLocaleString() + ")");
+      log(`Revenue: ${revenue} BTC/${hashRateUnit}/day ${revenueTimestamp}`);
+    };
+
+    const printProfit = () => {
+      const profit = underline(fancyFormatNumber(data.profit));
+      const percentChange = underline(fancyFormatNumber(data.percentChange * 100));
+      log(`Profit: ${profit} BTC/${hashRateUnit}/day (${percentChange}%)`);
+    };
+
+    const printWarnings = () => {
+      // price of 0 means that there are no orders on nicehash
+      if (data.price === 0) {
+        log(chalk.red("!!! WARNING: NO ORDERS !!!"));
+      }
+      // profit of more than 1000% typically means some api unit has changed
+      if (data.returnOnInvestment > 10) {
+        log(chalk.yellow("Warning: Profit seems incredibly high, perhaps an API unit has changed?"));
+      }
+    };
+
+    printTitle();
+    indent++;
+    printPrice();
+    printRevenue();
+    printProfit();
+    printWarnings();
 
     console.log("");
   }

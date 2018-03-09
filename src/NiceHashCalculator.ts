@@ -98,7 +98,8 @@ export class NiceHashCalculator {
       const price = await this.getAlgoPrice(coin.algorithm.niceHash);
       const profit = revenue - price;
 
-      const returnOnInvestment = revenue / price;
+      // if the price is 0 (no orders) then ROI should also be 0
+      const returnOnInvestment = price === 0 ? 0 : revenue / price;
       const percentChange = returnOnInvestment - 1;
 
       // create the data structure
