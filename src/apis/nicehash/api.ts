@@ -1,4 +1,4 @@
-import * as request from "request-promise";
+import * as request from "request-promise-native";
 
 import * as NiceHash from ".";
 import { logger } from "../../logger";
