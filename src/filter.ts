@@ -1,9 +1,9 @@
 import chalk from "chalk";
 
 import { ICoin } from "./coins";
-import { debug } from "./debug";
 import { IOptions } from "./options";
 import { clone } from "./utils";
+import { logger } from "./logger";
 
 export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
   // If a user types in an algorithm it enables all coins of that algorithm
@@ -27,13 +27,13 @@ export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
         if (isDisablingCoin) {
           const index = result.indexOf(coin);
           if (index === -1) {
-            console.warn(chalk.yellow(`WARN: Can't disable coin '${name}': not found`));
+            logger.warn(`Can't disable coin '${name}': not enabled`);
           } else {
-            debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
+            logger.debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
             result.splice(index, 1);
           }
         } else {
-          debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
+          logger.debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
           if (!userDefinedCoins) {
             result = [];
           }

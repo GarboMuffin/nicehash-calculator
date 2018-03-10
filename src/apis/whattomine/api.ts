@@ -1,7 +1,7 @@
 import * as request from "request-promise";
 
 import * as WhatToMine from ".";
-import { debug } from "../../debug";
+import { logger } from "../../logger";
 
 interface IBaseCoin {
   id: number;
@@ -89,7 +89,7 @@ export class API {
 
   // Raw requests
   private async request(url: string): Promise<any> {
-    debug("WhatToMine.request(): requested " + url);
+    logger.debug("WhatToMine.request(): requested " + url);
     const rq = await request(url, {
       headers: {
         // perhaps define a user-agent or referrer?
@@ -155,7 +155,7 @@ export class API {
   public async getRevenue(id: number, hashrate: number, forceRequest: boolean = false): Promise<IRevenueResponse> {
     // If a coin is present in the cache then return it from there
     if (!forceRequest && this.coinRevenueCache[id]) {
-      debug("WhatToMine.getRevenue(): returning from cache for " + id);
+      logger.debug("WhatToMine.getRevenue(): returning from cache for " + id);
       const item = this.coinRevenueCache[id];
       const revenue = item.revenue * (hashrate / item.hashrate);
       return {
@@ -164,7 +164,7 @@ export class API {
         revenue,
       };
     } else {
-      debug("WhatToMine.getRevenue(): returning from web for " + id);
+      logger.debug("WhatToMine.getRevenue(): returning from web for " + id);
       const data = await this.getRawCoin(id, hashrate);
       const revenue = Number(data.btc_revenue);
       return {
@@ -199,14 +199,14 @@ export class API {
       const age = currentDate.getTime() - (new Date(timestamp).getTime());
       // if its older than an hour then don't use the data (too old, unreliable)
       if (age >= maxAge) {
-        debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
+        logger.debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
         continue;
       }
 
       // get algorithm
       const algorithm = (WhatToMine.Algorithm as any)[coin.algorithm];
       if (!algorithm) {
-        debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): no matching algo`);
+        logger.debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): no matching algo`);
         continue;
       }
       const hashrate = algorithm.defaultSpeed;

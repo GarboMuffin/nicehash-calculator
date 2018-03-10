@@ -2,6 +2,7 @@ import * as NiceHash from "./apis/nicehash/";
 import { HashRateUnit } from "./HashRateUnit";
 import { NiceHashCalculator } from "./NiceHashCalculator";
 import { Algorithm } from "./Algorithm";
+import { logger } from "./logger";
 
 // We convert IWhatToMineCoin to this
 export interface ICoin {
@@ -66,7 +67,7 @@ export async function getCoins(calculator: NiceHashCalculator): Promise<ICoin[]>
     const algorithm = getAlgorithm(whatToMineCalculator.algorithm);
     if (algorithm === null) {
       // This coin doesn't have a matching algorithm on nicehash so don't add it
-      // console.warn(`Unknown algo: ${whatToMineCalculator.algorithm} (${whatToMineCalculator.name})`);
+      logger.debug(`Unknown algo: ${whatToMineCalculator.algorithm} (${whatToMineCalculator.name})`);
       continue;
     }
     coin.algorithm = algorithm;

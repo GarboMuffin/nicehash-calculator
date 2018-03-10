@@ -3,12 +3,12 @@ import chalk from "chalk";
 import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
-import { debug, state as _debugState } from "./debug";
 import { filter as filterCoins } from "./filter";
 import * as Handlers from "./handlers";
 import { IOptions, OutputHandlerOption, parseOptions, PricesOption } from "./options";
 import { sleep } from "./utils";
 import { Algorithm } from "./Algorithm";
+import { logger } from "./logger";
 
 export const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
 
@@ -33,6 +33,18 @@ export class NiceHashCalculator {
     // Parse options
     this.options = parseOptions();
 
+    // If debug was enabled then tell the debug method to start outputting things
+    if (this.options.debug) {
+      logger.debugEnabled = true;
+      // and also print some things to debug right away
+      logger.debug("options", this.options);
+    }
+
+    // For each unrecognized option log a warning to the user
+    for (const unrecognizedOption of this.options.unrecognized) {
+      logger.warn("Unrecognized option: " + unrecognizedOption);
+    }
+
     // Conditionally output a header
     // Disclaimer, donation addresses, etc.
     if (this.options.showHeader) {
@@ -45,18 +57,6 @@ export class NiceHashCalculator {
       console.log("");
       console.log("Please report bugs: " + chalk.underline(BUG_REPORTS));
       console.log("");
-    }
-
-    // If debug was enabled then tell the debug method to start outputting things
-    if (this.options.debug) {
-      _debugState.enabled = true;
-      // and also print some things to debug right away
-      debug("options", this.options);
-    }
-
-    // For each unrecognized option log a warning to the user
-    for (const unrecognizedOption of this.options.unrecognized) {
-      console.warn(chalk.red("Unrecognized option: " + unrecognizedOption));
     }
   }
 
@@ -84,7 +84,7 @@ export class NiceHashCalculator {
     // using minimum prices is heavily discouraged
     // so output a warning
     if (this.isUsingMinimumPrices) {
-      console.log(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
+      logger.warn(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
       console.log("");
     }
 
@@ -157,7 +157,7 @@ export class NiceHashCalculator {
     } else if (this.options.outputHandler === OutputHandlerOption.Pretty) {
       return new Handlers.UnifiedHandler();
     } else {
-      console.warn("chooseHandler(): unknown handler?");
+      logger.warn("chooseHandler(): unknown handler?");
       return new Handlers.UnifiedHandler();
     }
   }

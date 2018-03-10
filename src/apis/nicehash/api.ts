@@ -1,7 +1,7 @@
 import * as request from "request-promise";
 
 import * as NiceHash from ".";
-import { debug } from "../../debug";
+import { logger } from "../../logger";
 
 interface INHApiResult<T> {
   result: T;
@@ -37,7 +37,7 @@ export class API {
 
   // also see request() in apis/whattomine/api.ts
   private async request(url: string): Promise<any> {
-    debug("NiceHash.request(): requested " + url);
+    logger.debug("NiceHash.request(): requested " + url);
     const rq = await request(url, {
       headers: {
         // perhaps define a user-agent or referrer?
@@ -74,7 +74,7 @@ export class API {
 
   public async getAlgoMinimumPrice(algo: NiceHash.Algorithm, location?: NiceHash.Location): Promise<number> {
     if (this.cachedMinimumPrices[algo.id]) {
-      debug("NiceHash.getAlgoMinimumPrice(): returned from cache for " + algo.id);
+      logger.debug("NiceHash.getAlgoMinimumPrice(): returned from cache for " + algo.id);
       return this.cachedMinimumPrices[algo.id];
     }
 
@@ -91,7 +91,7 @@ export class API {
       }
     }
 
-    debug("NiceHash.getAlgoMinimumPrice(): returned from web for " + algo.id);
+    logger.debug("NiceHash.getAlgoMinimumPrice(): returned from web for " + algo.id);
     const minimumPrice = minimumOrder ? Number(minimumOrder.price) : Infinity;
     this.cachedMinimumPrices[algo.id] = minimumPrice;
     return minimumPrice;

@@ -1,6 +1,7 @@
 import * as fs from "fs";
 
 import * as OptionLib from "./lib/options";
+import { logger } from "./logger";
 
 // Prices type
 export enum PricesOption {
@@ -119,7 +120,7 @@ export function parseOptions() {
     } else if (value === "minimum") {
       return PricesOption.Minimum;
     } else {
-      console.warn("unknown value specified for --prices, accepted values are 'average' (default) and 'minimum'");
+      logger.warn("Unknown value specified for --prices, accepted values are 'average' (default) and 'minimum'");
       return PricesOption.Average;
     }
   };
@@ -131,7 +132,7 @@ export function parseOptions() {
     } else if (value === "json") {
       return OutputHandlerOption.JSON;
     } else {
-      console.warn("unknown value specified for --output, accepted values are 'pretty' (default) and 'json'");
+      logger.warn("Unknown value specified for --output, accepted values are 'pretty' (default) and 'json'");
       return OutputHandlerOption.Pretty;
     }
   };
