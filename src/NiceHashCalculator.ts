@@ -56,7 +56,7 @@ export class NiceHashCalculator {
       console.log(chalk`Only spend what you can afford to lose. {bold I am not responsible for any losses}.`);
       console.log("");
       // please do send me money that would be great
-      console.log(chalk`BTC: 1JZS1fhPHuxCyhPFYLYFoNzArTRJsJArwv {gray (more addresses in the readme!)}`);
+      console.log(chalk`BTC: 1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ {gray (more addresses in the readme!)}`);
       console.log("");
       console.log(chalk`Please report bugs: {underline ${BUG_REPORTS}}`);
       console.log("");
