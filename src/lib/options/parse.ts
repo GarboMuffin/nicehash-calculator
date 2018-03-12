@@ -47,25 +47,28 @@ function handleArgument(result: IParsedOptions, opts: IOptions, rawArg: string) 
     }
   };
 
-  const getOption = (): OptionParser.IOption | null => {
+  // returns a tuple
+  // [0]: the name of the option
+  // [1]: the option
+  const getOption = (): [string, OptionParser.IOption] | null => {
     // if the argument is directly defined then simply use that
     const directLookup = opts.arguments[name];
-    if (!directLookup) {
-      // otherwise look for aliases
-      for (const value of Object.values(opts.arguments)) {
-        // aliases is not always present
-        if (value.aliases && value.aliases.includes(name)) {
-          return option;
-        }
-      }
-      return null;
-    } else {
-      return directLookup;
+    if (directLookup) {
+      return [name, directLookup];
     }
+
+    for (const key of Object.keys(opts.arguments)) {
+      const value = opts.arguments[key];
+      // aliases is not always present
+      if (value.aliases && value.aliases.includes(name)) {
+        return [key, value];
+      }
+    }
+    return null;
   };
 
   const setResult = (value: any) => {
-    result.arguments[name] = value;
+    result.arguments[option![0]] = value;
   };
 
   const name = getName();
@@ -75,7 +78,7 @@ function handleArgument(result: IParsedOptions, opts: IOptions, rawArg: string) 
     return;
   }
 
-  const type = option.type;
+  const type = option[1].type;
   if (type === "string") {
     setResult(getValue());
   } else if (type === "number") {

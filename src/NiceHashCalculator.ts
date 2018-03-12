@@ -1,14 +1,14 @@
 import chalk from "chalk";
 
+import { Algorithm } from "./Algorithm";
 import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { filter as filterCoins } from "./filter";
 import * as Handlers from "./handlers";
-import { IOptions, OutputHandlerOption, parseOptions, PricesOption } from "./options";
-import { sleep } from "./utils";
-import { Algorithm } from "./Algorithm";
 import { logger } from "./logger";
+import { IOptions, OutputHandlerOption, PricesOption } from "./options";
+import { sleep } from "./utils";
 
 export const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/issues/new";
 
@@ -24,21 +24,20 @@ export interface ICoinData {
 }
 
 export class NiceHashCalculator {
-  public options!: IOptions;
+  public options: IOptions;
   private globalNiceHashPrices: number[] = [];
   // API objects
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
 
-  constructor() {
-    // everything happens in start()
+  constructor(options: IOptions = {} as IOptions) {
+    this.options = options;
+    // everything else happens in start()
     // constructing a NiceHashCalculator should be possible without side effects
+    // and constructors can't be async ("await new NiceHashCalculator()" would be so terrible)
   }
 
   public async start() {
-    // Parse options
-    this.options = parseOptions();
-
     logger.showWarnings = this.options.showWarnings;
     logger.debugEnabled = this.options.debug;
     logger.debug("options", this.options);
@@ -51,24 +50,29 @@ export class NiceHashCalculator {
     // Conditionally output a header
     // Disclaimer, donation addresses, etc.
     if (this.options.showHeader) {
-      console.log(`This program ${chalk.bold("**estimates**")} the profitability of buying hashing power on NiceHash`);
-      console.log(`Estimations are based on the NiceHash and WhatToMine APIs and have no guarantee of accuracy.`);
-      console.log(`Only spend what you can afford to lose. I am not responsible for any losses.`);
+      const includeFees = this.options.includeFees;
+      console.log(chalk`This program {bold estimates} the profitability of buying hashing power on NiceHash${includeFees ? "" : " ignoring fees"}.`);
+      console.log(chalk`Estimations are based on the NiceHash and WhatToMine APIs and have no guarantee of accuracy.`);
+      console.log(chalk`Only spend what you can afford to lose. {bold I am not responsible for any losses}.`);
       console.log("");
       // please do send me money that would be great
-      console.log("BTC: " + chalk.underline("1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ"));
+      console.log(chalk`BTC: 1JZS1fhPHuxCyhPFYLYFoNzArTRJsJArwv {gray (more addresses in the readme!)}`);
       console.log("");
-      console.log("Please report bugs: " + chalk.underline(BUG_REPORTS));
+      console.log(chalk`Please report bugs: {underline ${BUG_REPORTS}}`);
       console.log("");
     }
 
     // using minimum prices is heavily discouraged so output a warning
     if (this.options.prices === PricesOption.MinimumWithWorkers) {
-      logger.warn(chalk.yellow("Calculating prices using lowest order with some amount of workers. This is discouraged."));
+      logger.warn("Calculating prices using lowest order with some amount of workers. This is discouraged.");
     }
+    // minimumw with hashrate is more dangerous
     if (this.options.prices === PricesOption.MinimumWithHashrate) {
-      // this is more dangerous
-      logger.warn(chalk.yellow("Calculating prices using lowest order with some amount of accepted speed. This is very discouraged."));
+      logger.warn("Calculating prices using lowest order with some amount of accepted speed. This is very discouraged.");
+    }
+    // --experimental-fees: attempt to include fees
+    if (this.options.includeFees) {
+      logger.warn("Accounting for NiceHash's 3% fee. This is experimental. Please be aware of the other 0.0001 BTC fee that is not accounted for here.");
     }
 
     // get all coins on what to mine
@@ -95,7 +99,12 @@ export class NiceHashCalculator {
     for (const coin of coins) {
       // Calculate the numbers
       const revenueData = await this.getCoinRevenue(coin);
+      // optionally account for 3% fee on nicehash
+      if (this.options.includeFees) {
+        revenueData.revenue *= 0.97;
+      }
       const revenue = revenueData.revenue;
+
       const price = await this.getAlgoPrice(coin.algorithm.niceHash);
       const profit = revenue - price;
 

@@ -6,7 +6,7 @@ import { getCoins, ICoin } from "../coins";
 import { filter } from "../filter";
 import { NiceHashCalculator } from "../NiceHashCalculator";
 
-describe("Coin filtering", async () => {
+describe("Coin Filtering", () => {
   let allCoins: ICoin[];
 
   before(async () => {

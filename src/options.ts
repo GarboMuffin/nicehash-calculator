@@ -53,6 +53,9 @@ export interface IOptions {
 
   // max age of things loaded from https://whattomine.com/coins.json
   maxCacheAge: number;
+
+  // attempt to include fees?
+  includeFees: boolean;
 }
 
 interface IEnumFromOptionOptions {
@@ -140,6 +143,7 @@ export function parseOptions(args?: string[]) {
       "debug": {
         type: "boolean",
         default: false,
+        aliases: ["verbose"],
       },
       "no-header": {
         type: "boolean",
@@ -165,10 +169,13 @@ export function parseOptions(args?: string[]) {
         type: "number",
         default: 60 * 5, // 5 minutes
       },
+      "experimental-fees": {
+        type: "boolean",
+        default: false,
+      },
       /* tslint:enable:object-literal-key-quotes */
     },
   });
-
 
   const options: IOptions = {
     unrecognized: parsedOptions.unrecognized,
@@ -195,6 +202,7 @@ export function parseOptions(args?: string[]) {
       },
     }),
     maxCacheAge: (parsedOptions.arguments["max-age"] as number) * 1000,
+    includeFees: parsedOptions.arguments["experimental-fees"] as boolean,
   };
   return options;
 }

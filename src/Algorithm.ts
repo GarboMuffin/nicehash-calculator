@@ -1,4 +1,3 @@
-import { HashRateUnit } from "./HashRateUnit";
 import * as NiceHash from "./apis/nicehash";
 import * as WhatToMine from "./apis/whattomine";
 

@@ -1,8 +1,6 @@
-import * as NiceHash from "./apis/nicehash/";
-import { HashRateUnit } from "./HashRateUnit";
-import { NiceHashCalculator } from "./NiceHashCalculator";
 import { Algorithm } from "./Algorithm";
 import { logger } from "./logger";
+import { NiceHashCalculator } from "./NiceHashCalculator";
 
 // We convert IWhatToMineCoin to this
 export interface ICoin {

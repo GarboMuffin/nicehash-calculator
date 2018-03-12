@@ -1,9 +1,11 @@
 import chalk from "chalk";
 
-import { NiceHashCalculator, BUG_REPORTS } from "./NiceHashCalculator";
+import { BUG_REPORTS, NiceHashCalculator } from "./NiceHashCalculator";
+import { parseOptions } from "./options";
 
 async function start() {
-  const calculator = new NiceHashCalculator();
+  const options = parseOptions();
+  const calculator = new NiceHashCalculator(options);
   await calculator.start();
 }
 

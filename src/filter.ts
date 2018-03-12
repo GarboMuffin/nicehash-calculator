@@ -1,9 +1,6 @@
-import chalk from "chalk";
-
 import { ICoin } from "./coins";
-import { IOptions } from "./options";
-import { clone } from "./utils";
 import { logger } from "./logger";
+import { clone } from "./utils";
 
 export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
   // If a user types in an algorithm it enables all coins of that algorithm

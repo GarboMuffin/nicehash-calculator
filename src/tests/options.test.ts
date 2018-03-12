@@ -4,9 +4,14 @@ import { expect } from "chai";
 
 import { OutputHandlerOption, parseOptions, PricesOption } from "../options";
 
-describe("Option parsing", () => {
+describe("Option Parsing", () => {
   it("should recognize --debug", () => {
     const result = parseOptions(["--debug"]);
+    expect(result.debug).to.equal(true);
+  });
+
+  it("should recognize --verbose", () => {
+    const result = parseOptions(["--verbose"]);
     expect(result.debug).to.equal(true);
   });
 
@@ -53,6 +58,11 @@ describe("Option parsing", () => {
   it("should recognize --output=json", () => {
     const result = parseOptions(["--output=json"]);
     expect(result.outputHandler).to.equal(OutputHandlerOption.JSON);
+  });
+
+  it("should recognize --fees", () => {
+    const result = parseOptions(["--experimental-fees"]);
+    expect(result.includeFees).to.equal(true);
   });
 
   it("should recognize coins", () => {
