@@ -140,6 +140,11 @@ export function parseOptions(args?: string[]) {
   const parsedOptions = OptionLib.parse(args, {
     arguments: {
       /* tslint:disable:object-literal-key-quotes */
+      // argument is used by chalk
+      "no-color": {
+        type: "boolean",
+        default: false
+      },
       "debug": {
         type: "boolean",
         default: false,
