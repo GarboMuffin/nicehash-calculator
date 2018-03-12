@@ -6,9 +6,7 @@ _To be clear, this is for people wanting to make a profit by **buying** hashing 
 
 ## Web Version
 
-### [A web version now exists so you can view the stats without downloading anything! nicehash.garbomuffin.com](https://nicehash.garbomuffin.com/)
-
-[Source code](https://github.com/GarboMuffin/nicehash-calculator-web)
+### [A web version now exists so you can view the stats without downloading anything!](https://nicehash.garbomuffin.com/)
 
 ## Installation
 
