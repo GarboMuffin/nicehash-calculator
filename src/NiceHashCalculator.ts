@@ -15,7 +15,8 @@ export const BUG_REPORTS = "https://github.com/GarboMuffin/nicehash-calculator/i
 // This is the data that is passed onto handlers
 export interface ICoinData {
   coin: ICoin;
-  revenue: WhatToMine.IRevenueResponse;
+  revenue: number;
+  rawRevenue: WhatToMine.IRevenueResponse;
   profit: number;
   price: number;
   returnOnInvestment: number;
@@ -23,22 +24,24 @@ export interface ICoinData {
 }
 
 export class NiceHashCalculator {
-  public options: IOptions;
+  public options!: IOptions;
   private globalNiceHashPrices: number[] = [];
   // API objects
   public whatToMine: WhatToMine.API = new WhatToMine.API();
   public niceHash: NiceHash.API = new NiceHash.API();
 
   constructor() {
+    // everything happens in start()
+    // constructing a NiceHashCalculator should be possible without side effects
+  }
+
+  public async start() {
     // Parse options
     this.options = parseOptions();
 
-    // If debug was enabled then tell the debug method to start outputting things
-    if (this.options.debug) {
-      logger.debugEnabled = true;
-      // and also print some things to debug right away
-      logger.debug("options", this.options);
-    }
+    logger.showWarnings = this.options.showWarnings;
+    logger.debugEnabled = this.options.debug;
+    logger.debug("options", this.options);
 
     // For each unrecognized option log a warning to the user
     for (const unrecognizedOption of this.options.unrecognized) {
@@ -58,11 +61,16 @@ export class NiceHashCalculator {
       console.log("Please report bugs: " + chalk.underline(BUG_REPORTS));
       console.log("");
     }
-  }
 
-  // Has to be seperate from constructor to use async
-  // Asnyc constructors would be terrible
-  public async start() {
+    // using minimum prices is heavily discouraged so output a warning
+    if (this.options.prices === PricesOption.MinimumWithWorkers) {
+      logger.warn(chalk.yellow("Calculating prices using lowest order with some amount of workers. This is discouraged."));
+    }
+    if (this.options.prices === PricesOption.MinimumWithHashrate) {
+      // this is more dangerous
+      logger.warn(chalk.yellow("Calculating prices using lowest order with some amount of accepted speed. This is very discouraged."));
+    }
+
     // get all coins on what to mine
     const whatToMineCoins = await getWhatToMineCoins(this);
     // only populate the cache if the max age wouldn't remove everything there's more than 2 coins active
@@ -76,17 +84,10 @@ export class NiceHashCalculator {
     this.globalNiceHashPrices = await this.getGlobalNiceHashPrices();
 
     // read the coins the user specified and get them
-    const coins = filterCoins(whatToMineCoins, this.options);
+    const coins = filterCoins(whatToMineCoins, this.options.coins);
 
     // determine the output handler to be used
     const outputHandler = this.chooseHandler();
-
-    // using minimum prices is heavily discouraged
-    // so output a warning
-    if (this.isUsingMinimumPrices) {
-      logger.warn(chalk.yellow("Calculating prices using lowest order with workers. This is discouraged."));
-      console.log("");
-    }
 
     // TODO: other warnings
 
@@ -105,7 +106,8 @@ export class NiceHashCalculator {
       // create the data structure
       const data: ICoinData = {
         coin,
-        revenue: revenueData,
+        revenue,
+        rawRevenue: revenueData,
         price,
         profit,
         returnOnInvestment,
@@ -140,7 +142,8 @@ export class NiceHashCalculator {
 
   private async getAlgoPrice(algo: NiceHash.Algorithm): Promise<number> {
     if (this.isUsingMinimumPrices) {
-      return await this.niceHash.getAlgoMinimumPrice(algo);
+      const withWorkers = this.options.prices === PricesOption.MinimumWithWorkers;
+      return await this.niceHash.getAlgoMinimumPrice(algo, withWorkers);
     } else {
       return this.globalNiceHashPrices[algo.id];
     }
@@ -167,6 +170,6 @@ export class NiceHashCalculator {
   ///
 
   get isUsingMinimumPrices(): boolean {
-    return this.options.prices === PricesOption.Minimum;
+    return this.options.prices === PricesOption.MinimumWithWorkers || this.options.prices === PricesOption.MinimumWithHashrate;
   }
 }

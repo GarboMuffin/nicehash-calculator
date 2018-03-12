@@ -4,7 +4,6 @@ import { ICoinData, NiceHashCalculator } from "../NiceHashCalculator";
 import { AbstractHandler } from "./AbstractHandler";
 
 const PRECISION = 4;
-const underline = chalk.underline;
 
 function fancyFormatNumber(num: number): string {
   const isPositive = num > 0;
@@ -19,37 +18,33 @@ export class UnifiedHandler extends AbstractHandler {
     const hashRateUnit = data.coin.algorithm.niceHash.unit.displayName;
     let indent = 0;
 
-    const log = (message: string, newLine: boolean = true) => {
+    const log = (message: string) => {
       const spacing = " ".repeat(indent);
       const messageToPrint = spacing + message;
-      if (newLine) {
-        console.log(messageToPrint);
-      } else {
-        process.stdout.write(messageToPrint);
-      }
+      console.log(messageToPrint);
     };
 
     const printTitle = () => {
       // output coin name & algo
-      const algo = chalk.gray(`(${data.coin.algorithm.displayName})`);
-      log(`${data.coin.displayName}: ${algo}`);
+      const algo = data.coin.algorithm.displayName;
+      log(chalk`${data.coin.displayName}: {gray (${algo})}`);
     };
 
     const printPrice = () => {
-      const price = underline(data.price.toFixed(PRECISION));
-      log(`Price:   ${price} BTC/${hashRateUnit}/day`);
+      const price = data.price.toFixed(PRECISION);
+      log(chalk`Price:   {underline ${price}} BTC/${hashRateUnit}/day`);
     };
 
     const printRevenue = () => {
-      const revenue = underline(data.revenue.revenue.toFixed(PRECISION));
-      const revenueTimestamp = chalk.gray("(" + (new Date(data.revenue.timestamp)).toLocaleString() + ")");
-      log(`Revenue: ${revenue} BTC/${hashRateUnit}/day ${revenueTimestamp}`);
+      const revenue = data.revenue.toFixed(PRECISION);
+      const time = (new Date(data.rawRevenue.timestamp)).toLocaleString();
+      log(chalk`Revenue: {underline ${revenue}} BTC/${hashRateUnit}/day {gray (${time})}`);
     };
 
     const printProfit = () => {
-      const profit = underline(fancyFormatNumber(data.profit));
-      const percentChange = underline(fancyFormatNumber(data.percentChange * 100));
-      log(`Profit: ${profit} BTC/${hashRateUnit}/day (${percentChange}%)`);
+      const profit = fancyFormatNumber(data.profit);
+      const percentChange = fancyFormatNumber(data.percentChange * 100);
+      log(chalk`Profit: {underline ${profit}} BTC/${hashRateUnit}/day (${percentChange}%)`);
     };
 
     const printWarnings = () => {

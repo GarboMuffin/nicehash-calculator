@@ -2,12 +2,15 @@ import chalk from "chalk";
 
 class Logger {
   public debugEnabled: boolean = false;
+  public showWarnings: boolean = true;
 
   // logs warning text
   warn(...args: any[]) {
-    args.unshift("Warning:");
-    args = args.map((str) => chalk.yellow(str));
-    console.warn.apply(console, args);
+    if (this.showWarnings) {
+      args.unshift("Warning:");
+      args = args.map((str) => chalk.yellow(str));
+      console.warn.apply(console, args);
+    }
   }
 
   // logs debug text, only if debug is enabled

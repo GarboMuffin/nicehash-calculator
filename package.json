@@ -4,6 +4,7 @@
   "description": "Calculate the profitability of buying hashing power on NiceHash",
   "main": "index.js",
   "scripts": {
+    "test": "mocha -r ts-node/register src/tests/**/*.test.ts",
     "build": "tsc",
     "watch": "tsc -w",
     "start": "node dist/index"
@@ -14,12 +15,18 @@
   "author": "GarboMuffin",
   "license": "MIT",
   "dependencies": {
-    "@types/node": "^9.4.7",
     "@types/request-promise-native": "^1.0.14",
     "chalk": "^2.3.1",
     "request": "^2.83.0",
     "request-promise-native": "^1.0.5",
     "typescript": "^2.7.1"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.1.2",
+    "@types/mocha": "^2.2.48",
+    "mocha": "^5.0.4",
+    "ts-node": "^5.0.1",
+    "chai": "^4.1.2"
   },
   "private": true
 }

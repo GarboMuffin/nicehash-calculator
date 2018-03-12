@@ -9,9 +9,10 @@ export enum PricesOption {
   Average,
 
   // minimum order with workers
-  Minimum,
+  MinimumWithWorkers,
 
-  // TODO: "MinimumWithWorkers" and "MinimumWithHashrate"
+  // minimum order with some amount of accepted speed
+  MinimumWithHashrate
 }
 
 // Support handlers
@@ -32,6 +33,9 @@ export interface IOptions {
   // show the header at the start?
   showHeader: boolean;
 
+  // show warnings?
+  showWarnings: boolean;
+
   // user specified coins
   coins: string[];
 
@@ -51,34 +55,84 @@ export interface IOptions {
   maxCacheAge: number;
 }
 
-export function parseOptions() {
-  const readArgumentsFile = () => {
-    const content = fs.readFileSync("arguments.txt");
-    const lines = content.toString().split("\n");
-    const result: string[] = [];
+interface IEnumFromOptionOptions {
+  name: string;
+  default: number;
+  args: {
+    [s: string]: number;
+  }
+}
 
-    for (const line of lines) {
-      // Lines that starti with # are comments
-      if (line.startsWith("#")) {
-        continue;
-      }
-      // Trim it to avoid newlines and other characters
-      const trimmed = line.trim();
-      // Ignore empty lines
-      if (trimmed === "") {
-        continue;
-      }
-      result.push(trimmed);
+function enumFromOption<T>(parsedOptions: OptionLib.IParsedOptions, opts: IEnumFromOptionOptions): number {
+  const value = parsedOptions.arguments[opts.name];
+  for (const key of Object.keys(opts.args)) {
+    if (value === key) {
+      return opts.args[key];
+    }
+  }
+
+  const getAcceptedValues = () => {
+    const parsedArgs = [];
+    for (const key of Object.keys(opts.args)) {
+      const isDefault = opts.args[key] === opts.default;
+      parsedArgs.push({
+        name: key,
+        isDefault,
+      });
     }
 
+    let result = "";
+    for (const arg of parsedArgs) {
+      const isLast = parsedArgs.indexOf(arg) === parsedArgs.length - 1;
+      const isSecondToLast = parsedArgs.indexOf(arg) === parsedArgs.length - 2;
+
+      let name = `'${arg.name}'`;
+      if (arg.isDefault) {
+        name += " (default)";
+      }
+      if (isLast) {
+        name += ".";
+      } else if (isSecondToLast) {
+        name += ", and ";
+      } else {
+        name += ", ";
+      }
+      result += name;
+    }
     return result;
   };
 
-  // get the arguments to pass to the parser
-  // remove the first 2 things from argv because that's node and this file
-  let args = process.argv.splice(2);
-  // append arguments.txt
-  args = args.concat(readArgumentsFile());
+  logger.warn(`Unknown value specified for --${opts.name}. Accepted values are ${getAcceptedValues()}`);
+  return opts.default;
+};
+
+function readArgumentsFile() {
+  const content = fs.readFileSync("arguments.txt");
+  const lines = content.toString().split("\n");
+  const result: string[] = [];
+
+  for (const line of lines) {
+    // Lines that start with # are comments
+    if (line.startsWith("#")) {
+      continue;
+    }
+    // Trim it to avoid newlines and other characters
+    const trimmed = line.trim();
+    // Ignore empty lines
+    if (trimmed === "") {
+      continue;
+    }
+    result.push(trimmed);
+  }
+
+  return result;
+};
+
+export function parseOptions(args?: string[]) {
+  if (!args) {
+    args = process.argv.splice(2);
+    args = args.concat(readArgumentsFile());
+  }
 
   const parsedOptions = OptionLib.parse(args, {
     arguments: {
@@ -88,6 +142,10 @@ export function parseOptions() {
         default: false,
       },
       "no-header": {
+        type: "boolean",
+        default: false,
+      },
+      "no-warnings": {
         type: "boolean",
         default: false,
       },
@@ -111,40 +169,31 @@ export function parseOptions() {
     },
   });
 
-  // TODO: remove some of this ugly duplication somehow?
-
-  const getPricesOption = (): PricesOption => {
-    const value = parsedOptions.arguments.prices;
-    if (value === "average") {
-      return PricesOption.Average;
-    } else if (value === "minimum") {
-      return PricesOption.Minimum;
-    } else {
-      logger.warn("Unknown value specified for --prices, accepted values are 'average' (default) and 'minimum'");
-      return PricesOption.Average;
-    }
-  };
-
-  const getOutputHandlerOption = (): OutputHandlerOption => {
-    const value = parsedOptions.arguments.output;
-    if (value === "pretty") {
-      return OutputHandlerOption.Pretty;
-    } else if (value === "json") {
-      return OutputHandlerOption.JSON;
-    } else {
-      logger.warn("Unknown value specified for --output, accepted values are 'pretty' (default) and 'json'");
-      return OutputHandlerOption.Pretty;
-    }
-  };
 
   const options: IOptions = {
     unrecognized: parsedOptions.unrecognized,
     coins: parsedOptions.plain,
     debug: parsedOptions.arguments.debug as boolean,
     showHeader: !parsedOptions.arguments["no-header"] as boolean,
+    showWarnings: !parsedOptions.arguments["no-warnings"] as boolean,
     sleepTime: parsedOptions.arguments["sleep-time"] as number,
-    prices: getPricesOption(),
-    outputHandler: getOutputHandlerOption(),
+    prices: enumFromOption(parsedOptions, {
+      name: "prices",
+      default: PricesOption.Average,
+      args: {
+        average: PricesOption.Average,
+        minimum: PricesOption.MinimumWithWorkers,
+        "minimum-with-speed": PricesOption.MinimumWithHashrate,
+      },
+    }),
+    outputHandler: enumFromOption(parsedOptions, {
+      name: "output",
+      default: OutputHandlerOption.Pretty,
+      args: {
+        pretty: OutputHandlerOption.Pretty,
+        json: OutputHandlerOption.JSON,
+      },
+    }),
     maxCacheAge: (parsedOptions.arguments["max-age"] as number) * 1000,
   };
   return options;

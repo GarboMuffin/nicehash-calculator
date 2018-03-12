@@ -5,7 +5,7 @@ import { IOptions } from "./options";
 import { clone } from "./utils";
 import { logger } from "./logger";
 
-export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
+export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
   // If a user types in an algorithm it enables all coins of that algorithm
   // If a user types in the ticker/abbrevation of a coin it will enable it
   // If a user types in the name of a coin it will enable it
@@ -14,7 +14,7 @@ export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
   let userDefinedCoins = false;
 
   for (const coin of allCoins) {
-    for (const str of options.coins) {
+    for (const str of coins) {
       // disabling a coin
       const isDisablingCoin = str.startsWith("-");
 
@@ -40,7 +40,6 @@ export function filter(allCoins: ICoin[], options: IOptions): ICoin[] {
           result.push(coin);
         }
         userDefinedCoins = true;
-        break;
       }
     }
   }
