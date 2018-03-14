@@ -5,7 +5,7 @@ class Logger {
   public showWarnings: boolean = true;
 
   // logs warning text
-  warn(...args: any[]) {
+  public warn(...args: any[]) {
     if (this.showWarnings) {
       args.unshift("Warning:");
       args = args.map((str) => chalk.yellow(str));
@@ -14,7 +14,7 @@ class Logger {
   }
 
   // logs debug text, only if debug is enabled
-  debug(...args: any[]) {
+  public debug(...args: any[]) {
     if (this.debugEnabled) {
       args.unshift(chalk.gray("debug"));
       console.log.apply(console, args);

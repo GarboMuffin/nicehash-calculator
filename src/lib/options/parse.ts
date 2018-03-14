@@ -47,7 +47,8 @@ function handleArgument(result: IParsedOptions, opts: IOptions, rawArg: string) 
     }
   };
 
-  // returns a tuple
+  // returns the associated IOption for the argument or null if there isn't one
+  // returns a tuple:
   // [0]: the name of the option
   // [1]: the option
   const getOption = (): [string, OptionParser.IOption] | null => {

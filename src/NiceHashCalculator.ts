@@ -31,6 +31,10 @@ export class NiceHashCalculator {
     // constructing a NiceHashCalculator should be possible without side effects so that testing can be done
   }
 
+  //
+  // Core
+  //
+
   public async start() {
     this.initOptions();
     await this.initApis();
@@ -66,7 +70,7 @@ export class NiceHashCalculator {
 
   // given a coin it will return the data structure that is then passed onto handlers
   private async handleCoin(coin: ICoin) {
-    // Calculate the numbers
+    // estimate revenue from whattomine
     const revenueData = await this.getRevenue(coin);
     // optionally account for 3% fee on nicehash
     if (this.options.includeFees) {
@@ -74,6 +78,7 @@ export class NiceHashCalculator {
     }
     const revenue = revenueData.revenue;
 
+    // get the price from nicehash
     const price = await this.getPrice(coin.algorithm.niceHash);
     const profit = revenue - price;
 
@@ -129,15 +134,15 @@ export class NiceHashCalculator {
   }
 
   private printHeader() {
-    const includeFees = this.options.includeFees;
-    console.log(chalk`This program {bold estimates} the profitability of buying hashing power on NiceHash${includeFees ? "" : " ignoring fees"}.`);
-    console.log(chalk`Estimations are based on the NiceHash and WhatToMine APIs and have no guarantee of accuracy.`);
-    console.log(chalk`Only spend what you can afford to lose. {bold I am not responsible for any losses}.`);
+    console.log(chalk`This program {bold estimates} the profitability of buying hashing power on NiceHash.`);
+    console.log(chalk`Estimations have no guarantee of accuracy.`);
+    console.log(chalk`NiceHash is not affiliated with this project. {bold I am not responsible for any losses}.`);
     console.log("");
     // please do send me money that would be great
     console.log(chalk`BTC: 1GarboYPsadWuEi8B2Pv1SvwAsBHVn1ABZ {gray (more addresses in the readme!)}`);
+    console.log(chalk`Referral link: {underline https://www.nicehash.com/?refby=258346}`);
     console.log("");
-    console.log(chalk`Please report bugs: {underline ${BUG_REPORT_URL}}`);
+    console.log(chalk`Report bugs or suggest ideas: {underline ${BUG_REPORT_URL}}`);
     console.log("");
   }
 

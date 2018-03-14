@@ -28,8 +28,7 @@
     "member-access": [true, "check-parameter-property"],
     "ordered-imports": false,
     "object-literal-key-quotes": false,
-    "max-line-length": [true, 140],
-    "no-namespace": false
+    "max-line-length": false
   },
   "rulesDirectory": []
 }

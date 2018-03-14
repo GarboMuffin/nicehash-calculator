@@ -20,7 +20,7 @@ function readArgumentsFile() {
   }
 
   return result;
-};
+}
 
 export function getArguments() {
   let args = process.argv.splice(2);

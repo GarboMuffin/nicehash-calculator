@@ -42,7 +42,7 @@ export function parseOptions(args: string[]) {
       // used by chalk
       "no-color": {
         type: "boolean",
-        default: false
+        default: false,
       },
       "debug": {
         type: "boolean",

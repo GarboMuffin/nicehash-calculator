@@ -7,8 +7,8 @@ import { filter } from "../filter";
 import { Algorithm } from "../Algorithm";
 
 describe("Coin Filtering", () => {
-  // a few select coins
-  let coins: ICoin[] = [
+  // a few select coins for testing
+  const coins: ICoin[] = [
     {
       displayName: "Bitcoin",
       abbreviation: "BTC",
@@ -50,7 +50,7 @@ describe("Coin Filtering", () => {
     const result = filter(coins, ["scrypt"]);
     expect(result.length).to.equal(2); // litecoin and dogecoin
     for (const coin of result) {
-      expect(coin.algorithm.niceHash.id).to.equal(0);
+      expect(coin.algorithm.niceHash.id).to.equal(Algorithm.Scrypt.niceHash.id);
     }
   });
 
@@ -65,7 +65,7 @@ describe("Coin Filtering", () => {
   it("should disable coins by algorithm", () => {
     const result = filter(coins, ["-scrypt"]);
     for (const coin of result) {
-      expect(coin.algorithm.niceHash.id).to.not.equal(0);
+      expect(coin.algorithm.niceHash.id).to.not.equal(Algorithm.Scrypt.niceHash.id);
     }
   });
 });

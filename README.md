@@ -1,10 +1,10 @@
 # NiceHash Profit Calculator for Buyers v2
 
-A JavaScript program to estimate the profitability of buying hashing power on NiceHash.
+A JavaScript program to estimate the profitability of buying hashing power on [NiceHash (referral link)](https://www.nicehash.com/?refby=258346).
 
 Get help by [making an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new).
 
-**This project is not affiliated with or endorsed by NiceHash.**
+**This project is not affiliated with NiceHash. I am not responsible for any losses that may come as a result of this project.**
 
 This README is a work in progress and very incomplete.
 

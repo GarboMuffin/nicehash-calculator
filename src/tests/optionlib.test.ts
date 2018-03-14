@@ -14,8 +14,8 @@ describe("Option Parsing Library", () => {
         arg: {
           type: "string",
           default: "def",
-        }
-      }
+        },
+      },
     });
     expect(result.arguments.arg).to.equal("abc");
   });
@@ -26,8 +26,8 @@ describe("Option Parsing Library", () => {
         arg: {
           type: "number",
           default: 456,
-        }
-      }
+        },
+      },
     });
     expect(result.arguments.arg).to.equal(123);
   });
@@ -38,8 +38,8 @@ describe("Option Parsing Library", () => {
         arg: {
           type: "boolean",
           default: false,
-        }
-      }
+        },
+      },
     });
     expect(result.arguments.arg).to.equal(true);
   });
@@ -51,8 +51,8 @@ describe("Option Parsing Library", () => {
           type: "string",
           default: "def",
           aliases: ["arg-alias"],
-        }
-      }
+        },
+      },
     });
     expect(result.arguments.arg).to.equal("abc");
   });
@@ -63,8 +63,8 @@ describe("Option Parsing Library", () => {
         arg: {
           type: "boolean",
           default: false,
-        }
-      }
+        },
+      },
     });
     expect(result.unrecognized).to.have.ordered.members(["--another-arg", "--and-more-args"]);
   });

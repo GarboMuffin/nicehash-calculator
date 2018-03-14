@@ -140,7 +140,7 @@ class API {
         logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: lagging`);
         continue;
       }
-  
+
       // Set the name property
       value.name = key;
       coins.push(value);

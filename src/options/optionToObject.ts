@@ -6,7 +6,7 @@ interface IOptionToObjectOptions<T = number> {
   default: T;
   args: {
     [s: string]: T;
-  }
+  };
 }
 
 export function optionToObject<T>(parsedOptions: OptionLib.IParsedOptions, opts: IOptionToObjectOptions<T>): any {
@@ -52,4 +52,4 @@ export function optionToObject<T>(parsedOptions: OptionLib.IParsedOptions, opts:
 
   logger.warn(`Unknown value specified for --${opts.name}. Accepted values are ${getAcceptedValues()}`);
   return opts.default;
-};
+}

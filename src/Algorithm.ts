@@ -3,7 +3,7 @@ import * as WhatToMine from "./apis/whattomine";
 
 interface IAlgorithmOptions {
   name: string;
-  aliases?: string[],
+  aliases?: string[];
   whatToMine: WhatToMine.Algorithm;
   niceHash: NiceHash.Algorithm;
 }
