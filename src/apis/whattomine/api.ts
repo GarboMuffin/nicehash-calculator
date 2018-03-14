@@ -11,9 +11,7 @@ interface IBaseCoin {
   status: string;
 }
 
-///
-/// for https://whattomine.com/calculators.json
-///
+// for https://whattomine.com/calculators.json
 interface IAPICalculator extends IBaseCoin {
   // There's more properties that aren't one here
   listed: boolean;
@@ -29,10 +27,7 @@ interface IAPICalculators {
   };
 }
 
-///
-/// for https://whattomine.com/coins.json and https://whattomine.com/coins/1.json
-///
-
+// for https://whattomine.com/coins.json and https://whattomine.com/coins/1.json
 interface IAPICoin extends IBaseCoin {
   name: string;
   block_time: string;
@@ -69,6 +64,7 @@ interface IAPICoins {
   };
 }
 
+// other interfaces that are not linked to any API routes
 interface ICoinRevenueCacheEntry {
   hashrate: number;
   revenue: number;
@@ -84,10 +80,9 @@ export interface IRevenueResponse {
   timestamp: number;
 }
 
-export class API {
-  private coinRevenueCache: ICoinRevenueCacheEntry[] = [];
+class API {
+  private revenueCache: ICoinRevenueCacheEntry[] = [];
 
-  // Raw requests
   private async request(url: string): Promise<any> {
     logger.debug("WhatToMine.request(): requested " + url);
     const rq = await request(url, {
@@ -110,14 +105,16 @@ export class API {
     return data;
   }
 
-  private async getRawCoin(id: number, hashrate: number): Promise<IAPICoin> {
-    // https://whattomine.com/coins/1.json?cost=0
+  private async getRawRevenue(id: number, hashrate: number): Promise<IAPICoin> {
+    // https://whattomine.com/coins/1.json
     const raw = await this.request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}`);
     const data = JSON.parse(raw) as IAPICoin;
     return data;
   }
 
+  //
   // Wrappers
+  //
 
   // Returns WhatToMine's list of calculators in a more usable format
   public async getCalculators(): Promise<IAPICalculator[]> {
@@ -128,21 +125,22 @@ export class API {
     const coins = [];
     for (const key of Object.keys(data)) {
       const value = data[key];
-      // TODO: debug() messages
-
       // Ignore Nicehash coins
       if (value.tag === "NICEHASH") {
+        logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: nicehash`);
         continue;
       }
       // Remove coins that aren't active (profitability calculating won't work)
       if (value.status !== "Active") {
+        logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: inactive`);
         continue;
       }
       // Remove coins that are lagging
       if (value.lagging) {
+        logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: lagging`);
         continue;
       }
-
+  
       // Set the name property
       value.name = key;
       coins.push(value);
@@ -152,11 +150,11 @@ export class API {
   }
 
   // Returns BTC revenue of mining coin id with hashrate hashrate
-  public async getRevenue(id: number, hashrate: number, forceRequest: boolean = false): Promise<IRevenueResponse> {
+  public async getRevenue(id: number, hashrate: number): Promise<IRevenueResponse> {
     // If a coin is present in the cache then return it from there
-    if (!forceRequest && this.coinRevenueCache[id]) {
+    if (this.revenueCache[id]) {
       logger.debug("WhatToMine.getRevenue(): returning from cache for " + id);
-      const item = this.coinRevenueCache[id];
+      const item = this.revenueCache[id];
       const revenue = item.revenue * (hashrate / item.hashrate);
       return {
         fromCache: true,
@@ -165,7 +163,7 @@ export class API {
       };
     } else {
       logger.debug("WhatToMine.getRevenue(): returning from web for " + id);
-      const data = await this.getRawCoin(id, hashrate);
+      const data = await this.getRawRevenue(id, hashrate);
       const revenue = Number(data.btc_revenue);
       return {
         fromCache: false,
@@ -220,6 +218,9 @@ export class API {
       };
       cache[coin.id] = entry;
     }
-    this.coinRevenueCache = cache;
+
+    this.revenueCache = cache;
   }
 }
+
+export const api = new API();

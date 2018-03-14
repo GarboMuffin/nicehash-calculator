@@ -3,9 +3,10 @@ import { logger } from "./logger";
 import { clone } from "./utils";
 
 export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
-  // If a user types in an algorithm it enables all coins of that algorithm
-  // If a user types in the ticker/abbrevation of a coin it will enable it
   // If a user types in the name of a coin it will enable it
+  // If a user types in the ticker/abbrevation of a coin it will enable it
+  // If a user types in an algorithm it enables all coins of that algorithm
+  // If a user prepends any of this with a single '-' it will instead disable all coins it matches
 
   let result: ICoin[] = clone(allCoins);
   let userDefinedCoins = false;

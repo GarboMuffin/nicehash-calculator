@@ -50,7 +50,7 @@ export class UnifiedHandler extends AbstractHandler {
     const printWarnings = () => {
       // price of 0 means that there are no orders on nicehash
       if (data.price === 0) {
-        log(chalk.red("!!! WARNING: NO ORDERS !!!"));
+        log(chalk.red("Warning: NO ORDERS!"));
       }
       // profit of more than 1000% typically means some api unit has changed
       if (data.returnOnInvestment > 10) {

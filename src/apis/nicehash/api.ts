@@ -32,8 +32,8 @@ interface IRawOrders {
   orders: IOrder[];
 }
 
-export class API {
-  private cachedMinimumPrices: number[] = [];
+class API {
+  private cachedPrices: number[] = [];
 
   // also see request() in apis/whattomine/api.ts
   private async request(url: string): Promise<any> {
@@ -52,25 +52,30 @@ export class API {
     return data;
   }
 
-  public async getGlobalPrices(): Promise<IRawGlobalPricesCoin[]> {
+  public async cacheGlobalPrices() {
     const data = await this.getRawGlobalPrices();
-    return data.result.stats;
+    const cache: number[] = [];
+    for (const niceHashCost of data.result.stats) {
+      cache[niceHashCost.algo] = Number(niceHashCost.price);
+    }
+    this.cachedPrices = cache;
   }
 
-  private async getRawOrders(algo: NiceHash.Algorithm): Promise<IApiResult<IRawOrders>> {
+  // Returns the existing orders for an algorithm on NiceHash
+  private async getOrders(algo: NiceHash.Algorithm): Promise<IApiResult<IRawOrders>> {
     const rq = await this.request(`https://api.nicehash.com/api?method=orders.get&algo=${algo.id}`);
     const data = JSON.parse(rq) as IApiResult<IRawOrders>;
     return data;
   }
 
-  // withWorkers - find minimum with workers OR find minimum with some hashrate
-  public async getAlgoMinimumPrice(algo: NiceHash.Algorithm, withWorkers: boolean): Promise<number> {
-    if (this.cachedMinimumPrices[algo.id]) {
-      logger.debug("NiceHash.getAlgoMinimumPrice(): returned from cache for " + algo.id);
-      return this.cachedMinimumPrices[algo.id];
+  // withWorkers - find minimum with workers OR find minimum with some hashrate, only applies if cache is not populated
+  public async getPrice(algo: NiceHash.Algorithm, withWorkers?: boolean): Promise<number> {
+    if (this.cachedPrices[algo.id]) {
+      logger.debug("NiceHash.getPrice(): returned from cache for " + algo.id);
+      return this.cachedPrices[algo.id];
     }
 
-    const data = await this.getRawOrders(algo);
+    const data = await this.getOrders(algo);
     const orders = data.result.orders;
 
     // find the lowest order with workers
@@ -83,9 +88,11 @@ export class API {
       }
     }
 
-    logger.debug("NiceHash.getAlgoMinimumPrice(): returned from web for " + algo.id);
+    logger.debug("NiceHash.getPrice(): returned from web for " + algo.id);
     const minimumPrice = minimumOrder ? Number(minimumOrder.price) : Infinity;
-    this.cachedMinimumPrices[algo.id] = minimumPrice;
+    this.cachedPrices[algo.id] = minimumPrice;
     return minimumPrice;
   }
 }
+
+export const api = new API();

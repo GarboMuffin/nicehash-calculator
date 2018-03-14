@@ -4,7 +4,9 @@ A JavaScript program to estimate the profitability of buying hashing power on Ni
 
 Get help by [making an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new).
 
-This README is a work in progress.
+**This project is not affiliated with or endorsed by NiceHash.**
+
+This README is a work in progress and very incomplete.
 
 ## Installing / Downloading
 
@@ -43,7 +45,7 @@ node index [...arguments]
 Arguments can be things like `--no-header` or `--debug` or more commonly a list of coins to run on. Without specifically specifying any coins it will run on all coins. It's probably easiest to understand usage by example.
 
 ```bash
-# Everything is case insensitive. bItCoIn and bitcoin are treated as the same
+# Everything is case insensitive. bItCoIn and bitcoin both have the same effect
 
 # You can specify names of coins to enable only those
 # To run on only bitcoin, litecoin, and ethereum you could do:
@@ -64,6 +66,10 @@ node index -bitcoin
 
 # Run on all scrypt coins except litecoin:
 node index scrypt -litecoin
+
+# And you can use `-` on algorithms as well
+# Run on all coins except scrypt coins:
+node index -scrypt
 ```
 
 ## Donations?

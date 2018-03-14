@@ -1,6 +1,6 @@
 import { Algorithm } from "./Algorithm";
+import * as WhatToMine from "./apis/whattomine";
 import { logger } from "./logger";
-import { NiceHashCalculator } from "./NiceHashCalculator";
 
 // We convert IWhatToMineCoin to this
 export interface ICoin {
@@ -37,8 +37,8 @@ function getAdditionalNames(coin: ICoin): ICoinNames {
   }
 }
 
-export async function getCoins(calculator: NiceHashCalculator): Promise<ICoin[]> {
-  const whatToMineCalculators = await calculator.whatToMine.getCalculators();
+export async function getCoins(): Promise<ICoin[]> {
+  const whatToMineCalculators = await WhatToMine.api.getCalculators();
   const coins: ICoin[] = [];
 
   // Convert the coins to our own thing
@@ -65,7 +65,7 @@ export async function getCoins(calculator: NiceHashCalculator): Promise<ICoin[]>
     const algorithm = getAlgorithm(whatToMineCalculator.algorithm);
     if (algorithm === null) {
       // This coin doesn't have a matching algorithm on nicehash so don't add it
-      logger.debug(`Unknown algo: ${whatToMineCalculator.algorithm} (${whatToMineCalculator.name})`);
+      logger.debug(`getCoins(): unknown algo: ${whatToMineCalculator.algorithm} (${whatToMineCalculator.name})`);
       continue;
     }
     coin.algorithm = algorithm;

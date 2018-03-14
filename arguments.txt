@@ -2,8 +2,8 @@
 # Lines starting with # are ingored
 # One argument per line
 
-# For example if you always want --experimental-fees enabled without having to type it each time you could do
-# (without the #)
+# For example if you always want --experimental-fees enabled without having to type it each time you could do:
+# (remove the #)
 #--experimental-fees
 
 # You can put coins in here but I would recommend against it
