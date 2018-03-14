@@ -3,7 +3,7 @@ import { NiceHashLocation, Locations } from "./location";
 import { NHOrderType } from "./order";
 import { NHOptions } from "./nicehash";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 export enum Unit {
   Percent, BTC

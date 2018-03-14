@@ -1,11 +1,18 @@
 {
   "name": "nicehash-calculator",
-  "version": "1.0.0",
+  "version": "0.9.0",
   "description": "Calculate the profitability of buying hashing power on NiceHash",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w",
     "start": "node dist/index"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/GarboMuffin/nicehash-calculator"
+  },
+  "bugs": {
+    "url": "https://github.com/GarboMuffin/nicehash-calculator/issues"
   },
   "author": "GarboMuffin",
   "license": "MIT",
@@ -14,7 +21,7 @@
     "@types/node": "^8.0.17",
     "@types/request": "^2.0.0",
     "@types/request-promise": "^4.1.36",
-    "chalk": "2.0.1",
+    "chalk": "^2.3.2",
     "readline": "^1.3.0",
     "request": "^2.81.0",
     "request-promise": "^4.2.1",

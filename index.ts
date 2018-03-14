@@ -7,7 +7,7 @@ import { NHOrderType } from "./src/order";
 import { NiceHashAPI } from "./src/nicehash";
 import { NiceHashLocation } from "./src/location";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 import * as readline from "readline";
 import * as fs from "fs";
 

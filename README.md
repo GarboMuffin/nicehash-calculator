@@ -1,8 +1,10 @@
 # NiceHash Profit Calculator for Buyers
 
-A script to estimate the profitability of buying hashing power on NiceHash.
+A script to estimate the profitability of buying hashing power on [NiceHash (referral link)](https://www.nicehash.com/?refby=258346).
 
-_To be clear, this is for people wanting to make a profit by **buying** hashing power on NiceHash. It isn't for miners. Use [NiceHash's official profit calculator](https://www.nicehash.com/profitability-calculator) for that._
+If you are a miner you should use [NiceHash's official profit calculator](https://www.nicehash.com/profitability-calculator).
+
+**This project is not affiliated with NiceHash. I am not responsible for any losses that may come as a result of this project.**
 
 ## Web Version
 

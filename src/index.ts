@@ -12,7 +12,7 @@ import { Options, DefaultOptions, ProfitUnit, Unit } from "./options";
 import { Algorithms } from "./algorithms";
 import { NHOrderType } from "./order";
 
-import * as chalk from "chalk";
+import chalk from "chalk";
 
 const PRECISION = 6; // decimal places
 
