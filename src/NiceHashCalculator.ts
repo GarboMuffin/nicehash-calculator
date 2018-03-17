@@ -147,10 +147,8 @@ export class NiceHashCalculator {
   }
 
   private async initApis() {
-    // only populate the cache if the max age wouldn't remove everything there's more than 2 coins active
-    // with only 2 coins active it doesn't save any requests
-    if (this.options.maxCacheAge > 0 && this.options.coins.length >= 2) {
-      // load cache of many whattomine coins
+    // only populate the cache if the max age wouldn't remove everything
+    if (this.options.maxCacheAge > 0) {
       await WhatToMine.api.populateCoinRevenueCache(this.options.maxCacheAge);
     }
     if (this.options.prices === PricesOption.Average) {

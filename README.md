@@ -32,8 +32,6 @@ cd nicehash-calculator
 npm install --only=production
 # builds typescript (.ts) files to javascript (.js)
 npm run build
-
-# yarn or pnpm will also work. just run the equivelant command
 ```
 
 ## Usage
