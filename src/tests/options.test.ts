@@ -30,11 +30,6 @@ describe("Option Parsing", () => {
     expect(result.sleepTime).to.equal(123);
   });
 
-  it("should recognize --max-age=123", () => {
-    const result = parseOptions(["--max-age=123"]);
-    expect(result.maxCacheAge).to.equal(123 * 1000);
-  });
-
   it("should recognize --prices=average", () => {
     const result = parseOptions(["--prices=average"]);
     expect(result.prices).to.equal(PricesOption.Average);
