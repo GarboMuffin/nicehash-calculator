@@ -147,10 +147,6 @@ export class NiceHashCalculator {
   }
 
   private async initApis() {
-    // only populate the cache if the max age wouldn't remove everything
-    if (this.options.maxCacheAge > 0) {
-      await WhatToMine.api.populateCoinRevenueCache(this.options.maxCacheAge);
-    }
     if (this.options.prices === PricesOption.Average) {
       await NiceHash.api.cacheGlobalPrices();
     }

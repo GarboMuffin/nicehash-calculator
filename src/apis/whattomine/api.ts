@@ -75,14 +75,11 @@ interface ICoinRevenueCacheEntry {
 // Related to the API wrapper methods
 // getRevenue(), etc.
 export interface IRevenueResponse {
-  fromCache: boolean;
   revenue: number;
   timestamp: number;
 }
 
 class API {
-  private revenueCache: ICoinRevenueCacheEntry[] = [];
-
   private async request(url: string): Promise<any> {
     logger.debug("WhatToMine.request(): requested " + url);
     const rq = await request(url, {
@@ -151,72 +148,13 @@ class API {
 
   // Returns BTC revenue of mining coin id with hashrate hashrate
   public async getRevenue(id: number, hashrate: number): Promise<IRevenueResponse> {
-    // If a coin is present in the cache then return it from there
-    if (this.revenueCache[id]) {
-      logger.debug("WhatToMine.getRevenue(): returning from cache for " + id);
-      const item = this.revenueCache[id];
-      const revenue = item.revenue * (hashrate / item.hashrate);
-      return {
-        fromCache: true,
-        timestamp: item.timestamp,
-        revenue,
-      };
-    } else {
-      logger.debug("WhatToMine.getRevenue(): returning from web for " + id);
-      const data = await this.getRawRevenue(id, hashrate);
-      const revenue = Number(data.btc_revenue);
-      return {
-        fromCache: false,
-        timestamp: data.timestamp * 1000,
-        revenue,
-      };
-    }
-  }
-
-  // maxAge: milliseconds
-  public async populateCoinRevenueCache(maxAge: number): Promise<void> {
-    const data = await this.getRawCoins();
-    const cache = [];
-    for (const key of Object.keys(data.coins)) {
-      const coin = data.coins[key];
-
-      // skip nicehash coins
-      if (coin.tag === "NICEHASH") {
-        continue;
-      }
-
-      // get properties from response
-      const timestamp = coin.timestamp * 1000;
-      const revenue = Number(coin.btc_revenue);
-
-      // if the data is more than an hour old then skip it
-      const currentDate = new Date();
-      const age = currentDate.getTime() - (new Date(timestamp).getTime());
-      // if its older than an hour then don't use the data (too old, unreliable)
-      if (age >= maxAge) {
-        logger.debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): too old (${age / 1000} sec)`);
-        continue;
-      }
-
-      // get algorithm
-      const algorithm = (WhatToMine.Algorithm as any)[coin.algorithm];
-      if (!algorithm) {
-        logger.debug(`WhatToMine.populateCoinRevenueCache(): skipping data for ${coin.id} (${coin.algorithm}): no matching algo`);
-        continue;
-      }
-      const hashrate = algorithm.defaultSpeed;
-
-      // create the entry object
-      const entry: ICoinRevenueCacheEntry = {
-        revenue,
-        hashrate,
-        coin,
-        timestamp,
-      };
-      cache[coin.id] = entry;
-    }
-
-    this.revenueCache = cache;
+    logger.debug("WhatToMine.getRevenue(): returning from web for " + id);
+    const data = await this.getRawRevenue(id, hashrate);
+    const revenue = Number(data.btc_revenue);
+    return {
+      timestamp: data.timestamp * 1000,
+      revenue,
+    };
   }
 }
 
