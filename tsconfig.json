@@ -8,4 +8,7 @@
   "include": [
     "src/**/*",
   ],
+  "exclude": [
+    "src/tests/**/*",
+  ],
 }
