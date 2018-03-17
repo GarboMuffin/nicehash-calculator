@@ -187,10 +187,7 @@ class API {
 
       // get properties from response
       const timestamp = coin.timestamp * 1000;
-
-      // unsure if to use btc_revenue or btc_revenue24
-      // seems like btc_revenue24 matches better with web requests
-      const revenue = Number(coin.btc_revenue24);
+      const revenue = Number(coin.btc_revenue);
 
       // if the data is more than an hour old then skip it
       const currentDate = new Date();
