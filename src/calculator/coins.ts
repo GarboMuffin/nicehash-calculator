@@ -1,6 +1,6 @@
-import { Algorithm } from "./Algorithm";
-import * as WhatToMine from "./apis/whattomine";
-import { logger } from "./logger";
+import { Algorithm } from "../Algorithm";
+import * as WhatToMine from "../apis/whattomine";
+import { logger } from "../logger";
 
 // We convert IWhatToMineCoin to this
 export interface ICoin {

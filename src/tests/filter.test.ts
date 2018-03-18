@@ -2,8 +2,8 @@ import "mocha";
 
 import { expect } from "chai";
 
-import { getCoins, ICoin } from "../coins";
-import { filter } from "../filter";
+import { getCoins, ICoin } from "../calculator/coins";
+import { filter } from "../calculator/filter";
 import { Algorithm } from "../Algorithm";
 
 describe("Coin Filtering", () => {

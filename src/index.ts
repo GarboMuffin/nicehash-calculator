@@ -1,7 +1,7 @@
 import chalk from "chalk";
 
 import { BUG_REPORT_URL } from "./constants";
-import { NiceHashCalculator } from "./NiceHashCalculator";
+import { NiceHashCalculator } from "./calculator/NiceHashCalculator";
 import * as OptionParser from "./options";
 
 async function start() {

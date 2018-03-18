@@ -1,14 +1,14 @@
 import chalk from "chalk";
 
-import { Algorithm } from "./Algorithm";
-import * as NiceHash from "./apis/nicehash";
-import * as WhatToMine from "./apis/whattomine";
+import { Algorithm } from "../Algorithm";
+import * as NiceHash from "../apis/nicehash";
+import * as WhatToMine from "../apis/whattomine";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
-import { BUG_REPORT_URL } from "./constants";
+import { BUG_REPORT_URL } from "../constants";
 import { filter as filterCoins } from "./filter";
-import { logger } from "./logger";
-import { IOptions, PricesOption } from "./options";
-import { sleep } from "./utils";
+import { logger } from "../logger";
+import { IOptions, PricesOption } from "../options";
+import { sleep } from "../utils";
 
 // This is the data that is passed onto handlers
 export interface ICoinData {

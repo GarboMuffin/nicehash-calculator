@@ -1,25 +1,6 @@
 import * as OptionParser from ".";
 
-export interface IOptions {
-  arguments: {
-    [s: string]: OptionParser.IOption;
-  };
-}
-
-export interface IParsedOptions {
-  // list of arguments provided but are unknown
-  unrecognized: string[];
-
-  // list of things provided that don't start with --, eg.
-  // `node index --thing=3 somethingelse` would result in `somethingelse`
-  plain: string[];
-
-  arguments: {
-    [s: string]: string | number | boolean;
-  };
-}
-
-function handleArgument(result: IParsedOptions, opts: IOptions, rawArg: string) {
+function handleArgument(result: OptionParser.IParsedOptions, opts: OptionParser.IOptions, rawArg: string) {
   // remove leading --
   const arg = rawArg.substr(2);
 
@@ -90,8 +71,8 @@ function handleArgument(result: IParsedOptions, opts: IOptions, rawArg: string) 
   }
 }
 
-export function parse(argv: string[], opts: IOptions): IParsedOptions {
-  const result: IParsedOptions = {
+export function parse(argv: string[], opts: OptionParser.IOptions): OptionParser.IParsedOptions {
+  const result: OptionParser.IParsedOptions = {
     unrecognized: [],
     plain: [],
     arguments: {},

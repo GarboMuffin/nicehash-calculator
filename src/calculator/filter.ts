@@ -1,6 +1,6 @@
 import { ICoin } from "./coins";
-import { logger } from "./logger";
-import { clone } from "./utils";
+import { logger } from "../logger";
+import { clone } from "../utils";
 
 export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
   // If a user types in the name of a coin it will enable it

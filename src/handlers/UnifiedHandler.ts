@@ -1,6 +1,6 @@
 import chalk from "chalk";
 
-import { ICoinData, NiceHashCalculator } from "../NiceHashCalculator";
+import { ICoinData, NiceHashCalculator } from "../calculator/NiceHashCalculator";
 import { AbstractHandler } from "./AbstractHandler";
 
 const PRECISION = 4;

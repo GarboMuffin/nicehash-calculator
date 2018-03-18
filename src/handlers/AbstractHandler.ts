@@ -1,4 +1,4 @@
-import { ICoinData, NiceHashCalculator } from "../NiceHashCalculator";
+import { ICoinData, NiceHashCalculator } from "../calculator/NiceHashCalculator";
 
 // There will likely be more methods in the future
 export abstract class AbstractHandler {

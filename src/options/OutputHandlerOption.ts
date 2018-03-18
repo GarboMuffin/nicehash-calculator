@@ -5,14 +5,14 @@ import { DelayedJSONHandler } from "../handlers/DelayedJSONHandler";
 export class OutputHandlerOption {
   /* tslint:disable:variable-name */
   // The normal handler, "unified" or "pretty"
-  public static Pretty = new OutputHandlerOption(() => new UnifiedHandler());
+  public static readonly Pretty = new OutputHandlerOption(() => new UnifiedHandler());
 
   // Outputs formatted JSON, can be parsed by anything
   // Best used with --no-header
-  public static JSON = new OutputHandlerOption(() => new JSONHandler());
+  public static readonly JSON = new OutputHandlerOption(() => new JSONHandler());
 
   // Like JSONHandler but logs once at the end
-  public static DelayedJSON = new OutputHandlerOption(() => new DelayedJSONHandler());
+  public static readonly DelayedJSON = new OutputHandlerOption(() => new DelayedJSONHandler());
   /* tslint:enable:variable-name */
 
   public readonly getHandler: () => AbstractHandler;
