@@ -55,6 +55,11 @@ describe("Option Parsing", () => {
     expect(result.outputHandler).to.equal(OutputHandlerOption.JSON);
   });
 
+  it("should recognize --output=delayed-json", () => {
+    const result = parseOptions(["--output=delayed-json"]);
+    expect(result.outputHandler).to.equal(OutputHandlerOption.DelayedJSON);
+  });
+
   it("should recognize --fees", () => {
     const result = parseOptions(["--experimental-fees"]);
     expect(result.includeFees).to.equal(true);
