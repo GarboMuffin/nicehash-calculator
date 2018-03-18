@@ -1,4 +1,5 @@
-import { JSONHandler, UnifiedHandler, AbstractHandler } from "../handlers";
+import { AbstractHandler, JSONHandler, UnifiedHandler } from "../handlers";
+import { DelayedJSONHandler } from "../handlers/DelayedJSONHandler";
 
 // Support handlers
 export class OutputHandlerOption {
@@ -9,6 +10,9 @@ export class OutputHandlerOption {
   // Outputs formatted JSON, can be parsed by anything
   // Best used with --no-header
   public static JSON = new OutputHandlerOption(() => new JSONHandler());
+
+  // Like JSONHandler but logs once at the end
+  public static DelayedJSON = new OutputHandlerOption(() => new DelayedJSONHandler());
   /* tslint:enable:variable-name */
 
   public readonly getHandler: () => AbstractHandler;

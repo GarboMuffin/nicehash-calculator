@@ -96,6 +96,7 @@ export function parseOptions(args: string[]) {
       args: {
         pretty: OptionParser.OutputHandlerOption.Pretty,
         json: OptionParser.OutputHandlerOption.JSON,
+        "delayed-json": OptionParser.OutputHandlerOption.DelayedJSON,
       },
     }),
     includeFees: parsedOptions.arguments["experimental-fees"] as boolean,

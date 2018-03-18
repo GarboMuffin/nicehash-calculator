@@ -1,7 +1,7 @@
 import { ICoinData, NiceHashCalculator } from "../NiceHashCalculator";
 import { AbstractHandler } from "./AbstractHandler";
 
-// Enabled with --json-output
+// Enabled with --output=json
 // Allows access to just get the raw data and it's what you would use to read data from
 // this program to use with another
 
