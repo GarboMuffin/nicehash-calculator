@@ -28,13 +28,14 @@ function getAdditionalNames(coin: ICoin): ICoinNames {
   // WhatToMine doesn't always provide very good display names so some manual converting is done
   // some additional names may also be given
 
-  switch (coin.displayName) {
-    // don't kill me for using 'bcash', you don't have to use bcash but using bcash will enable bitcoin cash
-    case "BitcoinCash": return {displayName: "Bitcoin Cash", names: ["bcash", "bcc"]};
-    case "BitcoinGold": return {displayName: "Bitcoin Gold"};
-    case "EthereumClassic": return {displayName: "Ethereum Classic"};
-    default: return {};
-  }
+  const coins: {[s: string]: ICoinNames | undefined} = {
+    BitcoinCash: {displayName: "Bitcoin Cash", names: ["bcash", "bcc"]},
+    BitcoinGold: {displayName: "Bitcoin Gold"},
+    EthereumClassic: {displayName: "Ethereum Classic"},
+    BitcoinPrivate: {displayName: "Bitcoin Private"},
+  };
+
+  return coins[coin.displayName] || {};
 }
 
 export async function getCoins(): Promise<ICoin[]> {

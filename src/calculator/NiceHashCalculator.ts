@@ -3,12 +3,12 @@ import chalk from "chalk";
 import { Algorithm } from "../Algorithm";
 import * as NiceHash from "../apis/nicehash";
 import * as WhatToMine from "../apis/whattomine";
-import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { BUG_REPORT_URL } from "../constants";
-import { filter as filterCoins } from "./filter";
 import { logger } from "../logger";
 import { IOptions, PricesOption } from "../options";
 import { sleep } from "../utils";
+import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
+import { filter as filterCoins } from "./filter";
 
 // This is the data that is passed onto handlers
 export interface ICoinData {
@@ -23,6 +23,7 @@ export interface ICoinData {
 
 export class NiceHashCalculator {
   public options: IOptions;
+  private revenueCache: WhatToMine.IRevenueResponse[] = [];
 
   constructor(options: IOptions = {} as IOptions) {
     this.options = options;
@@ -43,6 +44,7 @@ export class NiceHashCalculator {
     const allCoins = await getWhatToMineCoins();
     // read the coins the user specified and get them
     const coins = filterCoins(allCoins, this.options.coins);
+    // await this.populateWhatToMineCache(coins);
 
     // determine the output handler to be used
     const outputHandler = this.options.outputHandler.getHandler();
@@ -152,9 +154,35 @@ export class NiceHashCalculator {
     }
   }
 
+  private async populateWhatToMineCache(coins: ICoin[]) {
+    const activeAlgorithms = new Set(coins.map((coin) => coin.algorithm));
+
+    const getOptions = () => {
+      const result: any = {};
+      for (const algo of activeAlgorithms) {
+        if (!algo.whatToMine.cacheInternalName) {
+          continue;
+        }
+        result[algo.whatToMine.cacheInternalName] = {
+          hashrate: this.getWhatToMineHashrate(algo),
+        };
+      }
+      return result;
+    };
+
+    const cache = await WhatToMine.api.getMassRevenueCache({
+      algos: getOptions(),
+    });
+    this.revenueCache = cache;
+  }
+
   //
   // Utility
   //
+
+  private getWhatToMineHashrate(algorithm: Algorithm) {
+    return algorithm.niceHash.unit.hashes / algorithm.whatToMine.unit.hashes;
+  }
 
   private async getPrice(algo: NiceHash.Algorithm): Promise<number> {
     const withWorkers = this.options.prices === PricesOption.MinimumWithWorkers;
@@ -162,7 +190,10 @@ export class NiceHashCalculator {
   }
 
   private async getRevenue(coin: ICoin): Promise<WhatToMine.IRevenueResponse> {
-    const hashrate = coin.algorithm.niceHash.unit.hashes / coin.algorithm.whatToMine.unit.hashes;
-    return await WhatToMine.api.getRevenue(coin.id, hashrate);
+    if (this.revenueCache[coin.id]) {
+      return this.revenueCache[coin.id];
+    } else {
+      return await WhatToMine.api.getRevenue(coin.id, this.getWhatToMineHashrate(coin.algorithm));
+    }
   }
 }

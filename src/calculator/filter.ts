@@ -2,12 +2,17 @@ import { ICoin } from "./coins";
 import { logger } from "../logger";
 import { clone } from "../utils";
 
-export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
-  // If a user types in the name of a coin it will enable it
-  // If a user types in the ticker/abbrevation of a coin it will enable it
-  // If a user types in an algorithm it enables all coins of that algorithm
-  // If a user prepends any of this with a single '-' it will instead disable all coins it matches
+// If a user types in the name of a coin it will enable it
+// If a user types in the ticker/abbrevation of a coin it will enable it
+// If a user types in an algorithm it enables all coins of that algorithm
+// If a user types in the ID of a coin it will enable it
+// If a user prepends any of this with a single '-' it will instead disable all coins it matches
 
+function isMatch(coin: ICoin, str: string): boolean {
+  return coin.names.indexOf(str) > -1 || coin.algorithm.names.indexOf(str) > -1 || str === coin.id.toString();
+}
+
+export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
   let result: ICoin[] = clone(allCoins);
   let userDefinedCoins = false;
 
@@ -21,7 +26,7 @@ export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
         name = name.substr(1);
       }
 
-      if (coin.names.indexOf(name) > -1 || coin.algorithm.names.indexOf(name) > -1) {
+      if (isMatch(coin, name)) {
         if (isDisablingCoin) {
           const index = result.indexOf(coin);
           if (index === -1) {

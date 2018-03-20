@@ -64,20 +64,23 @@ interface IAPICoins {
   };
 }
 
-// other interfaces that are not linked to any API routes
-interface ICoinRevenueCacheEntry {
-  hashrate: number;
-  revenue: number;
-  timestamp: number;
-  coin: IAPICoin;
-}
-
-// Related to the API wrapper methods
-// getRevenue(), etc.
+// getRevenue()
 export interface IRevenueResponse {
   revenue: number;
   timestamp: number;
 }
+
+// getCache()
+export interface IGetMassRevenueCacheOptions {
+  algos: {
+    [s: string]: {
+      hashrate: number;
+    };
+  };
+}
+
+// To be clear:
+// This is not a standalone What To Mine API wrapper
 
 class API {
   private async request(url: string): Promise<any> {
@@ -109,9 +112,42 @@ class API {
     return data;
   }
 
+  private async getRawMassRevenueCache(opts: IGetMassRevenueCacheOptions) {
+    let url = "http://whattomine.com/coins.json?";
+    for (const algoName of Object.keys(opts.algos)) {
+      const algo = opts.algos[algoName];
+      url += `&${algoName}=true&factor[${algoName}_hr]=${algo.hashrate}`;
+    }
+
+    const raw = await this.request(url);
+    const data = JSON.parse(raw) as IAPICoins;
+    return data;
+  }
+
   //
   // Wrappers
   //
+
+  // populates the local cache
+  public async getMassRevenueCache(opts: IGetMassRevenueCacheOptions): Promise<IRevenueResponse[]> {
+    const data = await this.getRawMassRevenueCache(opts);
+
+    const result = [];
+    for (const key of Object.keys(data.coins)) {
+      const value = data.coins[key];
+      if (value.lagging) {
+        continue;
+      }
+      if (key.startsWith("Nicehash")) {
+        continue;
+      }
+      result[value.id] = {
+        timestamp: value.timestamp * 1000,
+        revenue: +value.btc_revenue24,
+      };
+    }
+    return result;
+  }
 
   // Returns WhatToMine's list of calculators in a more usable format
   public async getCalculators(): Promise<IAPICalculator[]> {
