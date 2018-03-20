@@ -71,12 +71,12 @@ export interface IRevenueResponse {
 }
 
 // getCache()
+interface IGetMassRevenueCacheAlgo {
+  algorithm: WhatToMine.Algorithm;
+  hashrate: number;
+}
 export interface IGetMassRevenueCacheOptions {
-  algos: {
-    [s: string]: {
-      hashrate: number;
-    };
-  };
+  algos: IGetMassRevenueCacheAlgo[];
 }
 
 // To be clear:
@@ -114,9 +114,12 @@ class API {
 
   private async getRawMassRevenueCache(opts: IGetMassRevenueCacheOptions) {
     let url = "http://whattomine.com/coins.json?";
-    for (const algoName of Object.keys(opts.algos)) {
-      const algo = opts.algos[algoName];
-      url += `&${algoName}=true&factor[${algoName}_hr]=${algo.hashrate}`;
+    for (const algo of opts.algos) {
+      if (algo.algorithm.cacheNames === null) {
+        continue;
+      }
+      const names = algo.algorithm.cacheNames;
+      url += `&${names[0]}=true&factor[${names[1]}_hr]=${algo.hashrate}`;
     }
 
     const raw = await this.request(url);

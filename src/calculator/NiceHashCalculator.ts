@@ -44,7 +44,7 @@ export class NiceHashCalculator {
     const allCoins = await getWhatToMineCoins();
     // read the coins the user specified and get them
     const coins = filterCoins(allCoins, this.options.coins);
-    // await this.populateWhatToMineCache(coins);
+    await this.populateWhatToMineCache(coins);
 
     // determine the output handler to be used
     const outputHandler = this.options.outputHandler.getHandler();
@@ -158,14 +158,15 @@ export class NiceHashCalculator {
     const activeAlgorithms = new Set(coins.map((coin) => coin.algorithm));
 
     const getOptions = () => {
-      const result: any = {};
+      const result = [];
       for (const algo of activeAlgorithms) {
-        if (!algo.whatToMine.cacheInternalName) {
+        if (!algo.whatToMine.cacheNames) {
           continue;
         }
-        result[algo.whatToMine.cacheInternalName] = {
+        result.push({
+          algorithm: algo.whatToMine,
           hashrate: this.getWhatToMineHashrate(algo),
-        };
+        });
       }
       return result;
     };

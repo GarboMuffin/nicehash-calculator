@@ -6,13 +6,13 @@ export class Algorithm {
   /* tslint:disable:variable-name */
   public static LBRY = new Algorithm(HashRateUnit.MEGA, "lbry");
   public static Ethash = new Algorithm(HashRateUnit.MEGA, "eth");
-  public static NeoScrypt = new Algorithm(HashRateUnit.KILO, null);
+  public static NeoScrypt = new Algorithm(HashRateUnit.KILO, "ns");
   public static Skunkhash = new Algorithm(HashRateUnit.MEGA, "skh");
   public static Equihash = new Algorithm(HashRateUnit.HASH, "eq");
   public static CryptoNight = new Algorithm(HashRateUnit.HASH, "cn");
-  public static Lyra2REv2 = new Algorithm(HashRateUnit.KILO, null);
+  public static Lyra2REv2 = new Algorithm(HashRateUnit.KILO, ["lre", "lrev2"]);
   public static Pascal = new Algorithm(HashRateUnit.MEGA, "pas");
-  public static X11Gost = new Algorithm(HashRateUnit.MEGA, null);
+  public static X11Gost = new Algorithm(HashRateUnit.MEGA, "x11g");
   public static Keccak = new Algorithm(HashRateUnit.MEGA, null);
   public static X11 = new Algorithm(HashRateUnit.MEGA, null);
   public static X13 = new Algorithm(HashRateUnit.MEGA, null);
@@ -28,10 +28,14 @@ export class Algorithm {
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;
-  public readonly cacheInternalName: string | null;
+  public readonly cacheNames: [string | null, string | null] | null;
 
-  constructor(unit: HashRateUnit, cacheInternalName: string | null) {
+  constructor(unit: HashRateUnit, cacheNames: (string | null) | [string | null, string | null]) {
     this.unit = unit;
-    this.cacheInternalName = cacheInternalName;
+    if (typeof cacheNames === "string") {
+      this.cacheNames = [cacheNames, cacheNames];
+    } else {
+      this.cacheNames = cacheNames;
+    }
   }
 }
