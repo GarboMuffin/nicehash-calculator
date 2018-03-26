@@ -116,6 +116,11 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm["Blake (14r)"],
     niceHash: NiceHash.Algorithm.Decred,
   });
+  public static readonly CryptoNightV7 = new Algorithm({
+    name: "CryptoNightV7",
+    whatToMine: WhatToMine.Algorithm.CryptoNightV7,
+    niceHash: NiceHash.Algorithm.CryptoNightV7,
+  });
   /* tslint:enable:variable-name */
 
   public readonly displayName: string;

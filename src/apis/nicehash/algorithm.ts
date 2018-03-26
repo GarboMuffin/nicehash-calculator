@@ -32,6 +32,7 @@ export class Algorithm {
   public static readonly Sia = new Algorithm(27, HashRateUnit.TERA);
   public static readonly Blake2s = new Algorithm(28, HashRateUnit.TERA);
   public static readonly Skunk = new Algorithm(29, HashRateUnit.GIGA);
+  public static readonly CryptoNightV7 = new Algorithm(30, HashRateUnit.MEGA);
   /* tslint:enable:variable-name */
 
   public readonly id: number;
