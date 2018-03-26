@@ -86,7 +86,7 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm.Quark,
     niceHash: NiceHash.Algorithm.Quark,
   });
-  public static readonly Nist5 = new Algorithm({
+  public static readonly NIST5 = new Algorithm({
     name: "Nist5",
     whatToMine: WhatToMine.Algorithm.NIST5,
     niceHash: NiceHash.Algorithm.Nist5,
