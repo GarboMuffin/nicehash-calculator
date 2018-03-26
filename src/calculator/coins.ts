@@ -9,6 +9,7 @@ export interface ICoin {
   abbreviation: string;
   id: number;
   algorithm: Algorithm;
+  enabled: boolean | null;
 }
 
 interface ICoinNames {
@@ -45,6 +46,7 @@ export async function getCoins(): Promise<ICoin[]> {
   // Convert the coins to our own thing
   for (const whatToMineCalculator of whatToMineCalculators) {
     const coin: ICoin = {} as any; // as any tricks typescript into ignoring all the errors
+    coin.enabled = null;
 
     coin.displayName = whatToMineCalculator.name;
     coin.abbreviation = whatToMineCalculator.tag;

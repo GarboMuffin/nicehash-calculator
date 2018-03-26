@@ -12,13 +12,32 @@ function isMatch(coin: ICoin, str: string): boolean {
   return coin.names.indexOf(str) > -1 || coin.algorithm.names.indexOf(str) > -1 || str === coin.id.toString();
 }
 
-export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
-  let result: ICoin[] = clone(allCoins);
-  let userDefinedCoins = false;
+function disableCoin(coin: ICoin, trigger: string) {
+  if (coin.enabled === false) {
+    logger.warn(`Couldn't disable coin ${coin.displayName} because it's already disabled ('${trigger}')`);
+    return;
+  }
+  logger.debug(`filter(): Disabled coin ${coin.displayName} because of argument '${trigger}'`);
+  coin.enabled = false;
+}
 
-  for (const coin of allCoins) {
-    for (const str of coins) {
-      // disabling a coin
+function enableCoin(coin: ICoin, trigger: string) {
+  if (coin.enabled === true) {
+    logger.warn(`Couldn't enable coin ${coin.displayName} because it's already enabled ('${trigger}')`);
+    return;
+  }
+  logger.debug(`filter(): Enabled coin ${coin.displayName} because of argument '${trigger}'`);
+  coin.enabled = true;
+}
+
+export function filter(coins: ICoin[], targets: string[]): ICoin[] {
+  coins.forEach((coin) => coin.enabled = null);
+
+  let hasEnabledCoins: boolean = false;
+
+  for (const str of targets) {
+    let foundMatch: boolean = false;
+    for (const coin of coins) {
       const isDisablingCoin = str.startsWith("-");
 
       let name: string = str;
@@ -28,28 +47,21 @@ export function filter(allCoins: ICoin[], coins: string[]): ICoin[] {
 
       if (isMatch(coin, name)) {
         if (isDisablingCoin) {
-          const index = result.indexOf(coin);
-          if (index === -1) {
-            logger.warn(`Can't disable coin '${name}': not enabled`);
-          } else {
-            logger.debug(`Disabling coin ${coin.displayName} because of argument '${str}'`);
-            result.splice(index, 1);
-          }
+          disableCoin(coin, name);
         } else {
-          logger.debug(`Enabled coin ${coin.displayName} because of argument '${str}'`);
-          if (!userDefinedCoins) {
-            result = [];
+          enableCoin(coin, name);
+          if (!hasEnabledCoins) {
+            coins.filter((c) => c.enabled === null).forEach((c) => c.enabled = false);
           }
-          result.push(coin);
+          hasEnabledCoins = true;
         }
-        userDefinedCoins = true;
+        foundMatch = true;
       }
+    }
+    if (!foundMatch) {
+      logger.warn(`Couldn't find coins that match argument '${str}'`);
     }
   }
 
-  if (!userDefinedCoins) {
-    return allCoins;
-  }
-
-  return result;
+  return coins.filter((coin) => coin.enabled === true || coin.enabled === null);
 }
