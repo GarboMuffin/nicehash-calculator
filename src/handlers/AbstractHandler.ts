@@ -1,4 +1,5 @@
-import { ICoinData, NiceHashCalculator } from "../calculator/NiceHashCalculator";
+import { IHandlerData } from "../calculator/IHandlerData";
+import { NiceHashCalculator } from "../calculator/NiceHashCalculator";
 
 // There will likely be more methods in the future
 export abstract class AbstractHandler {
@@ -8,5 +9,5 @@ export abstract class AbstractHandler {
   }
 
   // called for each coin
-  public abstract handle(data: ICoinData, calculator: NiceHashCalculator): void;
+  public abstract handle(data: IHandlerData, calculator: NiceHashCalculator): void;
 }

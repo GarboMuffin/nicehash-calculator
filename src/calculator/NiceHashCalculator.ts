@@ -9,21 +9,13 @@ import { IOptions, PricesOption } from "../options";
 import { sleep } from "../utils";
 import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
 import { filter as filterCoins } from "./filter";
-
-// This is the data that is passed onto handlers
-export interface ICoinData {
-  coin: ICoin;
-  revenue: number;
-  rawRevenue: WhatToMine.IRevenueResponse;
-  profit: number;
-  price: number;
-  returnOnInvestment: number;
-  percentChange: number;
-}
+import { IHandlerData } from "./IHandlerData";
+import { listCoins } from "./listCoins";
 
 export class NiceHashCalculator {
   public options: IOptions;
   private revenueCache: WhatToMine.IRevenueResponse[] = [];
+  private priceCache: number[] = [];
 
   constructor(options: IOptions = {} as IOptions) {
     this.options = options;
@@ -44,6 +36,13 @@ export class NiceHashCalculator {
     const allCoins = await getWhatToMineCoins();
     // read the coins the user specified and get them
     const coins = filterCoins(allCoins, this.options.coins);
+
+    // if --list-coins is used then just print coins enabled rather than profit data
+    if (this.options.listCoins) {
+      listCoins(coins);
+      return;
+    }
+
     await this.populateWhatToMineCache(coins);
 
     // determine the output handler to be used
@@ -89,7 +88,7 @@ export class NiceHashCalculator {
     const percentChange = returnOnInvestment - 1;
 
     // create the data structure
-    const data: ICoinData = {
+    const data: IHandlerData = {
       coin,
       revenue,
       rawRevenue: revenueData,
@@ -150,7 +149,7 @@ export class NiceHashCalculator {
 
   private async initApis() {
     if (this.options.prices === PricesOption.Average) {
-      await NiceHash.api.cacheGlobalPrices();
+      this.priceCache = await NiceHash.cacheGlobalPrices();
     }
   }
 
@@ -171,7 +170,7 @@ export class NiceHashCalculator {
       return result;
     };
 
-    const cache = await WhatToMine.api.getMassRevenueCache({
+    const cache = await WhatToMine.getMassRevenueCache({
       algos: getOptions(),
     });
     this.revenueCache = cache;
@@ -186,15 +185,21 @@ export class NiceHashCalculator {
   }
 
   private async getPrice(algo: NiceHash.Algorithm): Promise<number> {
-    const withWorkers = this.options.prices === PricesOption.MinimumWithWorkers;
-    return await NiceHash.api.getPrice(algo, withWorkers);
+    if (this.priceCache[algo.id] !== undefined) {
+      return this.priceCache[algo.id];
+    } else {
+      const withWorkers = this.options.prices === PricesOption.MinimumWithWorkers;
+      const price = await NiceHash.getPrice(algo, withWorkers);
+      this.priceCache[algo.id] = price;
+      return price;
+    }
   }
 
   private async getRevenue(coin: ICoin): Promise<WhatToMine.IRevenueResponse> {
     if (this.revenueCache[coin.id]) {
       return this.revenueCache[coin.id];
     } else {
-      return await WhatToMine.api.getRevenue(coin.id, this.getWhatToMineHashrate(coin.algorithm));
+      return await WhatToMine.getRevenue(coin.id, this.getWhatToMineHashrate(coin.algorithm));
     }
   }
 }

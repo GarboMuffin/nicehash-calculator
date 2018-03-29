@@ -1,4 +1,8 @@
 // returns a promise that will resolve after `ms` ms
+import * as rp from "request-promise-native";
+
+import { logger } from "./logger";
+
 export function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -18,4 +22,14 @@ export function clone<T = any>(arr: T[]): T[] {
     res[i] = arr[i];
   }
   return res;
+}
+
+export async function request(url: string): Promise<any> {
+  logger.debug("request(): requested " + url);
+  const rq = await rp(url, {
+    headers: {
+      // perhaps define a user-agent or referrer?
+    },
+  });
+  return rq;
 }

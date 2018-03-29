@@ -1,6 +1,5 @@
-import { ICoin } from "./coins";
 import { logger } from "../logger";
-import { clone } from "../utils";
+import { ICoin } from "./coins";
 
 // If a user types in the name of a coin it will enable it
 // If a user types in the ticker/abbrevation of a coin it will enable it
@@ -14,7 +13,7 @@ function isMatch(coin: ICoin, str: string): boolean {
 
 function disableCoin(coin: ICoin, trigger: string) {
   if (coin.enabled === false) {
-    logger.warn(`Couldn't disable coin ${coin.displayName} because it's already disabled ('${trigger}')`);
+    logger.warn(`Couldn't disable coin ${coin.displayName} because it's already disabled (triggered by '${trigger}')`);
     return;
   }
   logger.debug(`filter(): Disabled coin ${coin.displayName} because of argument '${trigger}'`);
@@ -23,7 +22,7 @@ function disableCoin(coin: ICoin, trigger: string) {
 
 function enableCoin(coin: ICoin, trigger: string) {
   if (coin.enabled === true) {
-    logger.warn(`Couldn't enable coin ${coin.displayName} because it's already enabled ('${trigger}')`);
+    logger.warn(`Couldn't enable coin ${coin.displayName} because it's already enabled (triggered by '${trigger}')`);
     return;
   }
   logger.debug(`filter(): Enabled coin ${coin.displayName} because of argument '${trigger}'`);
@@ -31,6 +30,8 @@ function enableCoin(coin: ICoin, trigger: string) {
 }
 
 export function filter(coins: ICoin[], targets: string[]): ICoin[] {
+  // This is messy but from my tests it works just how I want it
+
   coins.forEach((coin) => coin.enabled = null);
 
   let hasEnabledCoins: boolean = false;

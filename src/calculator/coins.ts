@@ -40,7 +40,7 @@ function getAdditionalNames(coin: ICoin): ICoinNames {
 }
 
 export async function getCoins(): Promise<ICoin[]> {
-  const whatToMineCalculators = await WhatToMine.api.getCalculators();
+  const whatToMineCalculators = await WhatToMine.getCalculators();
   const coins: ICoin[] = [];
 
   // Convert the coins to our own thing

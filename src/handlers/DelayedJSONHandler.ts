@@ -1,4 +1,4 @@
-import { ICoinData } from "../calculator/NiceHashCalculator";
+import { IHandlerData } from "../calculator/IHandlerData";
 import { AbstractHandler } from "./AbstractHandler";
 
 // Enabled with --output=delayed-json, like JSONHandler
@@ -8,7 +8,7 @@ import { AbstractHandler } from "./AbstractHandler";
 export class DelayedJSONHandler extends AbstractHandler {
   private data: any[] = [];
 
-  public handle(data: ICoinData) {
+  public handle(data: IHandlerData) {
     // really advanced
     this.data.push(data);
   }

@@ -30,6 +30,9 @@ export interface IOptions {
 
   // attempt to include fees?
   includeFees: boolean;
+
+  // list enabled coins instead of profit information?
+  listCoins: boolean;
 }
 
 export function parseOptions(args: string[]) {
@@ -70,6 +73,10 @@ export function parseOptions(args: string[]) {
         type: "boolean",
         default: false,
       },
+      "list-coins": {
+        type: "boolean",
+        default: false,
+      },
       /* tslint:enable:object-literal-key-quotes */
     },
   });
@@ -100,6 +107,7 @@ export function parseOptions(args: string[]) {
       },
     }),
     includeFees: parsedOptions.arguments["experimental-fees"] as boolean,
+    listCoins: parsedOptions.arguments["list-coins"] as boolean,
   };
   return options;
 }

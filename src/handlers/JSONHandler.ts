@@ -1,4 +1,4 @@
-import { ICoinData } from "../calculator/NiceHashCalculator";
+import { IHandlerData } from "../calculator/IHandlerData";
 import { AbstractHandler } from "./AbstractHandler";
 
 // Enabled with --output=json
@@ -6,7 +6,7 @@ import { AbstractHandler } from "./AbstractHandler";
 // this program to use with another
 
 export class JSONHandler extends AbstractHandler {
-  public handle(data: ICoinData) {
+  public handle(data: IHandlerData) {
     // really advanced
     console.log(JSON.stringify(data));
   }

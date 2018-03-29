@@ -1,6 +1,7 @@
 import chalk from "chalk";
 
-import { ICoinData, NiceHashCalculator } from "../calculator/NiceHashCalculator";
+import { IHandlerData } from "../calculator/IHandlerData";
+import { NiceHashCalculator } from "../calculator/NiceHashCalculator";
 import { AbstractHandler } from "./AbstractHandler";
 
 const PRECISION = 4;
@@ -13,7 +14,7 @@ function fancyFormatNumber(num: number): string {
 }
 
 export class UnifiedHandler extends AbstractHandler {
-  public handle(data: ICoinData, calculator: NiceHashCalculator) {
+  public handle(data: IHandlerData, calculator: NiceHashCalculator) {
     // the unit of hashrate
     const hashRateUnit = data.coin.algorithm.niceHash.unit.displayName;
     let indent = 0;
