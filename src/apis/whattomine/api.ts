@@ -1,7 +1,6 @@
-import * as request from "request-promise-native";
-
 import * as WhatToMine from ".";
 import { logger } from "../../logger";
+import { request } from "../../utils";
 
 interface IBaseCoin {
   id: number;
