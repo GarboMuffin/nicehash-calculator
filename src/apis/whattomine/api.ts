@@ -146,19 +146,19 @@ export async function getCalculators(): Promise<IAPICalculator[]> {
   const coins = [];
   for (const key of Object.keys(data)) {
     const value = data[key];
+
+    const logSkip = (reason: string) => {
+      logger.debug(`WhatToMine.getCalculators(): skipping ${key} (${value.id}): ${reason}`);
+    };
+
     // Ignore Nicehash coins
     if (value.tag === "NICEHASH") {
-      logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: nicehash`);
+      logSkip("nicehash");
       continue;
     }
     // Remove coins that aren't active (profitability calculating won't work)
     if (value.status !== "Active") {
-      logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: inactive`);
-      continue;
-    }
-    // Remove coins that are lagging
-    if (value.lagging) {
-      logger.debug(`WhatToMine.getCalculators(): skipping ${value.id}: lagging`);
+      logSkip("inactive");
       continue;
     }
 

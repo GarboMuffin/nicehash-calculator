@@ -25,8 +25,7 @@ export class Algorithm {
   public static "Blake (2s)" = new Algorithm(HashRateUnit.MEGA, null);
   public static "Blake (2b)" = new Algorithm(HashRateUnit.GIGA, null);
   public static "Blake (14r)" = new Algorithm(HashRateUnit.MEGA, "bk14");
-  // TODO: update name once the api actually supports it
-  public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, null);
+  public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, "cn7");
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;

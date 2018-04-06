@@ -10,6 +10,7 @@ export interface ICoin {
   id: number;
   algorithm: Algorithm;
   enabled: boolean | null;
+  lagging: boolean;
 }
 
 interface ICoinNames {
@@ -51,6 +52,7 @@ export async function getCoins(): Promise<ICoin[]> {
     coin.displayName = whatToMineCalculator.name;
     coin.abbreviation = whatToMineCalculator.tag;
     coin.names = [coin.displayName.toLowerCase(), coin.abbreviation.toLowerCase()]; // name and abbreviation
+    coin.lagging = whatToMineCalculator.lagging;
 
     // Additional names/User friendly display names
     const additionalNames = getAdditionalNames(coin);

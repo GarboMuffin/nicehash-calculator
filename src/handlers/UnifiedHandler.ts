@@ -28,7 +28,12 @@ export class UnifiedHandler extends AbstractHandler {
     const printTitle = () => {
       // output coin name & algo
       const algo = data.coin.algorithm.displayName;
-      log(chalk`${data.coin.displayName}: {gray (${algo})}`);
+      let message = data.coin.displayName;
+      message += chalk.gray(` (${algo})`);
+      if (data.coin.lagging) {
+        message += chalk.yellow(" (Lagging)");
+      }
+      log(message);
     };
 
     const printPrice = () => {

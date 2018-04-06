@@ -38,6 +38,7 @@ export class Algorithm {
   });
   public static readonly CryptoNight = new Algorithm({
     name: "CryptoNight",
+    aliases: ["cn"],
     whatToMine: WhatToMine.Algorithm.CryptoNight,
     niceHash: NiceHash.Algorithm.CryptoNight,
   });
@@ -118,6 +119,7 @@ export class Algorithm {
   });
   public static readonly CryptoNightV7 = new Algorithm({
     name: "CryptoNightV7",
+    aliases: ["cryptonight7", "cn7"],
     whatToMine: WhatToMine.Algorithm.CryptoNightV7,
     niceHash: NiceHash.Algorithm.CryptoNightV7,
   });

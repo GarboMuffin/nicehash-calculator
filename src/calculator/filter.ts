@@ -2,7 +2,7 @@ import { logger } from "../logger";
 import { ICoin } from "./coins";
 
 // If a user types in the name of a coin it will enable it
-// If a user types in the ticker/abbrevation of a coin it will enable it
+// If a user types in the ticker/abbreviation of a coin it will enable it
 // If a user types in an algorithm it enables all coins of that algorithm
 // If a user types in the ID of a coin it will enable it
 // If a user prepends any of this with a single '-' it will instead disable all coins it matches

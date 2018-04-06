@@ -5,7 +5,7 @@ function handleArgument(result: OptionParser.IParsedOptions, opts: OptionParser.
   const arg = rawArg.substr(2);
 
   // divide the argument into two pieces, key and value
-  // regex here makes it only split at the first occurence
+  // regex here makes it only split at the first occurrence
   const argSplit = arg.split(/=/);
 
   // returns the "name" of the argument provided. eg.

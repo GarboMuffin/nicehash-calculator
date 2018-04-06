@@ -9,12 +9,15 @@ import { Algorithm } from "../Algorithm";
 describe("Coin Filtering", () => {
   // a few select coins for testing
   const coins: ICoin[] = [
+    // So a few fields will probably be missing from these objects
+    // mainly things like lagging that aren't used at all in filtering
     {
       displayName: "Bitcoin",
       abbreviation: "BTC",
       names: ["bitcoin", "btc"],
       id: 1,
       algorithm: Algorithm["SHA-256"],
+      enabled: null,
     },
     {
       displayName: "Litecoin",
@@ -22,6 +25,7 @@ describe("Coin Filtering", () => {
       names: ["litecoin", "ltc"],
       id: 2,
       algorithm: Algorithm.Scrypt,
+      enabled: null,
     },
     {
       displayName: "Vertcoin",
@@ -29,6 +33,7 @@ describe("Coin Filtering", () => {
       names: ["vertcoin", "vtc"],
       id: 3,
       algorithm: Algorithm.Lyra2REv2,
+      enabled: null,
     },
     {
       displayName: "Dogecoin",
@@ -36,8 +41,9 @@ describe("Coin Filtering", () => {
       names: ["dogecoin", "doge"],
       id: 6,
       algorithm: Algorithm.Scrypt,
+      enabled: null,
     },
-  ];
+  ] as ICoin[];
 
   it("should enable coins by name", () => {
     const result = filter(coins, ["bitcoin", "litecoin"]);
