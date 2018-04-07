@@ -61,7 +61,7 @@ Additionally, you can specify names, abbreviations, or algos to enable only thos
 ## Supported Coins
 
 ```bash
-$ npm start -- list
+$ node index list
 Supported coins:
  * 365Coin (Keccak) (disabled by default)
  * Aeon (CryptoNight) (disabled by default)
@@ -90,7 +90,7 @@ Supported coins:
  * Litecoin (Scrypt)
  * Maxcoin (Keccak) (disabled by default)
  * Monacoin (Lyra2REv2) (disabled by default)
- * Monero (CryptoNight)
+ * Monero (CryptoNightV7)
  * Musicoin (DaggerHashimoto) (disabled by default)
  * Orbitcoin (NeoScrypt) (disabled by default)
  * Pascal (Pascal) (disabled by default)

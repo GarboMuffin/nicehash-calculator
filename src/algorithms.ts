@@ -30,4 +30,5 @@ export enum Algorithms {
   Sia = 27,
   Blake2s = 28,
   Skunk = 29,
+  CryptoNightV7 = 30,
 }

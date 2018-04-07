@@ -5,11 +5,11 @@
 import { Hash, HashRate } from "./hash";
 import { Algorithms as Algorithm } from "./algorithms";
 
-// sHA
+// SHA
 import { coin as Bitcoin } from "./coins/sha/bitcoin";
 import { coin as BitcoinCash } from "./coins/sha/bitcoincash";
 
-// eTHASH
+// ETHASH
 import { coin as Ethereum } from "./coins/ethash/ethereum";
 import { coin as EthereumClassic } from "./coins/ethash/ethereumclassic";
 import { coin as Expanse } from "./coins/ethash/expanse";
@@ -19,7 +19,7 @@ import { coin as Krypton } from "./coins/ethash/krypton";
 import { coin as Shift } from "./coins/ethash/shift";
 import { coin as Soilcoin } from "./coins/ethash/soilcoin";
 
-// sCRYPT
+// SCRYPT
 import { coin as Litecoin } from "./coins/scrypt/litecoin";
 import { coin as Dogecoin } from "./coins/scrypt/dogecoin";
 import { coin as Gamecredits } from "./coins/scrypt/gamecredits";
@@ -28,18 +28,20 @@ import { coin as Gamecredits } from "./coins/scrypt/gamecredits";
 import { coin as Vertcoin } from "./coins/lyra2rev2/vertcoin";
 import { coin as Monacoin } from "./coins/lyra2rev2/monacoin";
 
-// eQUIHASH
+// EQUIHASH
 import { coin as ZCash } from "./coins/equihash/zcash";
 import { coin as ZClassic } from "./coins/equihash/zclassic";
 import { coin as Hush } from "./coins/equihash/hush";
 import { coin as Komodo } from "./coins/equihash/komodo";
 import { coin as Zencash } from "./coins/equihash/zencash";
 
-// pASCAL
+// PASCAL
 import { coin as Pascal } from "./coins/pascal/pascal";
 
-// cRYPTONIGHT
-import { coin as Monero } from "./coins/cryptonight/monero";
+// CRYPTONIGHTV7
+import { coin as Monero } from "./coins/cryptonightv7/monero";
+
+// CRYPTONIGHT
 import { coin as Aeon } from "./coins/cryptonight/aeon";
 import { coin as Bipcoin } from "./coins/cryptonight/bipcoin";
 import { coin as Bytecoin } from "./coins/cryptonight/bytecoin";
@@ -50,20 +52,20 @@ import { coin as Karbowanec } from "./coins/cryptonight/karbowanec";
 import { coin as Sumokoin } from "./coins/cryptonight/sumokoin";
 import { coin as Quazarcoin } from "./coins/cryptonight/quazarcoin";
 
-// kECCAK
+// KECCAK
 import { coin as Maxcoin } from "./coins/keccak/maxcoin";
 import { coin as Creativecoin } from "./coins/keccak/creativecoin";
 import { coin as ThreeSixtyFiveCoin } from "./coins/keccak/365coin"; // variables can't start with numbers
 import { coin as Smartcash } from "./coins/keccak/smartcash";
 
-// nEOSCRYPT
+// NEOSCRYPT
 import { coin as Feathercoin } from "./coins/neoscrypt/feathercoin";
 import { coin as Halcyon } from "./coins/neoscrypt/halcyon";
 import { coin as Orbitcoin } from "./coins/neoscrypt/orbitcoin";
 import { coin as Phoenixcoin } from "./coins/neoscrypt/phoenixcoin";
 import { coin as Vivo } from "./coins/neoscrypt/vivo";
 
-// oTHER
+// OTHER
 import { coin as Siacoin } from "./coins/sia";
 import { coin as Decred } from "./coins/decred";
 import { coin as Dash } from "./coins/x11/dash";
@@ -89,11 +91,11 @@ export interface Coin {
 }
 
 export var coins: Coin[] = [
-  // sHA
+  // SHA
   Bitcoin,
   BitcoinCash,
 
-  // eTHASH
+  // ETHASH
   Ethereum,
   EthereumClassic,
   Expanse,
@@ -103,27 +105,29 @@ export var coins: Coin[] = [
   Shift,
   Soilcoin,
 
-  // sCRYPT
+  // SCRYPT
   Litecoin,
   Dogecoin,
   Gamecredits,
 
-  // lYRA2REV2
+  // LYRA2REV2
   Vertcoin,
   Monacoin,
 
-  // eQUIHASH
+  // EQUIHASH
   ZCash,
   ZClassic,
   Hush,
   Komodo,
   Zencash,
 
-  // pASCAL
+  // PASCAL
   Pascal,
 
-  // cRYPTONIGHT
+  // CRYPTONIGHTV7
   Monero,
+
+  // CRYPTONIGHT
   Aeon,
   Bipcoin,
   Bytecoin,
@@ -134,20 +138,20 @@ export var coins: Coin[] = [
   Sumokoin,
   Quazarcoin,
 
-  // kECCAK
+  // KECCAK
   Maxcoin,
   Smartcash,
   ThreeSixtyFiveCoin,
   Creativecoin,
 
-  // nEOSCRYPT
+  // NEOSCRYPT
   Feathercoin,
   Halcyon,
   Orbitcoin,
   Phoenixcoin,
   Vivo,
 
-  // oTHER
+  // OTHER
   Siacoin,
   Decred,
   Dash,

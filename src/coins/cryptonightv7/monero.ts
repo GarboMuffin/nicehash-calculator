@@ -4,11 +4,11 @@ import { Algorithms } from "../../algorithms";
 export var coin = {
   name: "Monero",
   names: [
-    "xmr", "cryptonight", "monero",
+    "xmr", "cryptonightv7", "cryptonight7", "monero",
   ],
   NiceHash: {
     hashrate: Hash.MEGA,
-    id: Algorithms.CryptoNight,
+    id: Algorithms.CryptoNightV7,
   },
   WhatToMine: {
     hashrate: 1000 * 1000,
