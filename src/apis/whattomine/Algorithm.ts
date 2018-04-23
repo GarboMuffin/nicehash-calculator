@@ -19,7 +19,7 @@ export class Algorithm {
   public static Scrypt = new Algorithm(HashRateUnit.MEGA, null);
   public static "SHA-256" = new Algorithm(HashRateUnit.GIGA, null);
   public static Quark = new Algorithm(HashRateUnit.MEGA, null);
-  public static NIST5 = new Algorithm(HashRateUnit.MEGA, null);
+  public static NIST5 = new Algorithm(HashRateUnit.MEGA, "ns");
   public static Lyra2RE = new Algorithm(HashRateUnit.KILO, null);
   public static Qubit = new Algorithm(HashRateUnit.MEGA, null);
   public static "Blake (2s)" = new Algorithm(HashRateUnit.MEGA, null);

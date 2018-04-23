@@ -170,8 +170,14 @@ export class NiceHashCalculator {
       return result;
     };
 
+    const algos = getOptions();
+    // if no algorithms will benefit then don't waste time
+    if (algos.length === 0) {
+      return;
+    }
+
     const cache = await WhatToMine.getMassRevenueCache({
-      algos: getOptions(),
+      algos,
     });
     this.revenueCache = cache;
   }
