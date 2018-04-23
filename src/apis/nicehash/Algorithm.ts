@@ -9,7 +9,7 @@ export class Algorithm {
   public static readonly X13 = new Algorithm(4, HashRateUnit.GIGA);
   public static readonly Keccak = new Algorithm(5, HashRateUnit.TERA);
   public static readonly X15 = new Algorithm(6, HashRateUnit.GIGA);
-  public static readonly Nist5 = new Algorithm(7, HashRateUnit.GIGA);
+  public static readonly Nist5 = new Algorithm(7, HashRateUnit.TERA);
   public static readonly NeoScrypt = new Algorithm(8, HashRateUnit.GIGA);
   public static readonly Lyra2RE = new Algorithm(9, HashRateUnit.GIGA);
   public static readonly WhirlpoolX = new Algorithm(10, HashRateUnit.GIGA);
