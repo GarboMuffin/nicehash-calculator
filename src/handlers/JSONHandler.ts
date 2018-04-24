@@ -6,6 +6,8 @@ import { AbstractHandler } from "./AbstractHandler";
 // this program to use with another
 
 export class JSONHandler extends AbstractHandler {
+  public pretty = false;
+
   public handle(data: IHandlerData) {
     // really advanced
     console.log(JSON.stringify(data));

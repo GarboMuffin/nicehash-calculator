@@ -1,7 +1,6 @@
-import * as request from "request-promise-native";
-
 import * as NiceHash from ".";
 import { logger } from "../../logger";
+import { request } from "../../utils";
 
 interface IApiResult<T> {
   result: T;
@@ -34,7 +33,7 @@ interface IRawOrders {
 
 export async function getRawGlobalPrices(): Promise<IApiResult<IRawGlobalPrices>> {
   const rq = await request("https://api.nicehash.com/api?method=stats.global.current");
-  const data = JSON.parse(rq) as IApiResult<IRawGlobalPrices>;
+  const data = JSON.parse(rq.data) as IApiResult<IRawGlobalPrices>;
   return data;
 }
 
@@ -50,7 +49,7 @@ export async function cacheGlobalPrices() {
 // Returns the existing orders for an algorithm on NiceHash
 export async function getOrders(algo: NiceHash.Algorithm): Promise<IApiResult<IRawOrders>> {
   const rq = await request(`https://api.nicehash.com/api?method=orders.get&algo=${algo.id}`);
-  const data = JSON.parse(rq) as IApiResult<IRawOrders>;
+  const data = JSON.parse(rq.data) as IApiResult<IRawOrders>;
   return data;
 }
 

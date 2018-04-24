@@ -80,20 +80,20 @@ export interface IGetMassRevenueCacheOptions {
 
 export async function getRawCoins(): Promise<IAPICoins> {
   const raw = await request("https://whattomine.com/coins.json");
-  const data = JSON.parse(raw) as IAPICoins;
+  const data = JSON.parse(raw.data) as IAPICoins;
   return data;
 }
 
 export async function getRawCalculators(): Promise<IAPICalculators> {
   const raw = await request("https://whattomine.com/calculators.json");
-  const data = JSON.parse(raw) as IAPICalculators;
+  const data = JSON.parse(raw.data) as IAPICalculators;
   return data;
 }
 
 export async function getRawRevenue(id: number, hashrate: number): Promise<IAPICoin> {
   // https://whattomine.com/coins/1.json
   const raw = await request(`https://whattomine.com/coins/${id}.json?hr=${hashrate}`);
-  const data = JSON.parse(raw) as IAPICoin;
+  const data = JSON.parse(raw.data) as IAPICoin;
   return data;
 }
 
@@ -108,7 +108,7 @@ export async function getRawMassRevenueCache(opts: IGetMassRevenueCacheOptions) 
   }
 
   const raw = await request(url);
-  const data = JSON.parse(raw) as IAPICoins;
+  const data = JSON.parse(raw.data) as IAPICoins;
   return data;
 }
 

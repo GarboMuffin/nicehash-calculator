@@ -2,9 +2,9 @@ import "mocha";
 
 import { expect } from "chai";
 
-import { getCoins, ICoin } from "../calculator/coins";
-import { filter } from "../calculator/filter";
 import { Algorithm } from "../Algorithm";
+import { ICoin } from "../calculator/coins";
+import { filter } from "../calculator/filter";
 
 describe("Coin Filtering", () => {
   // a few select coins for testing

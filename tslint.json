@@ -12,6 +12,7 @@
       "check-format",
       "allow-leading-underscore"
     ],
+    "no-trailing-whitespace": [true, "ignore-jsdoc"],
     "no-console": false,
     "member-ordering": [
       true, {

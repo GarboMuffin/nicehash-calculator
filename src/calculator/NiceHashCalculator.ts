@@ -4,6 +4,8 @@ import { Algorithm } from "../Algorithm";
 import * as NiceHash from "../apis/nicehash";
 import * as WhatToMine from "../apis/whattomine";
 import { BUG_REPORT_URL } from "../constants";
+import { AbstractHandler } from "../handlers";
+import * as requestLib from "../lib/request";
 import { logger } from "../logger";
 import { IOptions, PricesOption } from "../options";
 import { sleep } from "../utils";
@@ -16,6 +18,7 @@ export class NiceHashCalculator {
   public options: IOptions;
   private revenueCache: WhatToMine.IRevenueResponse[] = [];
   private priceCache: number[] = [];
+  private outputHandler!: AbstractHandler;
 
   constructor(options: IOptions = {} as IOptions) {
     this.options = options;
@@ -29,7 +32,12 @@ export class NiceHashCalculator {
   //
 
   public async start() {
+    // determine the output handler to be used
+    const outputHandler = new this.options.outputHandler.class();
+    this.outputHandler = outputHandler;
+
     this.initOptions();
+
     await this.initApis();
 
     // get all coins on whattomine
@@ -44,9 +52,6 @@ export class NiceHashCalculator {
     }
 
     await this.populateWhatToMineCache(coins);
-
-    // determine the output handler to be used
-    const outputHandler = this.options.outputHandler.getHandler();
 
     // For every coin...
     for (const coin of coins) {
@@ -108,6 +113,9 @@ export class NiceHashCalculator {
     logger.showWarnings = this.options.showWarnings;
     logger.debugEnabled = this.options.debug;
     logger.debug("options", this.options);
+
+    // set the pretty print option of the request lib
+    requestLib.config.pretty.enabled = this.outputHandler.pretty;
 
     // For each unrecognized option log a warning to the user
     for (const unrecognizedOption of this.options.unrecognized) {

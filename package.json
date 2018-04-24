@@ -16,10 +16,8 @@
   "author": "GarboMuffin",
   "license": "MIT",
   "dependencies": {
-    "@types/request-promise-native": "^1.0.14",
+    "@types/node": "^8.0.0",
     "chalk": "^2.3.1",
-    "request": "^2.83.0",
-    "request-promise-native": "^1.0.5",
     "typescript": "^2.7.1"
   },
   "devDependencies": {
