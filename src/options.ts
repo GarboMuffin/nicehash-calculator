@@ -169,7 +169,7 @@ export class OptionsParser {
         this.options.onlyShowRevenue = true;
         break;
       case "--prompt":
-        this.options.showPercent = true;
+        this.options.showPrompt = true;
         break;
       case "--fixed":
         this.options.orderType = NHOrderType.Fixed;
