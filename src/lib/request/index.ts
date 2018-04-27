@@ -119,7 +119,7 @@ export const config = {
   pretty: {
     enabled: false,
     characters: ["/", "|", "\\", "-"],
-    initialDelay: 0,
+    initialDelay: 1000,
     characterDelay: 250,
   },
 };
