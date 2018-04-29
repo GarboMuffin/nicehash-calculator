@@ -9,7 +9,7 @@ export class Algorithm {
   public static NeoScrypt = new Algorithm(HashRateUnit.KILO, "ns");
   public static Skunkhash = new Algorithm(HashRateUnit.MEGA, "skh");
   public static Equihash = new Algorithm(HashRateUnit.HASH, "eq");
-  public static CryptoNight = new Algorithm(HashRateUnit.HASH, "cn");
+  public static CryptoNight = new Algorithm(HashRateUnit.KILO, "cn");
   public static Lyra2REv2 = new Algorithm(HashRateUnit.KILO, ["lre", "lrev2"]);
   public static Pascal = new Algorithm(HashRateUnit.MEGA, "pas");
   public static X11Gost = new Algorithm(HashRateUnit.MEGA, "x11g");
