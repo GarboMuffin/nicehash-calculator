@@ -12,7 +12,7 @@ export class Algorithm {
   public static CryptoNight = new Algorithm(HashRateUnit.HASH, "cn");
   public static Lyra2REv2 = new Algorithm(HashRateUnit.KILO, ["lre", "lrev2"]);
   public static Pascal = new Algorithm(HashRateUnit.MEGA, "pas");
-  public static X11Gost = new Algorithm(HashRateUnit.MEGA, "x11g");
+  public static X11Gost = new Algorithm(HashRateUnit.GIGA, "x11g");
   public static Keccak = new Algorithm(HashRateUnit.MEGA, null);
   public static X11 = new Algorithm(HashRateUnit.MEGA, null);
   public static X13 = new Algorithm(HashRateUnit.MEGA, null);
