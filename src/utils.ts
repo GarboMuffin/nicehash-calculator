@@ -8,7 +8,7 @@ export function sleep(ms: number) {
 
 // returns whether or not a given input is a valid finite number
 // typically `thing` is of type string or number
-export function isNumber(thing: any): boolean {
+export function isNumber(thing: string | number): boolean {
   return Number.isFinite(+thing);
 }
 
