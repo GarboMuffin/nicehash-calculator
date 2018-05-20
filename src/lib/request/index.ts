@@ -3,7 +3,6 @@ import * as http from "http";
 import * as https from "https";
 import * as readline from "readline";
 import * as url from "url";
-import { sleep } from "../../utils";
 
 /**
  * Bare bones HTTP(S) library to reduce the need for dependencies and allows more control over certain things.
