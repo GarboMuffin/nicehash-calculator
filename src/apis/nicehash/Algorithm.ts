@@ -6,7 +6,7 @@ export class Algorithm {
   public static readonly SHA256 = new Algorithm(1, HashRateUnit.PETA);
   public static readonly ScryptNf = new Algorithm(2, HashRateUnit.GIGA);
   public static readonly X11 = new Algorithm(3, HashRateUnit.TERA);
-  public static readonly X13 = new Algorithm(4, HashRateUnit.GIGA);
+  public static readonly X13 = new Algorithm(4, HashRateUnit.TERA);
   public static readonly Keccak = new Algorithm(5, HashRateUnit.TERA);
   public static readonly X15 = new Algorithm(6, HashRateUnit.GIGA);
   public static readonly Nist5 = new Algorithm(7, HashRateUnit.TERA);
