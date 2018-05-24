@@ -1,6 +1,6 @@
 import chalk from "chalk";
-
 import { Algorithm } from "../Algorithm";
+import { HashRateUnit } from "../HashRateUnit";
 import * as NiceHash from "../apis/nicehash";
 import * as WhatToMine from "../apis/whattomine";
 import { BUG_REPORT_URL } from "../constants";
@@ -9,9 +9,9 @@ import * as requestLib from "../lib/request";
 import { logger } from "../logger";
 import { IOptions, PricesOption } from "../options";
 import { sleep } from "../utils";
-import { getCoins as getWhatToMineCoins, ICoin } from "./coins";
-import { filter as filterCoins } from "./filter";
 import { IHandlerData } from "./IHandlerData";
+import { ICoin, getCoins as getWhatToMineCoins } from "./coins";
+import { filter as filterCoins } from "./filter";
 import { listCoins } from "./listCoins";
 
 export class NiceHashCalculator {
@@ -157,7 +157,31 @@ export class NiceHashCalculator {
 
   private async initApis() {
     if (this.options.prices === PricesOption.Average) {
-      this.priceCache = await NiceHash.cacheGlobalPrices();
+      this.priceCache = await NiceHash.getGlobalPrices();
+    }
+
+    // set some algorithm metadata
+    const buyerInfo = await NiceHash.getBuyerInfo();
+    const algorithms = buyerInfo.algorithms;
+    for (const nhMeta of algorithms) {
+      const hashrate = nhMeta.speed_text;
+      const name = nhMeta.name;
+      const id = nhMeta.algo;
+      const algorithm = new NiceHash.Algorithm(id, HashRateUnit.fromString(hashrate));
+      for (const algo of Algorithm.instances) {
+        if (algo.id === id) {
+          logger.debug(`set unit for ${algo.displayName} to ${algorithm.unit.displayName}`);
+          algo.niceHash = algorithm;
+          break;
+        }
+      }
+    }
+
+    // error checking
+    for (const algo of Algorithm.instances) {
+      if (!algo.niceHash) {
+        logger.warn(`Missing metadata for algorithm ${algo.displayName} (${algo.id})`);
+      }
     }
   }
 

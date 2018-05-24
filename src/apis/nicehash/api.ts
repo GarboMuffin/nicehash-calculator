@@ -31,19 +31,45 @@ interface IRawOrders {
   orders: IOrder[];
 }
 
+interface IAlgorithm {
+  down_step: string;
+  min_diff_working: string;
+  min_limit: string;
+  speed_text: string; // "TH";
+  min_diff_initial: string;
+  name: string;
+  algo: number;
+  multi: string;
+}
+
+interface IBuyerInfo {
+  algorithms: IAlgorithm[];
+  down_time: number;
+  min_amount: string;
+  static_fee: string;
+  dynamic_fee: string;
+}
+
 export async function getRawGlobalPrices(): Promise<IApiResult<IRawGlobalPrices>> {
   const rq = await request("https://api.nicehash.com/api?method=stats.global.current");
   const data = JSON.parse(rq.data) as IApiResult<IRawGlobalPrices>;
   return data;
 }
 
-export async function cacheGlobalPrices() {
+export async function getGlobalPrices() {
   const data = await getRawGlobalPrices();
   const cache: number[] = [];
   for (const niceHashCost of data.result.stats) {
     cache[niceHashCost.algo] = Number(niceHashCost.price);
   }
   return cache;
+}
+
+// Returns buyer info
+export async function getBuyerInfo(): Promise<IBuyerInfo> {
+  const rq = await request("https://api.nicehash.com/api?method=buy.info");
+  const data = JSON.parse(rq.data) as IApiResult<IBuyerInfo>;
+  return data.result;
 }
 
 // Returns the existing orders for an algorithm on NiceHash
