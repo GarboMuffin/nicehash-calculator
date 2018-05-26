@@ -170,7 +170,7 @@ export class NiceHashCalculator {
       const algorithm = new NiceHash.Algorithm(id, HashRateUnit.fromString(hashrate));
       for (const algo of Algorithm.instances) {
         if (algo.id === id) {
-          logger.debug(`set unit for ${algo.displayName} to ${algorithm.unit.displayName}`);
+          logger.debug(`initApis(): set unit for ${algo.displayName} to ${algorithm.unit.displayName}`);
           algo.niceHash = algorithm;
           break;
         }

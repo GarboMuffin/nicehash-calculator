@@ -1,7 +1,5 @@
-import "mocha";
-
 import { expect } from "chai";
-
+import "mocha";
 import { Algorithm } from "../Algorithm";
 import { ICoin } from "../calculator/coins";
 import { filter } from "../calculator/filter";
@@ -56,14 +54,14 @@ describe("Coin Filtering", () => {
     const result = filter(coins, ["scrypt"]);
     expect(result.length).to.equal(2); // litecoin and dogecoin
     for (const coin of result) {
-      expect(coin.algorithm.niceHash.id).to.equal(Algorithm.Scrypt.niceHash.id);
+      expect(coin.algorithm.id).to.equal(Algorithm.Scrypt.id);
     }
   });
 
   it("should disable coins by name", () => {
     const result = filter(coins, ["scrypt", "-litecoin"]);
     for (const coin of result) {
-      expect(coin.algorithm.niceHash.id).to.equal(0);
+      expect(coin.algorithm.id).to.equal(0);
       expect(coin.displayName).to.not.equal("Litecoin");
     }
   });
@@ -71,7 +69,7 @@ describe("Coin Filtering", () => {
   it("should disable coins by algorithm", () => {
     const result = filter(coins, ["-scrypt"]);
     for (const coin of result) {
-      expect(coin.algorithm.niceHash.id).to.not.equal(Algorithm.Scrypt.niceHash.id);
+      expect(coin.algorithm.id).to.not.equal(Algorithm.Scrypt.id);
     }
   });
 });
