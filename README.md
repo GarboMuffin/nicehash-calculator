@@ -4,7 +4,7 @@ A JavaScript program to estimate the profitability of buying hashing power on [N
 
 **This project is not affiliated with NiceHash. I am not responsible for any losses that may come as a result of this project.**
 
-## Web Version
+## Website
 
 ### [You can find the statistics output by this in a simple website without having to setup anything!](https://nicehash.garbomuffin.com/)
 
@@ -40,7 +40,7 @@ node index.js [arguments or coins]
 ### Arguments
 
 | Argument | Description |
-|--------------|----------------|--------------|
+|--------------|----------------|
 | `--experimental-fees` | Enables calculations to include a 3% fee. (experimental) |
 | `--no-color` | Disables color |
 | `--no-header` | Disables the large message printed at the start |
