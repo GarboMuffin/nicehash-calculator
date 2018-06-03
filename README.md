@@ -1,8 +1,12 @@
-# NiceHash Profit Calculator for Buyers
+# NiceHash Profit Calculator for Buyers v2
 
-A JavaScript program to estimate the profitability of buying hashing power on [NiceHash (referral link)](https://www.nicehash.com/?refby=258346). Get help by [making an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new).
+A JavaScript program to estimate the profitability of buying hashing power on [NiceHash](https://www.nicehash.com/?refby=258346). Feel free to [make an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new) if you need help using this.
 
 **This project is not affiliated with NiceHash. I am not responsible for any losses that may come as a result of this project.**
+
+## Web Version
+
+### [You can find the statistics output by this in a simple website without having to setup anything!](https://nicehash.garbomuffin.com/)
 
 ## Installing / Downloading
 
@@ -33,9 +37,23 @@ npm run build
 node index.js [arguments or coins]
 ```
 
-Arguments can be things like `--no-header` or `--debug` or more commonly a list of coins to run on. Without specifically specifying any coins it will run on all coins. It's probably easiest to understand usage by example.
+### Arguments
+
+| Argument | Description |
+|--------------|----------------|--------------|
+| `--experimental-fees` | Enables calculations to include a 3% fee. (experimental) |
+| `--no-color` | Disables color |
+| `--no-header` | Disables the large message printed at the start |
+| `--no-warnings` | Disables warnings |
+| `--output=thing` | Changes the format of the output. Valid values for `thing` are `pretty` (default), `json`, and `delayed-json` |
+| `--prices=thing` | Changes the prices used in calculations. Valid values for `thing` are `average` (default), `minimum`, and `minimum-with-speed` |
+| `--sleep-time=number` | Changes the time waited between each coin in milliseconds. Default is 1000. Replace `number` with some other number |
+| `--list-coins` | List enabled coin |
+| `--debug` | Makes it really verbose |
 
 ### Coins
+
+By default it will run on all coins. This is probably not the behavior you want. To only run on a few coins, you can specify a list of coins for the program. It's probably easiest to understand usage by example:
 
 ```bash
 # Everything is case insensitive. bItCoIn and bitcoin both have the same effect
@@ -71,7 +89,7 @@ node index scrypt -litecoin bitcoin
 
 ### Supported coins
 
-As coins are added to What To Mine they should automatically be supported if they use a supported algorithm. As coins become inactive or "lag" they will disappear. You can use `--list-coins` to list all coins that are enabled.
+As coins are added to What To Mine they should automatically be supported if they use an algorithm on NiceHash. As coins become inactive they will disappear.
 
 <details>
   <summary>All supported coins as of 5/25/2018 (Click to reveal)</summary>
@@ -180,6 +198,8 @@ As coins are added to What To Mine they should automatically be supported if the
 </details>
 
 ## Donations?
+
+Any donations are appreciated:
 
 ```
 BTC (bech32): bc1qkuz9a4trzgvdq9sru800jtxfz0ld0vtwrqu0nq
