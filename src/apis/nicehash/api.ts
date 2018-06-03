@@ -56,6 +56,9 @@ export async function getRawGlobalPrices(): Promise<IApiResult<IRawGlobalPrices>
   return data;
 }
 
+/**
+ * Gets the global average prices.
+ */
 export async function getGlobalPrices() {
   const data = await getRawGlobalPrices();
   const cache: number[] = [];
@@ -65,21 +68,33 @@ export async function getGlobalPrices() {
   return cache;
 }
 
-// Returns buyer info
+/**
+ * Returns generic information for buyers
+ */
 export async function getBuyerInfo(): Promise<IBuyerInfo> {
   const rq = await request("https://api.nicehash.com/api?method=buy.info");
   const data = JSON.parse(rq.data) as IApiResult<IBuyerInfo>;
   return data.result;
 }
 
-// Returns the existing orders for an algorithm on NiceHash
+/**
+ * Gets the existing orders for an algorithm
+ * 
+ * @param algo The algorithm
+ */
 export async function getOrders(algo: NiceHash.Algorithm): Promise<IApiResult<IRawOrders>> {
   const rq = await request(`https://api.nicehash.com/api?method=orders.get&algo=${algo.id}`);
   const data = JSON.parse(rq.data) as IApiResult<IRawOrders>;
   return data;
 }
 
-// withWorkers - find minimum with workers OR find minimum with some hashrate, only applies if cache is not populated
+/**
+ * Gets the minimum price to place an order for an algorithm.
+ * By default searches for the lowest price order with some accepted speed but can be configured to use workers instead of accepted speed.
+ * 
+ * @param algo The algorithm
+ * @param withWorkers If true, find the lowest price order with workers. If false or undefined, uses accepted speed as a comparison instead.
+ */
 export async function getPrice(algo: NiceHash.Algorithm, withWorkers?: boolean): Promise<number> {
   const data = await getOrders(algo);
   const orders = data.result.orders;

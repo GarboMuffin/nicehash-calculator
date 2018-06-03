@@ -208,9 +208,7 @@ export class NiceHashCalculator {
       return;
     }
 
-    const cache = await WhatToMine.getMassRevenueCache({
-      algos,
-    });
+    const cache = await WhatToMine.getListedCoins(algos);
     this.revenueCache = cache;
   }
 
