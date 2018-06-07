@@ -125,6 +125,16 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm.CryptoNightV7,
     id: 30,
   });
+  public static readonly CryptoNightHeavy = new Algorithm({
+    name: "CryptoNightHeavy",
+    whatToMine: WhatToMine.Algorithm.CryptoNightHeavy,
+    id: 31,
+  });
+  public static readonly Lyra2z = new Algorithm({
+    name: "Lyra2Z",
+    whatToMine: WhatToMine.Algorithm.Lyra2z,
+    id: 32,
+  });
   /* tslint:enable:variable-name */
 
   public displayName: string;

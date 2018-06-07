@@ -26,6 +26,8 @@ export class Algorithm {
   public static "Blake (2b)" = new Algorithm(HashRateUnit.GIGA, null);
   public static "Blake (14r)" = new Algorithm(HashRateUnit.MEGA, "bk14");
   public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, "cn7");
+  public static CryptoNightHeavy = new Algorithm(HashRateUnit.HASH, null);
+  public static Lyra2z = new Algorithm(HashRateUnit.KILO, null);
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;
