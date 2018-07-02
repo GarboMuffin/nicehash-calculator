@@ -135,6 +135,11 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm.Lyra2z,
     id: 32,
   });
+  public static readonly X16R = new Algorithm({
+    name: "X16R",
+    whatToMine: WhatToMine.Algorithm.Lyra2z,
+    id: 33,
+  });
   /* tslint:enable:variable-name */
 
   public displayName: string;
