@@ -165,7 +165,6 @@ export class NiceHashCalculator {
     const algorithms = buyerInfo.algorithms;
     for (const nhMeta of algorithms) {
       const hashrate = nhMeta.speed_text;
-      const name = nhMeta.name;
       const id = nhMeta.algo;
       const algorithm = new NiceHash.Algorithm(id, HashRateUnit.fromString(hashrate));
       for (const algo of Algorithm.instances) {

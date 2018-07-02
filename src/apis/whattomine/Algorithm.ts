@@ -28,7 +28,7 @@ export class Algorithm {
   public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, "cn7");
   public static CryptoNightHeavy = new Algorithm(HashRateUnit.HASH, null);
   public static Lyra2z = new Algorithm(HashRateUnit.MEGA, null);
-  public static X16R = new Algorithm(HashRateUnit.MEGA, null);
+  public static X16R = new Algorithm(HashRateUnit.MEGA, "x16r");
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;

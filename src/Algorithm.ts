@@ -82,6 +82,7 @@ export class Algorithm {
   public static readonly "SHA-256" = new Algorithm({
     name: "SHA-256",
     whatToMine: WhatToMine.Algorithm["SHA-256"],
+    aliases: ["sha256"],
     id: 1,
   });
   public static readonly Quark = new Algorithm({
@@ -137,7 +138,7 @@ export class Algorithm {
   });
   public static readonly X16R = new Algorithm({
     name: "X16R",
-    whatToMine: WhatToMine.Algorithm.Lyra2z,
+    whatToMine: WhatToMine.Algorithm.X16R,
     id: 33,
   });
   /* tslint:enable:variable-name */
