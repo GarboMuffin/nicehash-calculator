@@ -5,7 +5,7 @@ import { logger } from "../logger";
 // We convert IWhatToMineCoin to this
 export interface ICoin {
   displayName: string;
-  names: string[]; // more names
+  names: string[]; // aliases
   abbreviation: string;
   id: number;
   algorithm: Algorithm;
@@ -28,7 +28,7 @@ function getAdditionalNames(coin: ICoin): ICoinNames {
   // And as a result some "less than good" work is done for this
 
   // WhatToMine doesn't always provide very good display names so some manual converting is done
-  // some additional names may also be given
+  // some additional aliases may also be given
 
   const coins: {[s: string]: ICoinNames | undefined} = {
     BitcoinCash: {displayName: "Bitcoin Cash", names: ["bcash", "bcc"]},
