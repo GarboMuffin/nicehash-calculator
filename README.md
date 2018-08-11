@@ -197,6 +197,98 @@ As coins are added to What To Mine they should automatically be supported if the
   ```
 </details>
 
+## API
+
+_**This section needs some work to be finished. I also haven't tested the code, and it probably doesn't work.**_
+
+nicehash-calculator's functionality can be embedded in other programs, albiet with a lot of spaghetti.
+
+### Subprocess Method
+
+You can run just run a new node process on the project. You'll probably want the arguments `--no-header --no-warnings --output=json` to make it output just machine readable JSON. `--output=delayed-json` will wait until the end and log a single large array instead of each coin as its own log message.
+
+You can parse this and lookup properties for information. nicehash.garbomuffin.com did this for a while.
+
+TODO: code samples
+
+### Using the API directly
+
+If you are already in node, there's a good chance you can use the classes directly. [This is what nicehash.garbomuffin.com does now](https://github.com/GarboMuffin/nicehash-calculator-web/blob/master/src/getData.js), because running an additional node process and parsing stdout has been problematic.
+
+Take the compiled TypeScript and just drop it into your project somewhere (in this example a folder named "nicehash-calculator"); maybe with a link to the commit. It's not in NPM (for now, at least).
+
+```javascript
+// I'm being serious when I say this, just copy what is here and don't question what it is or how it works.
+
+// import a few files from the project
+// we need to be able to parse options
+const parseOptions = require("./nicehash-calculator/options/index").parseOptions;
+// we need the main class as well
+const NiceHashCalculator = require("./nicehash-calculator/calculator/NiceHashCalculator").NiceHashCalculator;
+
+// use parseOptions with an empty array to just get the defaults
+const options = parseOptions([]);
+// disable logging stuff that we don't want
+// you don't want to see the header
+options.showHeader = false;
+// you probably can ignore most warnings
+options.showWarnings = false;
+// optionally change the "sleep time", that is the time between each coin is ran
+// the default of 1000 (1s) might be too low for consistent streams of requests (rate limits)
+options.sleepTime = 2500;
+// optionaly define your list of coins, supports everything you can do from the command line
+options.coins = [
+  "bitcoin"
+];
+
+// if you want, you can just define the full options object instead of using the parseOptions() method
+// const options = {sleepTime: 2500, coins: ["bitcoin", ...], showHeader: false, ... }
+
+// this is the function that will return a promise that resolves with all the data
+function getData() {
+  // promise boilerplate
+  return new Promise((resolve, reject) => {
+    // stores the resulting data
+    const result = [];
+
+    // this is the weirdest part; define a class that will be the "output handler"
+    // just copy this boilerplate and replace handle() and finished() with something else
+    options.outputHandler.class = class {
+      // the class constructor
+      constructor() {
+        // set pretty to false, this will disable some logging output you don't want
+        this.pretty = false;
+      }
+
+      handle(data) {
+        // called once for each coin, data is the coin's data
+        // it has many properties you can examine
+        result.push(data);
+      }
+
+      finished() {
+        // called when everything is finished
+        // resole the promise with the result
+        resolve(result);
+      }
+    };
+
+    // construct a calculator object with the options we determined earlier
+    const calculator = new NiceHashCalculator(options);
+
+    // start the calculator; returns a promise
+    calculator.start()
+      // catch errors and reject the promise
+      .catch((err) => {
+        reject(err);
+      });
+  });
+}
+
+// basic usage
+getData().then((result) => console.log(result));
+```
+
 ## Donations?
 
 Any donations are appreciated:
