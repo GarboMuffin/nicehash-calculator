@@ -13,14 +13,14 @@ A JavaScript program to estimate the profitability of buying hashing power on [N
 ### Requirements
 
 - [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/en/) (8, 9, or 10)
+- [Node.js](https://nodejs.org/en/) (8 or later will work)
 
 ### Downloading
 
 <!-- TODO: use github releases instead? -->
 
 ```
-git clone -b rewrite https://github.com/GarboMuffin/nicehash-calculator/
+git clone https://github.com/GarboMuffin/nicehash-calculator/
 cd nicehash-calculator
 ```
 
@@ -92,7 +92,7 @@ node index scrypt -litecoin bitcoin
 As coins are added to What To Mine they should automatically be supported if they use an algorithm on NiceHash. As coins become inactive they will disappear.
 
 <details>
-  <summary>All supported coins as of 5/25/2018 (Click to reveal)</summary>
+  <summary>All supported coins as of 11/8/2018 (Click to reveal)</summary>
 
   ```sh
   $ node index --list-coins
@@ -105,7 +105,6 @@ As coins are added to What To Mine they should automatically be supported if the
    * Dogecoin (DOGE) (Scrypt)
    * Feathercoin (FTC) (NeoScrypt)
    * Einsteinium (EMC2) (Scrypt)
-   * DGC-Scrypt (DGC) (Scrypt)
    * DGB-Scrypt (DGB) (Scrypt)
    * Worldcoin (WDC) (Scrypt)
    * Myriad-Scrypt (XMY) (Scrypt)
@@ -117,23 +116,20 @@ As coins are added to What To Mine they should automatically be supported if the
    * Unobtanium (UNO) (SHA-256)
    * Myriad-SHA (XMY) (SHA-256)
    * Gulden (NLG) (Scrypt)
-   * Maza (MZC) (SHA-256)
+   * Maza (MAZA) (SHA-256)
    * Phoenixcoin (PXC) (NeoScrypt)
    * Orbitcoin (ORB) (NeoScrypt)
    * Maxcoin (MAX) (Keccak)
-   * Monero (XMR) (CryptoNightV7)
+   * Monero (XMR) (CryptoNightV8)
    * Bytecoin (BCN) (CryptoNight)
-   * DigitalNote (XDN) (CryptoNight)
+   * DigitalNote (XDN) (CryptoNightV7)
    * Viacoin (VIA) (Scrypt)
    * DGB-SHA (DGB) (SHA-256)
    * DGB-Qubit (DGB) (Qubit)
    * Mooncoin (MOON) (Scrypt)
    * Halcyon (HAL) (NeoScrypt)
-   * DGC-SHA (DGC) (SHA-256)
    * Startcoin (START) (X11)
    * Quark (QRK) (Quark)
-   * MonetaryUnit (MUE) (X11)
-   * Bata (BTA) (Scrypt)
    * GameCredits (GAME) (Scrypt)
    * Monacoin (MONA) (Lyra2REv2)
    * Influxcoin (INFX) (X11)
@@ -142,7 +138,6 @@ As coins are added to What To Mine they should automatically be supported if the
    * Decred (DCR) (Decred)
    * Expanse (EXP) (DaggerHashimoto)
    * Adzcoin (ADZ) (X11)
-   * Sia (SC) (Sia)
    * Ethereum Classic (ETC) (DaggerHashimoto)
    * LBRY (LBC) (LBRY)
    * Crown (CRW) (SHA-256)
@@ -153,25 +148,24 @@ As coins are added to What To Mine they should automatically be supported if the
    * Pascalcoin (PASC) (Pascal)
    * Ubiq (UBQ) (DaggerHashimoto)
    * Komodo (KMD) (Equihash)
+   * Zcoin (XZC) (Lyra2Z)
    * Karbo (KRB) (CryptoNight)
    * PascalLite (PASL) (Pascal)
    * Musicoin (MUSIC) (DaggerHashimoto)
    * Deutsche eMark (DEM) (SHA-256)
-   * Zencash (ZEN) (Equihash)
+   * Horizen (ZEN) (Equihash)
    * Cannabiscoin (CANN) (X11)
-   * Prime-XI (PXI) (X11)
    * Bitcoin Cash (BCH) (SHA-256)
    * Onix (ONX) (X11)
    * Linx (LINX) (Scrypt)
+   * Sumokoin (SUMO) (CryptoNight)
    * SmartCash (SMART) (Keccak)
    * Vivo (VIVO) (NeoScrypt)
    * Monoeci (XMCC) (X11)
    * Creamcoin (CRM) (X11)
-   * BitcoinZ (BTCZ) (Equihash)
    * Metaverse (ETP) (DaggerHashimoto)
    * Pirl (PIRL) (DaggerHashimoto)
    * Electroneum (ETN) (CryptoNight)
-   * Bitcoin Gold (BTG) (Equihash)
    * Trezarcoin (TZC) (NeoScrypt)
    * DeepOnion (ONION) (X13)
    * Verge-Lyra2REv2 (XVG) (Lyra2REv2)
@@ -179,7 +173,6 @@ As coins are added to What To Mine they should automatically be supported if the
    * Ellaism (ELLA) (DaggerHashimoto)
    * Florin (FLO) (Scrypt)
    * Universal (UNIT) (SHA-256)
-   * Bulwark (BWK) (Nist5)
    * GoByte (GBX) (NeoScrypt)
    * Crowdcoin (CRC) (NeoScrypt)
    * Dinastycoin (DCY) (CryptoNight)
@@ -188,28 +181,39 @@ As coins are added to What To Mine they should automatically be supported if the
    * Bitcoin Private (BTCP) (Equihash)
    * LitecoinCash (LCC) (SHA-256)
    * Galactrum (ORE) (Lyra2REv2)
-   * Rupee (RUP) (Lyra2REv2)
+   * Ravencoin (RVN) (X16R)
    * Dinero (DIN) (NeoScrypt)
    * MoneroOriginal (XMO) (CryptoNight)
    * Paccoin ($PAC) (X11)
    * Straks (STAK) (Lyra2REv2)
-   * Bitcoin Interest (BCI) (Equihash)
+   * Motion (XMN) (X16R)
+   * Loki (LOKI) (CryptoNightHeavy)
+   * Gincoin (GIN) (Lyra2Z)
+   * SimpleBank (SPLB) (NeoScrypt)
+   * Mano (MANO) (Lyra2Z)
+   * Commercium (CMM) (Equihash)
+   * MCT+ (MCT) (Lyra2Z)
+   * HelpTheHomeless (HTH) (X16R)
+   * Ryo (RYO) (CryptoNightHeavy)
+   * Graft (GRFT) (CryptoNightV8)
+   * Gravium (GRV) (X16R)
+   * Quantum R L (QRL) (CryptoNightV7)
+   * Nix (NIX) (Lyra2REv2)
+   * Gentarium (GTM) (Lyra2Z)
+   * Hanacoin (HANA) (Lyra2REv2)
+   * Dubaicoin (DBIX) (DaggerHashimoto)
+   * Traid (TRAID) (NeoScrypt)
+   * LitecoinPlus (LCP) (Scrypt)
   ```
 </details>
 
 ## API
 
-_**This section needs some work to be finished. I also haven't tested the code, and it probably doesn't work.**_
-
 nicehash-calculator's functionality can be embedded in other programs, albiet with a lot of spaghetti.
 
-### Subprocess Method
+### Reading stdout
 
-You can run just run a new node process on the project. You'll probably want the arguments `--no-header --no-warnings --output=json` to make it output just machine readable JSON. `--output=delayed-json` will wait until the end and log a single large array instead of each coin as its own log message.
-
-You can parse this and lookup properties for information. nicehash.garbomuffin.com did this for a while.
-
-TODO: code samples
+It's possible to spawn a new process of the program and read the console output. You'll probably want the arguments `--no-header --no-warnings --output=json` to make it output just machine parsable JSON. `--output=delayed-json` will instead wait until the end and log a single large array instead of an individual object for each coin.
 
 ### Using the API directly
 
@@ -218,56 +222,46 @@ If you are already in node, there's a good chance you can use the classes direct
 Take the compiled TypeScript and just drop it into your project somewhere (in this example a folder named "nicehash-calculator"); maybe with a link to the commit. It's not in NPM (for now, at least).
 
 ```javascript
-// I'm being serious when I say this, just copy what is here and don't question what it is or how it works.
-
-// import a few files from the project
-// we need to be able to parse options
+// imports for options parsing
 const parseOptions = require("./nicehash-calculator/options/index").parseOptions;
-// we need the main class as well
+// imports for the main functionality
 const NiceHashCalculator = require("./nicehash-calculator/calculator/NiceHashCalculator").NiceHashCalculator;
 
-// use parseOptions with an empty array to just get the defaults
-const options = parseOptions([]);
-// disable logging stuff that we don't want
-// you don't want to see the header
+// You can also do this in getData() below, but you should only have to do it once.
+const options = parseOptions([]); // get the default options
+// Disable the header
 options.showHeader = false;
-// you probably can ignore most warnings
+// Disable warnings
 options.showWarnings = false;
-// optionally change the "sleep time", that is the time between each coin is ran
-// the default of 1000 (1s) might be too low for consistent streams of requests (rate limits)
+// Choose a reasonable time between each coin to avoid API rate limits
 options.sleepTime = 2500;
-// optionaly define your list of coins, supports everything you can do from the command line
+// Define the coins you want to include. Supports all filtering rules you can use from the CLI
 options.coins = [
   "bitcoin"
 ];
 
-// if you want, you can just define the full options object instead of using the parseOptions() method
-// const options = {sleepTime: 2500, coins: ["bitcoin", ...], showHeader: false, ... }
-
-// this is the function that will return a promise that resolves with all the data
+// Returns a promise that resolves with all the data
 function getData() {
-  // promise boilerplate
   return new Promise((resolve, reject) => {
-    // stores the resulting data
     const result = [];
 
-    // this is the weirdest part; define a class that will be the "output handler"
-    // just copy this boilerplate and replace handle() and finished() with something else
+    // We need to define a custom output handler
+    // This happens inside of getData() so that the class can access the `result` list easier
     options.outputHandler.class = class {
-      // the class constructor
       constructor() {
-        // set pretty to false, this will disable some logging output you don't want
+        // disable console output meant for users
         this.pretty = false;
       }
 
+      // Called once for each coin.
       handle(data) {
-        // called once for each coin, data is the coin's data
-        // it has many properties you can examine
+        // `data` is the raw coin data that you can do anything with
+        // here, we just push it to an array so we can return it later
         result.push(data);
       }
 
+      // Called once when everything is finished
       finished() {
-        // called when everything is finished
         // resole the promise with the result
         resolve(result);
       }
@@ -276,16 +270,15 @@ function getData() {
     // construct a calculator object with the options we determined earlier
     const calculator = new NiceHashCalculator(options);
 
-    // start the calculator; returns a promise
+    // start() returns a promise
     calculator.start()
-      // catch errors and reject the promise
       .catch((err) => {
         reject(err);
       });
   });
 }
 
-// basic usage
+// example usage
 getData().then((result) => console.log(result));
 ```
 
