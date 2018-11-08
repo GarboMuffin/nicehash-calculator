@@ -141,6 +141,12 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm.X16R,
     id: 33,
   });
+  public static readonly CryptoNightV8 = new Algorithm({
+    name: "CryptoNightV8",
+    aliases: ["cryptonight8", "cn8"],
+    whatToMine: WhatToMine.Algorithm.CryptoNightV8,
+    id: 34,
+  });
   /* tslint:enable:variable-name */
 
   public displayName: string;
