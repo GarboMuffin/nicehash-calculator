@@ -28,7 +28,7 @@ cd nicehash-calculator
 
 ```bash
 # You can try 'npm install --only=production' instead if you don't plan to make edits and normal 'npm install' is slow.
-npm install --only=production
+npm install
 
 # Build the TypeScript files to JavaScript, must be done each time you make a change to the source.
 npm run build
@@ -222,17 +222,15 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
 
 ## Using nicehash-calculator in other programs
 
-If you only care about a few specific coins, then just use the [What to Mine](https://whattomine.com/coins/1.json?hr=1234) API directly. (hint: use `--debug` and careful searching to find out what URLs are being requested - look for `request(): requested https://whattomine.com/coins/`)
+If you only care about a few specific coins, then just use the [What to Mine](https://whattomine.com/coins/1.json?hr=1234) API directly. (hint: use `--debug` to find out what URLs are being requested - look for `request(): requested https://whattomine.com/coins/...`)
 
 ### Reading stdout
 
-You could spawn a new `node` process and read stdout. (Hint: use `node --no-header --no-warnings --output=json` to only log machine readable JSON) [nicehash.garbomuffin.com used to do this in the past.](https://github.com/GarboMuffin/nicehash-calculator-web/blob/d35ca079d4e202e888b1328d778e5a831dfa16e7/src/getData.js#L62-L115)
+You could spawn a new `node` process and read stdout. (Hint: use `node --no-header --no-warnings --output=json` to only print machine readable JSON) [nicehash.garbomuffin.com used to do this in the past.](https://github.com/GarboMuffin/nicehash-calculator-web/blob/d35ca079d4e202e888b1328d778e5a831dfa16e7/src/getData.js#L62-L115)
 
 ### Interfacing with the source
 
-If you are already using nodejs, you could interface directly with the source code. [nicehash.garbomuffin.com does this now](https://github.com/GarboMuffin/nicehash-calculator-web/blob/master/src/getData.js) because running an additional node process is unnecessary.
-
-Take the compiled JavaScript and just drop it into your project somewhere (in this example a folder named "nicehash-calculator").
+If you are already using nodejs, you could interface directly with the source code. [nicehash.garbomuffin.com does this now](https://github.com/GarboMuffin/nicehash-calculator-web/blob/master/src/getData.js). Take the compiled JavaScript (the `dist` folder) and just drop it into your project somewhere (in this example a folder named "nicehash-calculator").
 
 ```javascript
 // import a couple of source files from the program
