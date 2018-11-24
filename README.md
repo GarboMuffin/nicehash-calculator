@@ -97,7 +97,6 @@ node index scrypt -litecoin bitcoin
 $ node index bitcoin --list-coins --no-header
 Enabled coins:
  * Bitcoin (BTC) (SHA-256)
-# You can also use `--debug` and careful searching to 
 ```
 
 ### Supported coins
