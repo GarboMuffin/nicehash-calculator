@@ -110,9 +110,9 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm["Blake (2s)"],
     id: 28,
   });
-  public static readonly "Blake (2b)" = new Algorithm({
+  public static readonly Sia = new Algorithm({
     name: "Sia",
-    whatToMine: WhatToMine.Algorithm["Blake (2b)"],
+    whatToMine: WhatToMine.Algorithm.Sia,
     id: 27,
   });
   public static readonly "Blake (14r)" = new Algorithm({
@@ -146,6 +146,17 @@ export class Algorithm {
     aliases: ["cryptonight8", "cn8"],
     whatToMine: WhatToMine.Algorithm.CryptoNightV8,
     id: 34,
+  });
+  // WTM does not seem to differentiate here. Will look into later.
+  // public static readonly SHA256AsicBoost = new Algorithm({
+  //   name: "SHA256AsicBoost",
+  //   whatToMine: WhatToMine.Algorithm.SHA256AsicBoost,
+  //   id: 35,
+  // });
+  public static readonly Zhash = new Algorithm({
+    name: "Zhash",
+    whatToMine: WhatToMine.Algorithm.Zhash,
+    id: 36,
   });
   /* tslint:enable:variable-name */
 
