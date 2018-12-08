@@ -1,6 +1,8 @@
-# NiceHash Profit Calculator for Buyers v2
+# NiceHash Profit Calculator for Buyers
 
-A JavaScript (TypeScript) program for estimating the profitability of buying hashing power on [NiceHash](https://www.nicehash.com/?refby=258346). Feel free to [make an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new) if you need help using this.
+![The program running.](program.png "The program running.")
+
+A JavaScript (TypeScript) program for estimating the profitability of buying hashing power on [NiceHash](https://www.nicehash.com/?refby=258346). Feel free to [make an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new) if you need help with usage or have find any bugs.
 
 **This project is not affiliated with NiceHash. I am not responsible for any losses that may come as a result of this project.**
 
@@ -60,6 +62,8 @@ Argument parsing is very strict. You **must** use `--` before each argument name
 | `--list-coins` | List coins and exit |
 | `--debug` | Enables debug logging (very verbose) |
 
+You can also put arguments you would like to always be added in `arguments.txt`. See that file for more information.
+
 ### Coins
 
 By default it will do calculations for all known coins. This is slow and probably not what you want. You probably want to pick a few coins to monitor (like Bitcoin, Litecoin, Ethereum, etc.) and use coin filtering rules to only monitor those coins.
@@ -104,7 +108,7 @@ Enabled coins:
 As coins are added to [What To Mine](https://whattomine.com/) they should automatically be supported if they use an algorithm on NiceHash. As coins become inactive they will become unsupported.
 
 <details>
-  <summary>All supported coins (as of 11/8/2018)</summary>
+  <summary>All supported coins (as of 2018-12-7)</summary>
 
   ```bash
   $ node index --list-coins
@@ -150,6 +154,7 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Decred (DCR) (Decred)
    * Expanse (EXP) (DaggerHashimoto)
    * Adzcoin (ADZ) (X11)
+   * Sia (SC) (Sia)
    * Ethereum Classic (ETC) (DaggerHashimoto)
    * LBRY (LBC) (LBRY)
    * Crown (CRW) (SHA-256)
@@ -157,8 +162,6 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Zclassic (ZCL) (Equihash)
    * Hush (HUSH) (Equihash)
    * Sibcoin (SIB) (X11Gost)
-   * Pascalcoin (PASC) (Pascal)
-   * Ubiq (UBQ) (DaggerHashimoto)
    * Komodo (KMD) (Equihash)
    * Zcoin (XZC) (Lyra2Z)
    * Karbo (KRB) (CryptoNight)
@@ -167,7 +170,7 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Deutsche eMark (DEM) (SHA-256)
    * Horizen (ZEN) (Equihash)
    * Cannabiscoin (CANN) (X11)
-   * Bitcoin Cash (BCH) (SHA-256)
+   * BitcoinCashABC (BCH) (SHA-256)
    * Onix (ONX) (X11)
    * Linx (LINX) (Scrypt)
    * Sumokoin (SUMO) (CryptoNight)
@@ -175,9 +178,11 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Vivo (VIVO) (NeoScrypt)
    * Monoeci (XMCC) (X11)
    * Creamcoin (CRM) (X11)
+   * BitcoinZ (BTCZ) (Zhash)
    * Metaverse (ETP) (DaggerHashimoto)
    * Pirl (PIRL) (DaggerHashimoto)
    * Electroneum (ETN) (CryptoNight)
+   * Bitcoin Gold (BTG) (Zhash)
    * Trezarcoin (TZC) (NeoScrypt)
    * DeepOnion (ONION) (X13)
    * Verge-Lyra2REv2 (XVG) (Lyra2REv2)
@@ -186,7 +191,7 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Florin (FLO) (Scrypt)
    * Universal (UNIT) (SHA-256)
    * GoByte (GBX) (NeoScrypt)
-   * Crowdcoin (CRC) (NeoScrypt)
+   * Crowdcoin (CRC) (X16R)
    * Dinastycoin (DCY) (CryptoNight)
    * AUR-SHA (AUR) (SHA-256)
    * Innova (INN) (NeoScrypt)
@@ -216,6 +221,8 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Dubaicoin (DBIX) (DaggerHashimoto)
    * Traid (TRAID) (NeoScrypt)
    * LitecoinPlus (LCP) (Scrypt)
+   * Anon (ANON) (Zhash)
+   * Azart (AZART) (X11)
   ```
 </details>
 

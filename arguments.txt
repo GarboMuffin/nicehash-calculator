@@ -6,4 +6,7 @@
 # (remove the #)
 #--experimental-fees
 
+# If you dislike the big header text block you could uncomment:
+#--no-header
+
 # You can put coins in here but I would recommend against it
