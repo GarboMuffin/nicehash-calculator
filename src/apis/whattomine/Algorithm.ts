@@ -26,11 +26,11 @@ export class Algorithm {
   public static Sia = new Algorithm(HashRateUnit.GIGA, null);
   public static "Blake (14r)" = new Algorithm(HashRateUnit.MEGA, "bk14");
   public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, "cn7");
-  public static CryptoNightHeavy = new Algorithm(HashRateUnit.HASH, null);
-  public static Lyra2z = new Algorithm(HashRateUnit.MEGA, null);
+  public static CryptoNightHeavy = new Algorithm(HashRateUnit.HASH, "cnh");
+  public static Lyra2z = new Algorithm(HashRateUnit.MEGA, "l2z");
   public static X16R = new Algorithm(HashRateUnit.MEGA, "x16r");
   public static CryptoNightV8 = new Algorithm(HashRateUnit.HASH, "cn8");
-  public static Zhash = new Algorithm(HashRateUnit.HASH, "cn8");
+  public static Zhash = new Algorithm(HashRateUnit.HASH, "zh");
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;
