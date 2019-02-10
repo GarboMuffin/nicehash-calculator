@@ -48,6 +48,7 @@ export class Algorithm {
     name: "Lyra2REv2",
     whatToMine: WhatToMine.Algorithm.Lyra2REv2,
     id: 14,
+    aliases: ["lrev2"],
   });
   public static readonly Pascal = new Algorithm({
     name: "Pascal",
@@ -157,6 +158,30 @@ export class Algorithm {
     name: "Zhash",
     whatToMine: WhatToMine.Algorithm.Zhash,
     id: 36,
+  });
+  // Also known as Beam
+  public static readonly "Equihash (150,5)" = new Algorithm({
+    name: "Beam",
+    whatToMine: WhatToMine.Algorithm.Beam,
+    id: 37,
+  });
+  // Also known as GrinCuckaroo29
+  public static readonly Cuckaroo29 = new Algorithm({
+    name: "GrinCuckaroo29",
+    whatToMine: WhatToMine.Algorithm.GrinCuckaroo29,
+    id: 38,
+    aliases: ["gc29"],
+  });
+  // public static readonly GrinCuckatoo31 = new Algorithm({
+  //   name: "GrinCuckatoo31",
+  //   whatToMine: WhatToMine.Algorithm.GrinCuckatoo31,
+  //   id: 39,
+  // });
+  public static readonly Lyra2REv3 = new Algorithm({
+    name: "Lyra2REv3",
+    whatToMine: WhatToMine.Algorithm.Lyra2REv3,
+    id: 40,
+    aliases: ["lrev3"],
   });
   /* tslint:enable:variable-name */
 

@@ -7,6 +7,8 @@ export class HashRateUnit {
 
   public static readonly HASH = new HashRateUnit(1, "H");
   public static readonly KILO = new HashRateUnit(1000, "KH");
+  public static readonly KSOL = new HashRateUnit(1000, "KSol");
+  public static readonly KG = new HashRateUnit(1000, "KG");
   public static readonly MEGA = new HashRateUnit(1000 * 1000, "MH");
   public static readonly MSOL = new HashRateUnit(1000 * 1000, "MSol");
   public static readonly GIGA = new HashRateUnit(1000 * 1000 * 1000, "GH");

@@ -31,6 +31,9 @@ export class Algorithm {
   public static X16R = new Algorithm(HashRateUnit.MEGA, "x16r");
   public static CryptoNightV8 = new Algorithm(HashRateUnit.HASH, "cn8");
   public static Zhash = new Algorithm(HashRateUnit.HASH, "zh");
+  public static GrinCuckaroo29 = new Algorithm(HashRateUnit.HASH, "cr29");
+  public static Beam = new Algorithm(HashRateUnit.HASH, null);
+  public static Lyra2REv3 = new Algorithm(HashRateUnit.MEGA, "lrev3");
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;
