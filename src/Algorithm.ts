@@ -183,6 +183,16 @@ export class Algorithm {
     id: 40,
     aliases: ["lrev3"],
   });
+  public static readonly MTP = new Algorithm({
+    name: "MTP",
+    whatToMine: WhatToMine.Algorithm.MTP,
+    id: 41,
+  });
+  // public static readonly CryptoNightR = new Algorithm({
+  //   name: "CryptoNightR",
+  //   whatToMine: WhatToMine.Algorithm.CryptoNightR,
+  //   id: 42,
+  // });
   /* tslint:enable:variable-name */
 
   public displayName: string;
