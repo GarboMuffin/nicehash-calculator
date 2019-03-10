@@ -32,9 +32,11 @@ export class Algorithm {
   public static CryptoNightV8 = new Algorithm(HashRateUnit.HASH, "cn8");
   public static Zhash = new Algorithm(HashRateUnit.HASH, "zh");
   public static GrinCuckaroo29 = new Algorithm(HashRateUnit.HASH, "cr29");
+  public static GrinCuckatoo31 = new Algorithm(HashRateUnit.HASH, null);
   public static Beam = new Algorithm(HashRateUnit.HASH, null);
   public static Lyra2REv3 = new Algorithm(HashRateUnit.MEGA, "lrev3");
   public static MTP = new Algorithm(HashRateUnit.MEGA, "mtp");
+  public static CryptoNightR = new Algorithm(HashRateUnit.HASH, null);
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;

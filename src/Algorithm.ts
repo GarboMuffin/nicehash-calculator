@@ -172,11 +172,12 @@ export class Algorithm {
     id: 38,
     aliases: ["gc29"],
   });
-  // public static readonly GrinCuckatoo31 = new Algorithm({
-  //   name: "GrinCuckatoo31",
-  //   whatToMine: WhatToMine.Algorithm.GrinCuckatoo31,
-  //   id: 39,
-  // });
+  public static readonly Cuckatoo31 = new Algorithm({
+    name: "GrinCuckatoo31",
+    whatToMine: WhatToMine.Algorithm.GrinCuckatoo31,
+    id: 39,
+    aliases: ["ct31"],
+  });
   public static readonly Lyra2REv3 = new Algorithm({
     name: "Lyra2REv3",
     whatToMine: WhatToMine.Algorithm.Lyra2REv3,
@@ -188,11 +189,11 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm.MTP,
     id: 41,
   });
-  // public static readonly CryptoNightR = new Algorithm({
-  //   name: "CryptoNightR",
-  //   whatToMine: WhatToMine.Algorithm.CryptoNightR,
-  //   id: 42,
-  // });
+  public static readonly CryptoNightR = new Algorithm({
+    name: "CryptoNightR",
+    whatToMine: WhatToMine.Algorithm.CryptoNightR,
+    id: 42,
+  });
   /* tslint:enable:variable-name */
 
   public displayName: string;
