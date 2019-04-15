@@ -10,6 +10,11 @@ import * as url from "url";
  * It's terrible. I know.
  */
 
+// Enable keepalive
+// The types appear to be missing, but the properties definitely exist.
+(http.globalAgent as any).keepAlive = true;
+(https.globalAgent as any).keepAlive = true;
+
 export interface IRequestOptions {
   url: string;
   method?: string;
