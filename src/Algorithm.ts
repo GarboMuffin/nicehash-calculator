@@ -194,6 +194,11 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm.CryptoNightR,
     id: 42,
   });
+  public static readonly CuckooCycle = new Algorithm({
+    name: "CuckooCycle",
+    whatToMine: WhatToMine.Algorithm.CuckooCycle,
+    id: 43,
+  });
   /* tslint:enable:variable-name */
 
   public displayName: string;

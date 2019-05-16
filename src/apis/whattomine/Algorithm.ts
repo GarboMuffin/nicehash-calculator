@@ -37,6 +37,7 @@ export class Algorithm {
   public static Lyra2REv3 = new Algorithm(HashRateUnit.MEGA, "lrev3");
   public static MTP = new Algorithm(HashRateUnit.MEGA, "mtp");
   public static CryptoNightR = new Algorithm(HashRateUnit.HASH, null);
+  public static CuckooCycle = new Algorithm(HashRateUnit.HASH, "cc");
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;
