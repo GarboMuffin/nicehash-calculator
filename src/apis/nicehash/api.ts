@@ -2,57 +2,58 @@ import * as NiceHash from ".";
 import { logger } from "../../logger";
 import { request } from "../../utils";
 
-interface IApiResult<T> {
-  result: T;
-  method: string;
-}
-
-interface IRawGlobalPricesCoin {
-  price: string;
-  algo: number;
-}
-
 interface IRawGlobalPrices {
-  stats: IRawGlobalPricesCoin[];
+  miningAlgorithms: {
+    algorithm: string;
+    title: string;
+    speed: string;
+    paying: string;
+  }[];
 }
 
-interface IOrder {
-  limit_speed: string;
-  alive: boolean;
-  price: string;
-  id: number;
-  type: number;
-  workers: number;
-  algo: number;
-  accepted_speed: string;
+interface IRawMarket {
+  orders: {
+    payedAmount: number;
+    myOrder: boolean;
+    alive: boolean;
+    miningStatus: string;
+    payingSpeed: string;
+    acceptedSpeed: string;
+    rigsCount: number;
+    limit: string;
+    price: string;
+    type: string;
+    id: string;
+  }[];
 }
 
 interface IRawOrders {
-  orders: IOrder[];
-}
-
-interface IAlgorithm {
-  down_step: string;
-  min_diff_working: string;
-  min_limit: string;
-  speed_text: string; // "TH";
-  min_diff_initial: string;
-  name: string;
-  algo: number;
-  multi: string;
+  stats: {
+    EU: IRawMarket,
+    USA: IRawMarket,
+  }
 }
 
 interface IBuyerInfo {
-  algorithms: IAlgorithm[];
-  down_time: number;
-  min_amount: string;
-  static_fee: string;
-  dynamic_fee: string;
+  miningAlgorithms: {
+    down_step: number;
+    min_diff_working: number;
+    min_limit: number;
+    max_limit: number;
+    speed_text: string;
+    min_diff_initial: number;
+    name: string;
+    algo: string;
+    multi: number;
+    min_price: number;
+    max_price: number;
+    min_amount: number;
+  }[];
 }
 
-export async function getRawGlobalPrices(): Promise<IApiResult<IRawGlobalPrices>> {
-  const rq = await request("https://api.nicehash.com/api?method=stats.global.current");
-  const data = JSON.parse(rq.data) as IApiResult<IRawGlobalPrices>;
+export async function getRawGlobalPrices(): Promise<IRawGlobalPrices> {
+  const rq = await request("https://api2.nicehash.com/main/api/v2/public/simplemultialgo/info/");
+  const data = JSON.parse(rq.data) as IRawGlobalPrices;
   return data;
 }
 
@@ -61,9 +62,9 @@ export async function getRawGlobalPrices(): Promise<IApiResult<IRawGlobalPrices>
  */
 export async function getGlobalPrices() {
   const data = await getRawGlobalPrices();
-  const cache: number[] = [];
-  for (const niceHashCost of data.result.stats) {
-    cache[niceHashCost.algo] = Number(niceHashCost.price);
+  const cache: {[s: string]: number} = {};
+  for (const niceHashCost of data.miningAlgorithms) {
+    cache[niceHashCost.algorithm] = Number(niceHashCost.paying);
   }
   return cache;
 }
@@ -72,9 +73,9 @@ export async function getGlobalPrices() {
  * Returns generic information for buyers
  */
 export async function getBuyerInfo(): Promise<IBuyerInfo> {
-  const rq = await request("https://api.nicehash.com/api?method=buy.info");
-  const data = JSON.parse(rq.data) as IApiResult<IBuyerInfo>;
-  return data.result;
+  const rq = await request("https://api2.nicehash.com/main/api/v2/public/buy/info/");
+  const data = JSON.parse(rq.data) as IBuyerInfo;
+  return data;
 }
 
 /**
@@ -82,9 +83,9 @@ export async function getBuyerInfo(): Promise<IBuyerInfo> {
  * 
  * @param algo The algorithm
  */
-export async function getOrders(algo: NiceHash.Algorithm): Promise<IApiResult<IRawOrders>> {
-  const rq = await request(`https://api.nicehash.com/api?method=orders.get&algo=${algo.id}`);
-  const data = JSON.parse(rq.data) as IApiResult<IRawOrders>;
+export async function getOrders(algo: NiceHash.Algorithm): Promise<IRawOrders> {
+  const rq = await request(`https://api2.nicehash.com/main/api/v2/hashpower/orderBook/?algorithm=${algo.id}`);
+  const data = JSON.parse(rq.data) as IRawOrders;
   return data;
 }
 
@@ -97,13 +98,14 @@ export async function getOrders(algo: NiceHash.Algorithm): Promise<IApiResult<IR
  */
 export async function getPrice(algo: NiceHash.Algorithm, withWorkers?: boolean): Promise<number> {
   const data = await getOrders(algo);
-  const orders = data.result.orders;
+  const stats = data.stats;
+  const orders = stats.EU.orders.concat(stats.USA.orders);
 
   // find the lowest order with workers
-  let minimumOrder: IOrder = orders[0];
+  let minimumOrder = orders[0];
   for (const order of orders) {
     const price = Number(order.price);
-    const comparison = withWorkers ? order.workers : order.accepted_speed;
+    const comparison = withWorkers ? order.rigsCount : order.acceptedSpeed;
     if (price < Number(minimumOrder.price) && comparison > 0) {
       minimumOrder = order;
     }

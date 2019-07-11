@@ -17,7 +17,7 @@ import { listCoins } from "./listCoins";
 export class NiceHashCalculator {
   public options: IOptions;
   private revenueCache: WhatToMine.IRevenueResponse[] = [];
-  private priceCache: number[] = [];
+  private priceCache: {[s: string]: number} = {};
   private outputHandler!: AbstractHandler;
 
   constructor(options: IOptions = {} as IOptions) {
@@ -123,18 +123,16 @@ export class NiceHashCalculator {
     }
 
     // Conditionally output a header
-    // Disclaimer, donation addresses, etc.
     if (this.options.showHeader) {
       this.printHeader();
     }
-
     // using minimum prices is heavily discouraged so output a warning
     if (this.options.prices === PricesOption.MinimumWithWorkers) {
       logger.warn("Calculating prices using lowest order with some amount of workers. This is discouraged.");
     }
-    // minimumw with hashrate is more dangerous
+    // minimum with hashrate is more dangerous
     if (this.options.prices === PricesOption.MinimumWithHashrate) {
-      logger.warn("Calculating prices using lowest order with some amount of accepted speed. This is very discouraged.");
+      logger.warn("Calculating prices using lowest order with some amount of accepted speed. This is discouraged.");
     }
     // --experimental-fees: attempt to include fees
     if (this.options.includeFees) {
@@ -143,11 +141,8 @@ export class NiceHashCalculator {
   }
 
   private printHeader() {
-    console.log(`This program estimates the profitability of buying hashing power on NiceHash.`);
     console.log(chalk`NiceHash is not affiliated with this project. {bold I am not responsible for any losses.}`);
-    console.log("");
     console.log(chalk`Report bugs or suggest ideas: {underline ${BUG_REPORT_URL}}`);
-    console.log("");
   }
 
   private async initApis() {
@@ -157,24 +152,26 @@ export class NiceHashCalculator {
 
     // set some algorithm metadata
     const buyerInfo = await NiceHash.getBuyerInfo();
-    const algorithms = buyerInfo.algorithms;
+    const algorithms = buyerInfo.miningAlgorithms;
     for (const nhMeta of algorithms) {
       const hashrate = nhMeta.speed_text;
-      const id = nhMeta.algo;
-      const algorithm = new NiceHash.Algorithm(id, HashRateUnit.fromString(hashrate));
+      const id = +nhMeta.algo;
       for (const algo of Algorithm.instances) {
-        if (algo.id === id) {
-          logger.debug(`initApis(): set unit for ${algo.displayName} to ${algorithm.unit.displayName}`);
+        if (algo.idNum === id) {
+          const algorithm = new NiceHash.Algorithm(algo.idEnum, HashRateUnit.fromString(hashrate));
           algo.niceHash = algorithm;
+          logger.debug(`initApis(): set unit for ${algo.displayName} to ${algorithm.unit.displayName}`);
           break;
         }
       }
     }
 
     // error checking
-    for (const algo of Algorithm.instances) {
-      if (!algo.niceHash) {
-        logger.warn(`Missing metadata for algorithm ${algo.displayName} (${algo.id})`);
+    if (logger.debugEnabled) {
+      for (const algo of Algorithm.instances) {
+        if (!algo.niceHash) {
+          logger.warn(`Missing metadata for algorithm ${algo.displayName} (${algo.idEnum})`);
+        }
       }
     }
   }
