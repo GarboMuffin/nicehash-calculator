@@ -37,7 +37,7 @@ describe("Option Parsing", () => {
 
   it("should recognize --prices=minimum", () => {
     const result = parseOptions(["--prices=minimum"]);
-    expect(result.prices).to.equal(PricesOption.MinimumWithWorkers);
+    expect(result.prices).to.equal(PricesOption.MinimumWithMiners);
   });
 
   it("should recognize --prices=minimum-with-speed", () => {

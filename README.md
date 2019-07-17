@@ -57,7 +57,7 @@ Argument parsing is very strict. You **must** use `--` before each argument name
 | `--no-header` | Disables the large message printed at the start |
 | `--no-warnings` | Disables warnings |
 | `--output=thing` | Changes the format of the output. Valid values for `thing` are `pretty` (default), `json`, and `delayed-json` |
-| `--prices=thing` | Changes the how prices to buy hashing power are obtained. Valid values for `thing` are `average` (default), `minimum` (minimum with workers), and `minimum-with-speed` |
+| `--prices=thing` | Changes the how prices to buy hashing power are obtained. Valid values for `thing` are `minimum` (minimum with miners) and `minimum-with-speed` |
 | `--sleep-time=1000` | Changes the time waited between each coin in milliseconds. Default is 1000. `1000` can be replaced with any other number (including `0` to effectively disable a delay, but be warned you might get hit by rate limits) |
 | `--list-coins` | List coins and exit |
 | `--debug` | Enables debug logging (very verbose) |
