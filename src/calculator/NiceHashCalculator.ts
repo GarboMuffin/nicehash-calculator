@@ -127,8 +127,8 @@ export class NiceHashCalculator {
       this.printHeader();
     }
     // using minimum prices is heavily discouraged so output a warning
-    if (this.options.prices === PricesOption.MinimumWithWorkers) {
-      logger.warn("Calculating prices using lowest order with some amount of workers. This is discouraged.");
+    if (this.options.prices === PricesOption.Average) {
+      logger.warn("Calculating prices using averages should NOT BE USED as it is completely broken on the new platform.");
     }
     // minimum with hashrate is more dangerous
     if (this.options.prices === PricesOption.MinimumWithHashrate) {
@@ -215,8 +215,8 @@ export class NiceHashCalculator {
     if (this.priceCache[algo.id] !== undefined) {
       return this.priceCache[algo.id];
     } else {
-      const withWorkers = this.options.prices === PricesOption.MinimumWithWorkers;
-      const price = await NiceHash.getPrice(algo, withWorkers);
+      const withMiners = this.options.prices === PricesOption.MinimumWithMiners;
+      const price = await NiceHash.getPrice(algo, withMiners);
       this.priceCache[algo.id] = price;
       return price;
     }

@@ -63,7 +63,7 @@ export function parseOptions(args: string[]) {
       },
       "prices": {
         type: "string",
-        default: "average",
+        default: "minimum",
       },
       "sleep-time": {
         type: "number",
@@ -90,10 +90,10 @@ export function parseOptions(args: string[]) {
     sleepTime: parsedOptions.arguments["sleep-time"] as number,
     prices: optionToObject(parsedOptions, {
       name: "prices",
-      default: OptionParser.PricesOption.Average,
+      default: OptionParser.PricesOption.MinimumWithMiners,
       args: {
         average: OptionParser.PricesOption.Average,
-        minimum: OptionParser.PricesOption.MinimumWithWorkers,
+        minimum: OptionParser.PricesOption.MinimumWithMiners,
         "minimum-with-speed": OptionParser.PricesOption.MinimumWithHashrate,
       },
     }),

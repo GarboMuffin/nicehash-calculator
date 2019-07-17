@@ -1,13 +1,13 @@
 import * as NiceHash from ".";
 import { logger } from "../../logger";
 import { request } from "../../utils";
+import { Algorithm } from "../../Algorithm";
 
 interface IRawGlobalPrices {
-  miningAlgorithms: {
-    algorithm: string;
-    title: string;
-    speed: string;
-    paying: string;
+  algos: {
+    a: number;
+    p: number;
+    s: number;
   }[];
 }
 
@@ -52,7 +52,7 @@ interface IBuyerInfo {
 }
 
 export async function getRawGlobalPrices(): Promise<IRawGlobalPrices> {
-  const rq = await request("https://api2.nicehash.com/main/api/v2/public/simplemultialgo/info/");
+  const rq = await request("https://api2.nicehash.com/main/api/v2/public/stats/global/current/");
   const data = JSON.parse(rq.data) as IRawGlobalPrices;
   return data;
 }
@@ -63,8 +63,16 @@ export async function getRawGlobalPrices(): Promise<IRawGlobalPrices> {
 export async function getGlobalPrices() {
   const data = await getRawGlobalPrices();
   const cache: {[s: string]: number} = {};
-  for (const niceHashCost of data.miningAlgorithms) {
-    cache[niceHashCost.algorithm] = Number(niceHashCost.paying);
+  const algoMap = [];
+  for (const algorithm of Algorithm.instances) {
+    algoMap[algorithm.idNum] = algorithm;
+  }
+  for (const i of data.algos) {
+    const algorithm = algoMap[i.a];
+    if (!algorithm) {
+      continue;
+    }
+    cache[algorithm.idEnum] = i.p * 10000;
   }
   return cache;
 }
@@ -91,21 +99,21 @@ export async function getOrders(algo: NiceHash.Algorithm): Promise<IRawOrders> {
 
 /**
  * Gets the minimum price to place an order for an algorithm.
- * By default searches for the lowest price order with some accepted speed but can be configured to use workers instead of accepted speed.
+ * By default searches for the lowest price order with some accepted speed but can be configured to use miners instead of accepted speed.
  * 
  * @param algo The algorithm
- * @param withWorkers If true, find the lowest price order with workers. If false or undefined, uses accepted speed as a comparison instead.
+ * @param withMiners If true, find the lowest price order with miners. If false or undefined, uses accepted speed as a comparison instead.
  */
-export async function getPrice(algo: NiceHash.Algorithm, withWorkers?: boolean): Promise<number> {
+export async function getPrice(algo: NiceHash.Algorithm, withMiners?: boolean): Promise<number> {
   const data = await getOrders(algo);
   const stats = data.stats;
   const orders = stats.EU.orders.concat(stats.USA.orders);
 
-  // find the lowest order with workers
+  // find the lowest order with miners or speed
   let minimumOrder = orders[0];
   for (const order of orders) {
     const price = Number(order.price);
-    const comparison = withWorkers ? order.rigsCount : order.acceptedSpeed;
+    const comparison = withMiners ? order.rigsCount : order.acceptedSpeed;
     if (price < Number(minimumOrder.price) && comparison > 0) {
       minimumOrder = order;
     }
