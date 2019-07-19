@@ -126,14 +126,6 @@ export class NiceHashCalculator {
     if (this.options.showHeader) {
       this.printHeader();
     }
-    // using minimum prices is heavily discouraged so output a warning
-    if (this.options.prices === PricesOption.Average) {
-      logger.warn("Calculating prices using averages should NOT BE USED as it is completely broken on the new platform.");
-    }
-    // minimum with hashrate is more dangerous
-    if (this.options.prices === PricesOption.MinimumWithHashrate) {
-      logger.warn("Calculating prices using lowest order with some amount of accepted speed. This is discouraged.");
-    }
     // --experimental-fees: attempt to include fees
     if (this.options.includeFees) {
       logger.warn("Accounting for NiceHash's 3% fee. This is experimental. Please be aware of the additional 0.0001 BTC fee that is not accounted for here.");
@@ -143,12 +135,14 @@ export class NiceHashCalculator {
   private printHeader() {
     console.log(chalk`NiceHash is not affiliated with this project. {bold I am not responsible for any losses.}`);
     console.log(chalk`Report bugs or suggest ideas: {underline ${BUG_REPORT_URL}}`);
+    console.log('');
   }
 
   private async initApis() {
-    if (this.options.prices === PricesOption.Average) {
-      this.priceCache = await NiceHash.getGlobalPrices();
-    }
+    // Temporarily disabled until the API provides something actually equal to the old one.
+    // if (this.options.prices === PricesOption.Average) {
+    //   this.priceCache = await NiceHash.getGlobalPrices();
+    // }
 
     // set some algorithm metadata
     const buyerInfo = await NiceHash.getBuyerInfo();
@@ -215,8 +209,7 @@ export class NiceHashCalculator {
     if (this.priceCache[algo.id] !== undefined) {
       return this.priceCache[algo.id];
     } else {
-      const withMiners = this.options.prices === PricesOption.MinimumWithMiners;
-      const price = await NiceHash.getPrice(algo, withMiners);
+      const price = await NiceHash.getPrice(algo, this.options.prices);
       this.priceCache[algo.id] = price;
       return price;
     }
