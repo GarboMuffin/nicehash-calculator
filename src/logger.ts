@@ -9,7 +9,7 @@ class Logger {
     if (this.showWarnings) {
       args.unshift("Warning:");
       args = args.map((str) => chalk.yellow(str));
-      console.warn.apply(console, args);
+      console.warn.apply(console, args as any);
     }
   }
 
@@ -17,7 +17,7 @@ class Logger {
   public debug(...args: any[]) {
     if (this.debugEnabled) {
       args.unshift(chalk.gray("debug"));
-      console.log.apply(console, args);
+      console.log.apply(console, args as any);
     }
   }
 }
