@@ -2,6 +2,7 @@ import * as NiceHash from ".";
 import { logger } from "../../logger";
 import { request } from "../../utils";
 import { Algorithm } from "../../Algorithm";
+import { PricesOption } from "../../options";
 
 interface IRawGlobalPrices {
   algos: {
@@ -103,26 +104,32 @@ export async function getOrders(algo: NiceHash.Algorithm): Promise<IRawOrders> {
 /**
  * Gets the minimum price to place an order for an algorithm.
  * By default searches for the lowest price order with some accepted speed but can be configured to use miners instead of accepted speed.
- * 
- * @param algo The algorithm
- * @param withMiners If true, find the lowest price order with miners. If false or undefined, uses accepted speed as a comparison instead.
  */
-export async function getPrice(algo: NiceHash.Algorithm, withMiners?: boolean): Promise<number> {
+export async function getPrice(algo: NiceHash.Algorithm, type: PricesOption): Promise<number> {
   const data = await getOrders(algo);
   const stats = data.stats;
   const orders = stats.EU.orders.concat(stats.USA.orders);
 
-  // find the lowest order with miners or speed
-  let minimumOrder = orders[0];
-  for (const order of orders) {
-    const price = Number(order.price);
-    const comparison = withMiners ? order.rigsCount : order.acceptedSpeed;
-    if (price < Number(minimumOrder.price) && comparison > 0) {
-      minimumOrder = order;
-    }
-  }
+  logger.debug("NiceHash.getPrice(): returning from web for " + algo.id + " (type=" + type + ")");
 
-  logger.debug("NiceHash.getPrice(): returned from web for " + algo.id);
-  const minimumPrice = minimumOrder ? Number(minimumOrder.price) : Infinity;
-  return minimumPrice;
+  if (type === PricesOption.Average) {
+    let totalPrice = 0;
+    let totalHash = 0;
+    for (const order of orders) {
+      totalPrice += +order.price * +order.acceptedSpeed;
+      totalHash += +order.acceptedSpeed;
+    }
+    return totalPrice / totalHash;
+  } else {
+    let minimumOrder = orders[0];
+    for (const order of orders) {
+      const price = Number(order.price);
+      const comparison = type === PricesOption.MinimumWithMiners ? order.rigsCount : order.acceptedSpeed;
+      if (price < Number(minimumOrder.price) && comparison > 0) {
+        minimumOrder = order;
+      }
+    }
+    const minimumPrice = minimumOrder ? Number(minimumOrder.price) : Infinity;
+    return minimumPrice;
+  }
 }
