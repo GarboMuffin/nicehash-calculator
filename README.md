@@ -28,6 +28,8 @@ git clone https://github.com/GarboMuffin/nicehash-calculator/
 cd nicehash-calculator
 ```
 
+If you wish to use the old platform (api.nicehash.com) instead of the new platform (new.nicehash.com/docs.nicehash.com) while it is still around, do `git checkout old-platform` before continuing.
+
 ### Setup
 
 ```bash
