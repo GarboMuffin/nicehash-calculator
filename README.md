@@ -4,6 +4,8 @@
 
 A JavaScript (TypeScript) program for estimating the profitability of buying hashing power on [NiceHash](https://www.nicehash.com/?refby=258346). Feel free to [make an issue](https://github.com/GarboMuffin/nicehash-calculator/issues/new) if you need help with usage or have find any bugs.
 
+This project has been updated to use the [new platform](https://new.nicehash.com/) and the [new API](https://docs.nicehash.com/) for NiceHash.
+
 **This project is not affiliated with NiceHash. I am not responsible for any losses that may come as a result of this project.**
 
 ## Website
@@ -39,7 +41,7 @@ npm run build
 ## Running
 
 ```bash
-# Any of these will work. Pick your favorite. (assuming you are in the right directory)
+# Any of these will work. Pick your favorite.
 node index [arguments or coins]
 node dist/index [arguments or coins]
 node . [arguments or coins]
@@ -66,39 +68,38 @@ You can also put arguments you would like to always be added in `arguments.txt`.
 
 ### Coins
 
-By default it will do calculations for all known coins. This is slow and probably not what you want. You probably want to pick a few coins to monitor (like Bitcoin, Litecoin, Ethereum, etc.) and use coin filtering rules to only monitor those coins.
+By default it will do calculations for all known coins. This is slow and probably not what you want. Instead, you probably want to monitor a few specific coins or algorithms that you have wallets or pools setup for. Coin filtering rules allow you to do this:
 
 ```bash
 # Everything is case insensitive. 'bitcoin', 'bItCoIn', 'Bitcoin', and 'bITCOIN' all have the same effect.
-# Warnings will be printed if a filter is not understood.
+# Warnings will be printed if something you enter is not recognized.
 
 # The easiest filtering rule is to simply list the names of the coins you want to monitor.
-# This is probably enough for most people.
 # To monitor only Bitcoin, Litecoin, and Ethereum you could do:
 node index bitcoin litecoin ethereum
-# A coin's ticker also has the same effect as the name:
+# A coin's ticker or abbreviation has the same effect as the name:
 node index btc ltc eth
 
 # You can also use the names of algorithms to monitor all coins of that algorithm.
 # To monitor all Scrypt coins you could do:
 node index scrypt
 
-# Coin names/tickers and algorithm names can be mixed and matched.
+# Coin names/tickers and algorithm names can be mixed together.
 # To monitor all Scrypt coins and Bitcoin you could do:
 node index scrypt bitcoin
 
-# You can prepend a single `-` to any coin filter to disable the coin instead of enabling it.
+# You can prepend a single `-` to any filter (coin name, coin ticker, algorithm name, etc.) to disable that coin (or algorithm) instead of enabling it.
 # To run on all coins **except** Bitcoin you could do:
 node index -bitcoin
-# To monitor all coins except Scrypt coins you could do:
+# To monitor all coins **except** Scrypt coins you could do:
 node index -scypt
-# To monitor all Scrypt coins except Litecoin you could do:
+# You can mix exclusion rules with regular rules. To monitor all Scrypt coins **except** Litecoin you could do:
 node index scrypt -litecoin
 # To monitor all Scrypt coins except Litecoin and also monitor Bitcoin you could do:
 node index scrypt -litecoin bitcoin
 
 # You can easily determine what your filters include using `--list-coins`
-$ node index bitcoin --list-coins --no-header
+$ node index bitcoin --list-coins
 Enabled coins:
  * Bitcoin (BTC) (SHA-256)
 ```
@@ -108,7 +109,7 @@ Enabled coins:
 As coins are added to [What To Mine](https://whattomine.com/) they should automatically be supported if they use an algorithm on NiceHash. As coins become inactive they will become unsupported.
 
 <details>
-  <summary>All supported coins (as of 2018-12-7)</summary>
+  <summary>All supported coins (as of 2019-7-19)</summary>
 
   ```bash
   $ node index --list-coins
@@ -164,7 +165,6 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * Horizen (ZEN) (Equihash)
    * Cannabiscoin (CANN) (X11)
    * BitcoinCashABC (BCH) (SHA-256)
-   * Onix (ONX) (X11)
    * Linx (LINX) (Scrypt)
    * Sumokoin (SUMO) (CryptoNightR)
    * SmartCash (SMART) (Keccak)
@@ -204,7 +204,6 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * BitcoinSV (BSV) (SHA-256)
    * Actinium (ACM) (Lyra2Z)
    * Dero (DERO) (CryptoNight)
-   * Grin-CR29 (GRIN) (GrinCuckaroo29)
    * Beam (BEAM) (Beam)
    * Hilux (HLX) (X16R)
    * Lethean (LTHN) (CryptoNightR)
@@ -216,6 +215,24 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
    * EtherGem (EGEM) (DaggerHashimoto)
   ```
 </details>
+
+## Updating
+
+Instructions for upgrading from an older version of nicehash-calculator to a newer one.
+
+```bash
+# If these commands do not work, delete the repository and clone it again.
+
+# Reset any changes you made and pull new changes from GitHub
+git checkout .
+git pull
+
+# Update dependencies & build the new code
+npm install
+npm run build
+
+# Ready to be used. See `Running`
+```
 
 ## Using nicehash-calculator in other programs
 
