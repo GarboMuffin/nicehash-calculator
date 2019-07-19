@@ -21,7 +21,7 @@
   "dependencies": {
     "@types/node": "^8.0.0",
     "chalk": "^2.4.1",
-    "typescript": "^3.1.6"
+    "typescript": "^3.5.3"
   },
   "devDependencies": {
     "@types/chai": "^4.1.7",

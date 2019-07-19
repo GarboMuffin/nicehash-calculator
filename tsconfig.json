@@ -4,6 +4,7 @@
     "strict": true,
     "module": "commonjs",
     "outDir": "dist",
+    "incremental": true
   },
   "include": [
     "src/**/*",
