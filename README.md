@@ -223,7 +223,7 @@ As coins are added to [What To Mine](https://whattomine.com/) they should automa
 Instructions for upgrading from an older version of nicehash-calculator to a newer one.
 
 ```bash
-# If these commands do not work, delete the repository and clone it again.
+# If these commands do not work, delete the repository and clone it again. (see `Usage`)
 
 # Reset any changes you made and pull new changes from GitHub
 git checkout .
