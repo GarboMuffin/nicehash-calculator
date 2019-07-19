@@ -1,6 +1,6 @@
 {
   "name": "nicehash-calculator",
-  "version": "2.0.2",
+  "version": "3.0.0",
   "description": "Calculate the profitability of buying hashing power on NiceHash",
   "author": "GarboMuffin",
   "repository": "GarboMuffin/nicehash-calculator",
