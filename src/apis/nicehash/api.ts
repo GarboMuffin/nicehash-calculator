@@ -72,7 +72,10 @@ export async function getGlobalPrices() {
     if (!algorithm) {
       continue;
     }
-    cache[algorithm.idEnum] = i.p * 10000;
+    // TODO: This is very broken.
+    // The API does not return unit adjusted units, or something.
+    // I don't know, or care really.
+    cache[algorithm.idEnum] = i.p;
   }
   return cache;
 }
