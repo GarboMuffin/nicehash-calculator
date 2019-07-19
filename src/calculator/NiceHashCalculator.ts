@@ -134,7 +134,6 @@ export class NiceHashCalculator {
 
   private printHeader() {
     console.log(chalk`NiceHash is not affiliated with this project. {bold I am not responsible for any losses.}`);
-    console.log(chalk`Report bugs or suggest ideas: {underline ${BUG_REPORT_URL}}`);
     console.log('');
   }
 
