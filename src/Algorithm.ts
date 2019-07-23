@@ -58,12 +58,6 @@ export class Algorithm {
     idNum: 14,
     aliases: ["lrev2"],
   });
-  public static readonly Pascal = new Algorithm({
-    name: "Pascal",
-    whatToMine: WhatToMine.Algorithm.Pascal,
-    idEnum: "PASCAL",
-    idNum: 25,
-  });
   public static readonly Keccak = new Algorithm({
     name: "Keccak",
     whatToMine: WhatToMine.Algorithm.Keccak,
@@ -118,12 +112,6 @@ export class Algorithm {
     whatToMine: WhatToMine.Algorithm["Blake (2s)"],
     idEnum: "BLAKE2S",
     idNum: 28,
-  });
-  public static readonly Sia = new Algorithm({
-    name: "Sia",
-    whatToMine: WhatToMine.Algorithm.Sia,
-    idEnum: "SIA",
-    idNum: 27,
   });
   public static readonly "Blake (14r)" = new Algorithm({
     name: "Decred",

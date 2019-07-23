@@ -11,7 +11,6 @@ export class Algorithm {
   public static Equihash = new Algorithm(HashRateUnit.HASH, "eq");
   public static CryptoNight = new Algorithm(HashRateUnit.HASH, "cn");
   public static Lyra2REv2 = new Algorithm(HashRateUnit.KILO, ["lre", "lrev2"]);
-  public static Pascal = new Algorithm(HashRateUnit.MEGA, "pas");
   public static X11Gost = new Algorithm(HashRateUnit.GIGA, "x11g");
   public static Keccak = new Algorithm(HashRateUnit.MEGA, null);
   public static X11 = new Algorithm(HashRateUnit.MEGA, null);
@@ -23,7 +22,6 @@ export class Algorithm {
   public static Lyra2RE = new Algorithm(HashRateUnit.KILO, null);
   public static Qubit = new Algorithm(HashRateUnit.MEGA, null);
   public static "Blake (2s)" = new Algorithm(HashRateUnit.MEGA, null);
-  public static Sia = new Algorithm(HashRateUnit.GIGA, null);
   public static "Blake (14r)" = new Algorithm(HashRateUnit.MEGA, "bk14");
   public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, "cn7");
   public static CryptoNightHeavy = new Algorithm(HashRateUnit.HASH, "cnh");
