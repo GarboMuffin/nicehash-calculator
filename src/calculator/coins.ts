@@ -18,9 +18,14 @@ interface ICoinNames {
   names?: string[];
 }
 
-function getAlgorithm(algo: string): Algorithm {
-  const match = (Algorithm as any)[algo];
-  return match || null;
+function getAlgorithm(algo: string): Algorithm | null {
+  const match = (Algorithm as any)[algo] as Algorithm;
+  // bail on no match
+  if (!match) return null;
+  // bail on missing metadata
+  if (!match.niceHash) return null;
+  if (!match.whatToMine) return null;
+  return match;
 }
 
 function getAdditionalNames(coin: ICoin): ICoinNames {
