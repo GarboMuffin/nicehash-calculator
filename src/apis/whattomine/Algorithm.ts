@@ -7,9 +7,7 @@ export class Algorithm {
   public static LBRY = new Algorithm(HashRateUnit.MEGA, "lbry");
   public static Ethash = new Algorithm(HashRateUnit.MEGA, "eth");
   public static NeoScrypt = new Algorithm(HashRateUnit.KILO, "ns");
-  public static Skunkhash = new Algorithm(HashRateUnit.MEGA, "skh");
   public static Equihash = new Algorithm(HashRateUnit.HASH, "eq");
-  public static CryptoNight = new Algorithm(HashRateUnit.HASH, "cn");
   public static Lyra2REv2 = new Algorithm(HashRateUnit.KILO, ["lre", "lrev2"]);
   public static X11Gost = new Algorithm(HashRateUnit.GIGA, "x11g");
   public static Keccak = new Algorithm(HashRateUnit.MEGA, null);
@@ -21,21 +19,23 @@ export class Algorithm {
   public static NIST5 = new Algorithm(HashRateUnit.MEGA, "ns");
   public static Lyra2RE = new Algorithm(HashRateUnit.KILO, null);
   public static Qubit = new Algorithm(HashRateUnit.MEGA, null);
-  public static "Blake (2s)" = new Algorithm(HashRateUnit.MEGA, null);
-  public static "Blake (14r)" = new Algorithm(HashRateUnit.MEGA, "bk14");
-  public static CryptoNightV7 = new Algorithm(HashRateUnit.HASH, "cn7");
-  public static CryptoNightHeavy = new Algorithm(HashRateUnit.HASH, "cnh");
+  public static "Blake (2s)" = new Algorithm(HashRateUnit.GIGA, null);
+  public static "Blake (14r)" = new Algorithm(HashRateUnit.GIGA, "bk14");
   public static Lyra2z = new Algorithm(HashRateUnit.MEGA, "l2z");
   public static X16R = new Algorithm(HashRateUnit.MEGA, "x16r");
-  public static CryptoNightV8 = new Algorithm(HashRateUnit.HASH, "cn8");
   public static Zhash = new Algorithm(HashRateUnit.HASH, "zh");
   public static GrinCuckaroo29 = new Algorithm(HashRateUnit.HASH, "cr29");
   public static GrinCuckatoo31 = new Algorithm(HashRateUnit.HASH, null);
-  public static Beam = new Algorithm(HashRateUnit.HASH, null);
   public static Lyra2REv3 = new Algorithm(HashRateUnit.MEGA, "lrev3");
   public static MTP = new Algorithm(HashRateUnit.MEGA, "mtp");
   public static CryptoNightR = new Algorithm(HashRateUnit.HASH, null);
   public static CuckooCycle = new Algorithm(HashRateUnit.HASH, "cc");
+  public static Cuckaroo29s = new Algorithm(HashRateUnit.HASH, "cr29");
+  public static BeamHashII = new Algorithm(HashRateUnit.HASH, null);
+  public static X16Rv2 = new Algorithm(HashRateUnit.MEGA, null);
+  public static Eaglesong = new Algorithm(HashRateUnit.GIGA, null);
+  public static RandomX = new Algorithm(HashRateUnit.HASH, null);
+  public static Cuckaroom29 = new Algorithm(HashRateUnit.HASH, null);
   /* tslint:enable:variable-name */
 
   public readonly unit: HashRateUnit;
