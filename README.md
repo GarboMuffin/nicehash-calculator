@@ -111,7 +111,7 @@ Enabled coins:
 As coins are added to [What To Mine](https://whattomine.com/) they should automatically be supported if they use an algorithm on NiceHash. As coins become inactive they will become unsupported.
 
 <details>
-  <summary>All supported coins (as of 2019-7-19)</summary>
+  <summary>All supported coins (as of 2020-1-20)</summary>
 
   ```bash
   $ node index --list-coins
