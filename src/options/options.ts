@@ -33,6 +33,12 @@ export interface IOptions {
 
   // list enabled coins instead of profit information?
   listCoins: boolean;
+
+  // Watch mode
+  watch: boolean;
+
+  // Delay between runs of watch mode
+  watchDelay: number;
 }
 
 export function parseOptions(args: string[]) {
@@ -77,6 +83,14 @@ export function parseOptions(args: string[]) {
         type: "boolean",
         default: false,
       },
+      "watch": {
+        type: "boolean",
+        default: false,
+      },
+      "watch-delay": {
+        type: "number",
+        default: 1000,
+      },
       /* tslint:enable:object-literal-key-quotes */
     },
   });
@@ -108,6 +122,8 @@ export function parseOptions(args: string[]) {
     }),
     includeFees: parsedOptions.arguments["experimental-fees"] as boolean,
     listCoins: parsedOptions.arguments["list-coins"] as boolean,
+    watch: parsedOptions.arguments["watch"] as boolean,
+    watchDelay: parsedOptions.arguments["watch-delay"] as number,
   };
   return options;
 }

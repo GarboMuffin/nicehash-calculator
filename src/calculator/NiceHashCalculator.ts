@@ -121,19 +121,10 @@ export class NiceHashCalculator {
       logger.warn("Unrecognized option: " + unrecognizedOption);
     }
 
-    // Conditionally output a header
-    if (this.options.showHeader) {
-      this.printHeader();
-    }
     // --experimental-fees: attempt to include fees
     if (this.options.includeFees) {
       logger.warn("Accounting for NiceHash's 3% fee. This is experimental. Please be aware of the additional 0.0001 BTC fee that is not accounted for here.");
     }
-  }
-
-  private printHeader() {
-    console.log(chalk`NiceHash is not affiliated with this project. {bold I am not responsible for any losses.}`);
-    console.log('');
   }
 
   private async initApis() {

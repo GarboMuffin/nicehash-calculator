@@ -64,6 +64,8 @@ Argument parsing is very strict. You **must** use `--` before each argument name
 | `--prices=thing` | Changes the how prices to buy hashing power are obtained. Valid values for `thing` are `minimum` (minimum with miners) and `minimum-with-speed` |
 | `--sleep-time=1000` | Changes the time waited between each coin in milliseconds. Default is 1000. `1000` can be replaced with any other number (including `0` to effectively disable a delay, but be warned you might get hit by rate limits) |
 | `--list-coins` | List coins and exit |
+| `--watch` | Enables watch mode |
+| `--watch-delay` | Delay between runs with watch mode enabled |
 | `--debug` | Enables debug logging (very verbose) |
 
 You can also put arguments you would like to always be added in `arguments.txt`. See that file for more information.
