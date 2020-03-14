@@ -1,3 +1,7 @@
+# NOTE: This project is no longer maintained
+
+https://github.com/GarboMuffin/nicehash-calculator/issues/16
+
 # NiceHash Profit Calculator for Buyers
 
 ![The program running.](program.png "The program running.")
