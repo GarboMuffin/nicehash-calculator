@@ -14,7 +14,7 @@ This project has been updated to use the [new platform](https://new.nicehash.com
 
 ## Website
 
-**[You can view the calculations online without having to setup anything.](https://nicehash.garbomuffin.com/)**
+The website has been shut down for years.
 
 ## Usage
 
@@ -247,11 +247,11 @@ If you only care about a few specific coins, then just use the [What to Mine](ht
 
 ### Reading stdout
 
-You could spawn a new `node` process and read stdout. (Hint: use `node --no-header --no-warnings --output=json` to only print machine readable JSON) [nicehash.garbomuffin.com used to do this in the past.](https://github.com/GarboMuffin/nicehash-calculator-web/blob/d35ca079d4e202e888b1328d778e5a831dfa16e7/src/getData.js#L62-L115)
+You could spawn a new `node` process and read stdout. (Hint: use `node --no-header --no-warnings --output=json` to only print machine readable JSON) [nicehash-calculator-web used to do this in the past.](https://github.com/GarboMuffin/nicehash-calculator-web/blob/d35ca079d4e202e888b1328d778e5a831dfa16e7/src/getData.js#L62-L115)
 
 ### Interfacing with the source
 
-If you are already using nodejs, you could interface directly with the source code. [nicehash.garbomuffin.com does this now](https://github.com/GarboMuffin/nicehash-calculator-web/blob/master/src/getData.js). Take the compiled JavaScript (the `dist` folder) and just drop it into your project somewhere (in this example a folder named "nicehash-calculator").
+If you are already using nodejs, you could interface directly with the source code. [nicehash-calculator-web does this now](https://github.com/GarboMuffin/nicehash-calculator-web/blob/master/src/getData.js). Take the compiled JavaScript (the `dist` folder) and just drop it into your project somewhere (in this example a folder named "nicehash-calculator").
 
 ```javascript
 // import a couple of source files from the program
